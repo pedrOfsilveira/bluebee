@@ -1,128 +1,162 @@
 <template>
   <q-page>
     <div class="home-top-container">
-      <div class="header-top">
-        <div class="greeting text-h6">Olá, Investidor! 👋</div>
-      </div>
-      <div class="balance-info">
-        <div class="label text-subtitle1">Saldo Conta</div>
+      <div class="greeting text-h6">Olá, Investidor! 👋</div>
+      <div class="balance-info q-mb-sm">
+        <div class="label text-subtitle2 text-weight-regular">Saldo Conta</div>
         <div class="balance text-h5 text-weight-bolder">R$ 2500,00</div>
       </div>
-      <div class="chart-placeholder q-mt-md">
+      <div class="chart-placeholder flex">
         <div>
-          <div class="label text-caption">Seu Patrimônio Atual</div>
-          <div class="balance text-h5">R$ 5247.89</div>
+          <div class="text-subtitle2">Seu Patrimônio Atual</div>
+          <div class="text-h4 text-weight-bolder balance">R$ 5247.89</div>
+          <!-- <div class="text-caption bg-light-green-3 q-pa-sm ">+ R$ 245,12 (4,9%)</div> -->
+          <q-badge
+            transparent
+            align="middle"
+            label="+ R$245,12 (4,9%)"
+            class="q-pa-sm text-weight-bold positive-bg"
+            text-color="positive"
+          />
         </div>
-        <div class="change positive q-my-lg q-px-sm"><i class="fas fa-arrow-up"></i> + R$ 245,12 (4,9%)</div>
       </div>
     </div>
 
-    <!-- <div class="quick-actions">
-      <button class="action-btn" href="telaCarteira.html">
-        <div class="action-icon"><i class="fas fa-wallet"></i></div>
-        <span>Carteira</span>
-      </button>
-      <button class="action-btn" onclick="navigateTo('explorar')">
-        <div class="action-icon"><i class="fas fa-search-dollar"></i></div>
+    <div class="quick-actions">
+      <button class="action-btn">
+        <q-btn
+          flat
+          padding="md"
+          icon="explore"
+          text-color="primary"
+          class="q-mb-sm"
+        />
         <span>Explorar</span>
       </button>
-      <button class="action-btn" onclick="navigateTo('simulador')">
-        <div class="action-icon"><i class="fas fa-calculator"></i></div>
+      <button class="action-btn">
+        <q-btn
+          flat
+          padding="md"
+          icon="calculate"
+          text-color="primary"
+          class="q-mb-sm"
+        />
         <span>Simular</span>
       </button>
-      <button class="action-btn" onclick="navigateTo('desafios')">
-        <div class="action-icon"><i class="fas fa-star"></i></div>
+      <button class="action-btn">
+        <q-btn
+          flat
+          padding="md"
+          icon="star"
+          text-color="primary"
+          class="q-mb-sm"
+        />
         <span>Desafios</span>
       </button>
-    </div> -->
+    </div>
 
+    <div class="content-sections-wrapper">
+      <div class="section">
+        <div class="section-title">
+          <span>
+            Notícias
+            do Mercado
+          </span>
+          <a>Ver tudo</a>
+        </div>
+        <div>
+          <div>
+            <img
+              src="https://harus.ind.br/wp-content/uploads/2023/02/5-praias-brasileiras.jpg"
+              alt="Notícia 1"
+              class="news-image"
+            />
+            <div>
+              <div>
+                Impacto da Selic nos investimentos de Renda Fixa e Variável
+              </div>
+              <div>Valor Investe • 5 min leitura</div>
+            </div>
+          </div>
+          <div>
+            <img
+              src="https://harus.ind.br/wp-content/uploads/2023/02/5-praias-brasileiras.jpg"
+              alt="Notícia 2"
+              class="news-image"
+            />
+            <div class="news-content">
+              <div class="news-title">
+                Bitcoin e Ethereum: Novas perspectivas para o mercado cripto em
+                2025
+              </div>
+              <div class="news-source">CoinTelegraph • 8 min leitura</div>
+            </div>
+          </div>
+          <div class="news-card" onclick="navigateTo('noticia3')">
+            <img
+              src="https://harus.ind.br/wp-content/uploads/2023/02/5-praias-brasileiras.jpg"
+              alt="Notícia 3"
+              class="news-image"
+            />
+            <div class="news-content">
+              <div class="news-title">
+                Fundos Imobiliários (FIIs): O que esperar para o próximo
+                semestre?
+              </div>
+              <div class="news-source">InfoMoney • 3 min leitura</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </q-page>
 </template>
 
 <style scoped lang="scss">
+// fundo da página
 .q-page {
   background-color: $bg-light;
 }
 
+// "header"/parte azul da página
 header {
-  background: linear-gradient(135deg, $secondary 0%, $primary 70%, #5c6bc0 100%);
+  background: linear-gradient(
+    135deg,
+    $secondary 0%,
+    $primary 70%,
+    #5c6bc0 100%
+  );
   /* Mais padding inferior */
   position: relative;
   animation: fadeInDownHeader 0.8s ease-out;
 }
 
 .home-top-container {
-
   width: 100%;
   color: white;
   overflow: hidden;
   box-shadow: 0 12px 35px rgba(63, 81, 181, 0.4);
   padding: 30px 20px 40px;
-  background: linear-gradient(135deg, $secondary 0%, $primary 70%, #5c6bc0 100%);
+  background: linear-gradient(
+    135deg,
+    $secondary 0%,
+    $primary 70%,
+    #5c6bc0 100%
+  );
   border-bottom-left-radius: 35px;
   border-bottom-right-radius: 35px;
 }
 
-.header-top {
+.greeting {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-  /* Aumentado */
 }
 
 .label {
   opacity: 0.85;
 }
-
-// .balance-info .label {
-//   font-size: 14px;
-//   opacity: 0.85;
-//   margin-bottom: 8px;
-//   font-weight: 400;
-// }
-
-// .balance-info .balance {
-//   font-size: 34px;
-//   /* Maior */
-//   font-weight: 800;
-//   /* Mais peso */
-//   margin-bottom: 10px;
-//   filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.15));
-// }
-
-// .greeting {
-//   font-size: 18px;
-//   font-weight: 500;
-// }
-
-// .notification-bell {
-//   font-size: 22px;
-//   cursor: pointer;
-//   position: relative;
-//   padding: 8px;
-//   background: rgba(255, 255, 255, 0.1);
-//   border-radius: 50%;
-//   transition: all 0.3s ease;
-// }
-
-// .notification-bell:hover {
-//   background: rgba(255, 255, 255, 0.2);
-//   transform: scale(1.1);
-// }
-
-// .notification-bell .badge {
-//   /* Badge de notificação */
-//   position: absolute;
-//   top: 5px;
-//   right: 5px;
-//   width: 8px;
-//   height: 8px;
-//   background-color: var(--negative-color);
-//   border-radius: 50%;
-//   border: 1px solid white;
-// }
-
 
 .chart-placeholder {
   height: 140px;
@@ -140,75 +174,59 @@ header {
   border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-.oi {
-
-  /* justify-content: center; */
-  padding: 20px;
-  /* color: rgba(255, 255, 255, 0.85); */
-  color: #1a237e;
-  font-size: 28px;
-  font-weight: 500;
+.quick-actions {
+  // background-color: $card-opacity;
+  background-color: white;
+  backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 18px;
+  margin: -30px 20px 25px;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
 }
 
-// .chart-placeholder i {
-//   font-size: 30px;
+.action-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: none;
+  border: none;
+  color: var(--text-light);
+  cursor: pointer;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  color: $text-light;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.action-btn .q-btn {
+  background: linear-gradient(145deg, #eef2f9, #f8f9fd);
+  border-radius: 16px;
+}
+
+// .chart-placeholder .balance {
+//   // font-size: 28px;
+//   /* Maior */
+//   font-weight: 800;
+//   /* Mais peso */
 //   margin-bottom: 10px;
-//   opacity: 0.7;
+//
 // }
 
-.chart-placeholder .label {
-  font-size: 14px;
-  opacity: 0.85;
-  margin-bottom: 8px;
-  font-weight: 400;
-}
-
 .chart-placeholder .balance {
-  // font-size: 28px;
-  /* Maior */
-  font-weight: 800;
-  /* Mais peso */
-  margin-bottom: 10px;
   filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.15));
 }
 
-.chart-placeholder .change {
-  font-size: 14px;
-  // margin: 20px 0;
-  // padding: 4px 10px;
-  background-color: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(5px);
-  /* Ajustado */
-  border-radius: 15px;
-  display: inline-flex;
-  align-items: center;
-  // margin-left: auto;
-  /* empurra para a direita */
-  // min-width: 10px;
-  /* opcional, para não ficar muito pequeno */
-  justify-content: flex-end;
-  font-weight: 600;
+.positive-bg {
+  background-color: $bg-positive;
 }
 
-.chart-placeholder .change i {
-  font-size: 16px;
-  /* ícone menor */
-  margin-right: 4px;
-  margin-top: 8px;
-}
 
-.change.positive {
-  color: rgb(76, 175, 79);
-  background-color: #c8e6c9;
-  /* color: #c8e6c9; */
-  /* background-color: rgba(76, 175, 80, 0.25); */
-}
 
-.change.negative {
-  color: #ffcdd2;
-  background-color: rgba(244, 67, 54, 0.25);
-}
 
 // .quick-actions {
 //   display: grid;
@@ -238,7 +256,6 @@ header {
 //     transform: translateY(0);
 //   }
 // }
-
 
 // .action-btn {
 //   display: flex;
@@ -282,4 +299,4 @@ header {
 //   color: white;
 //   transform: scale(1.1) rotate(5deg);
 //   box-shadow: 0 8px 20px rgba(63, 81, 181, 0.25);
-// }</style>
+</style>
