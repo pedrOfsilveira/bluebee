@@ -10,47 +10,23 @@
         <div>
           <div class="text-subtitle2">Seu Patrimônio Atual</div>
           <div class="text-h4 text-weight-bolder balance">R$ 5247.89</div>
-          <!-- <div class="text-caption bg-light-green-3 q-pa-sm ">+ R$ 245,12 (4,9%)</div> -->
-          <q-badge
-            transparent
-            align="middle"
-            label="+ R$245,12 (4,9%)"
-            class="q-pa-sm text-weight-bold positive-bg"
-            text-color="positive"
-          />
+          <q-badge transparent align="middle" label="+ R$245,12 (4,9%)" class="q-pa-sm text-weight-bold positive-bg"
+            text-color="positive" />
         </div>
       </div>
     </div>
 
     <div class="quick-actions">
       <button class="action-btn">
-        <q-btn
-          flat
-          padding="md"
-          icon="explore"
-          text-color="primary"
-          class="q-mb-sm"
-        />
+        <q-btn flat padding="md" icon="explore" text-color="primary" class="q-mb-sm" />
         <span>Explorar</span>
       </button>
       <button class="action-btn">
-        <q-btn
-          flat
-          padding="md"
-          icon="calculate"
-          text-color="primary"
-          class="q-mb-sm"
-        />
+        <q-btn flat padding="md" icon="calculate" text-color="primary" class="q-mb-sm" />
         <span>Simular</span>
       </button>
       <button class="action-btn">
-        <q-btn
-          flat
-          padding="md"
-          icon="star"
-          text-color="primary"
-          class="q-mb-sm"
-        />
+        <q-btn flat padding="md" icon="star" text-color="primary" class="q-mb-sm" />
         <span>Desafios</span>
       </button>
     </div>
@@ -58,32 +34,27 @@
     <div class="content-sections-wrapper">
       <div class="section">
         <div class="section-title">
-          <span>
+          <span class="text-weight-bolder ">
+            <q-icon name="comment" size="sm" class="q-mr-sm" />
             Notícias
             do Mercado
           </span>
-          <a>Ver tudo</a>
+          <a class="text-weight-bold">Ver tudo</a>
         </div>
-        <div>
-          <div>
-            <img
-              src="https://harus.ind.br/wp-content/uploads/2023/02/5-praias-brasileiras.jpg"
-              alt="Notícia 1"
-              class="news-image"
-            />
-            <div>
-              <div>
+        <div class="news-container">
+          <div class="news-card">
+            <img src="https://harus.ind.br/wp-content/uploads/2023/02/5-praias-brasileiras.jpg" alt="Notícia 1"
+              class="news-image" />
+            <div class="news-content">
+              <div class="news-title">
                 Impacto da Selic nos investimentos de Renda Fixa e Variável
               </div>
-              <div>Valor Investe • 5 min leitura</div>
+              <div class="news-source">Valor Investe • 5 min leitura</div>
             </div>
           </div>
-          <div>
-            <img
-              src="https://harus.ind.br/wp-content/uploads/2023/02/5-praias-brasileiras.jpg"
-              alt="Notícia 2"
-              class="news-image"
-            />
+          <div class="news-card">
+            <img src="https://harus.ind.br/wp-content/uploads/2023/02/5-praias-brasileiras.jpg" alt="Notícia 2"
+              class="news-image" />
             <div class="news-content">
               <div class="news-title">
                 Bitcoin e Ethereum: Novas perspectivas para o mercado cripto em
@@ -92,12 +63,9 @@
               <div class="news-source">CoinTelegraph • 8 min leitura</div>
             </div>
           </div>
-          <div class="news-card" onclick="navigateTo('noticia3')">
-            <img
-              src="https://harus.ind.br/wp-content/uploads/2023/02/5-praias-brasileiras.jpg"
-              alt="Notícia 3"
-              class="news-image"
-            />
+          <div class="news-card">
+            <img src="https://harus.ind.br/wp-content/uploads/2023/02/5-praias-brasileiras.jpg" alt="Notícia 3"
+              class="news-image" />
             <div class="news-content">
               <div class="news-title">
                 Fundos Imobiliários (FIIs): O que esperar para o próximo
@@ -108,7 +76,32 @@
           </div>
         </div>
       </div>
+      <div class="section">
+        <div class="section-title">
+          <span class="text-weight-bolder">
+            <q-icon name="rocket_launch" size="sm" class="q-mr-sm" />
+            Seus Desafios Ativos</span>
+          <a class="text-weight-bold">Ver todos</a>
+        </div>
+        <div class="challenges-container">
+          <div class="challenge-card">
+            <div class="challenge-icon"><q-icon name="house" color="secondary" /></div>
+            <div class="challenge-info">
+              <div class="challenge-title">Primeiro Mergulho em FIIs</div>
+              <div class="challenge-desc">Compre a primeira cota de qualquer Fundo Imobiliário!</div>
+            </div>
+          </div>
+          <div class="challenge-card">
+            <div class="challenge-icon"><q-icon name="lightbulb" color="secondary" /></div>
+            <div class="challenge-info">
+              <div class="challenge-title">Mestre em Ações</div>
+              <div class="challenge-desc">Compre 20 cotas de qualquer Ação!</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+    <div class="mb" />
   </q-page>
 </template>
 
@@ -120,12 +113,10 @@
 
 // "header"/parte azul da página
 header {
-  background: linear-gradient(
-    135deg,
-    $secondary 0%,
-    $primary 70%,
-    #5c6bc0 100%
-  );
+  background: linear-gradient(135deg,
+      $secondary 0%,
+      $primary 70%,
+      #5c6bc0 100%);
   /* Mais padding inferior */
   position: relative;
   animation: fadeInDownHeader 0.8s ease-out;
@@ -137,12 +128,10 @@ header {
   overflow: hidden;
   box-shadow: 0 12px 35px rgba(63, 81, 181, 0.4);
   padding: 30px 20px 40px;
-  background: linear-gradient(
-    135deg,
-    $secondary 0%,
-    $primary 70%,
-    #5c6bc0 100%
-  );
+  background: linear-gradient(135deg,
+      $secondary 0%,
+      $primary 70%,
+      #5c6bc0 100%);
   border-bottom-left-radius: 35px;
   border-bottom-right-radius: 35px;
 }
@@ -208,14 +197,6 @@ header {
   border-radius: 16px;
 }
 
-// .chart-placeholder .balance {
-//   // font-size: 28px;
-//   /* Maior */
-//   font-weight: 800;
-//   /* Mais peso */
-//   margin-bottom: 10px;
-//
-// }
 
 .chart-placeholder .balance {
   filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.15));
@@ -226,77 +207,108 @@ header {
 }
 
 
+.section {
+  padding: 0 20px 25px;
+}
 
+.section-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: $secondary;
+}
 
-// .quick-actions {
-//   display: grid;
-//   /* Usando grid para 4 colunas */
-//   grid-template-columns: repeat(4, 1fr);
-//   gap: 12px;
-//   /* Espaço entre botões */
-//   background-color: var(--card-bg);
-//   margin: -30px 20px 25px;
-//   /* Sobreposição elegante */
-//   padding: 20px;
-//   /* Padding interno */
-//   border-radius: 20px;
-//   box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
-//   animation: fadeInUpQuickActions 0.7s ease-out 0.3s forwards;
-//   opacity: 0;
-// }
+.news-image {
+  height: 120px;
+  width: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
 
-// @keyframes fadeInUpQuickActions {
-//   from {
-//     opacity: 0;
-//     transform: translateY(20px);
-//   }
+.news-container {
+  display: flex;
+  overflow-x: auto;
+  gap: 18px;
+  padding: 5px 2px 15px 2px;
+  scrollbar-width: none;
+}
 
-//   to {
-//     opacity: 1;
-//     transform: translateY(0);
-//   }
-// }
+.news-card {
+  min-width: 240px;
+  background-color: white;
+  border-radius: 18px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
 
-// .action-btn {
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   background: none;
-//   border: none;
-//   color: var(--text-light);
-//   cursor: pointer;
-//   text-align: center;
-//   font-size: 12px;
-//   font-weight: 500;
-//   transition: transform 0.3s ease, color 0.3s ease;
-// }
+.news-title {
+  font-size: 15px;
+  margin-bottom: 8px;
+  font-weight: 600;
+  line-height: 1.45;
+  color: $text-dark;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
-// .action-icon {
-//   width: 50px;
-//   /* Maior */
-//   height: 50px;
-//   background: linear-gradient(145deg, #eef2f9, #f8f9fd);
-//   /* Gradiente sutil */
-//   border-radius: 16px;
-//   /* Mais quadrado-arredondado */
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   margin-bottom: 10px;
-//   font-size: 22px;
-//   color: var(--primary-color);
-//   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-//   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-// }
+.news-content {
+  padding: 15px;
+}
 
-// .action-btn:hover {
-//   color: var(--primary-color);
-//   transform: translateY(-3px);
-// }
+.news-source {
+  font-size: 12px;
+  color: $text-light;
+  font-weight: 500;
+}
 
-// .action-btn:hover .action-icon {
-//   background: linear-gradient(145deg, var(--primary-color), var(--secondary-color));
-//   color: white;
-//   transform: scale(1.1) rotate(5deg);
-//   box-shadow: 0 8px 20px rgba(63, 81, 181, 0.25);
+.challenge-card {
+  background-color: var(--card-bg);
+  border-radius: 18px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 18px;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.challenge-icon {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #ffecb3, $accent);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 18px;
+  font-size: 24px;
+  box-shadow: 0 5px 15px rgba(255, 193, 7, 0.3);
+  transition: all 0.3s ease;
+}
+
+.challenge-info {
+  flex: 1;
+}
+
+.challenge-title {
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: $secondary;
+}
+
+.challenge-desc {
+  font-size: 13px;
+  color: $text-light;
+  line-height: 1.5;
+}
+
+.mb {
+  margin-bottom: 100px;
+}
 </style>
