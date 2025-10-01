@@ -1,0 +1,24 @@
+<script setup>
+defineProps({
+  news: {
+    type: Object,
+    required: true,
+  },
+});
+</script>
+
+<template>
+  <div class="news-card">
+    <img :src="news.imageUrl" :alt="news.title" class="news-image" />
+
+    <div class="news-content">
+      <div class="news-title">
+        {{ news.title }}
+      </div>
+
+      <div class="news-source">
+        {{ news.source }}
+      </div>
+    </div>
+  </div>
+</template>

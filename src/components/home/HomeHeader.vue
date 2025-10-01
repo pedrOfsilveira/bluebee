@@ -1,0 +1,94 @@
+<script setup>
+const user = {
+  name: "Investidor",
+  accountBalance: 2500.00,
+  totalAssets: 5247.89,
+  assetChange: 245.12,
+  assetChangePercent: 4.9
+};
+</script>
+
+<template>
+  <div class="home-top-container">
+    <div class="greeting text-h6">Olá, {{ user.name }}! 👋</div>
+    <div class="balance-info q-mb-sm">
+      <div class="label text-subtitle2 text-weight-regular">Saldo Conta</div>
+      <div class="balance text-h5 text-weight-bolder">R$ {{ user.accountBalance.toFixed(2).replace('.', ',') }}</div>
+    </div>
+    <div class="chart-placeholder flex">
+      <div>
+        <div class="text-subtitle2">Seu Patrimônio Atual</div>
+        <div class="text-h4 text-weight-bolder balance">R$ {{ user.totalAssets.toFixed(2).replace('.', ',') }}</div>
+        <q-badge
+          transparent
+          align="middle"
+          label="+ R$245,12 (4,9%)"
+          class="q-pa-sm text-weight-bold positive-bg"
+          text-color="positive"
+        />
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped lang="scss">
+// "header"/parte azul da página
+header {
+  background: linear-gradient(
+    135deg,
+    $secondary 0%,
+    $primary 70%,
+    #5c6bc0 100%
+  );
+  /* Mais padding inferior */
+  position: relative;
+  animation: fadeInDownHeader 0.8s ease-out;
+}
+
+.home-top-container {
+  width: 100%;
+  color: white;
+  overflow: hidden;
+  box-shadow: 0 12px 35px rgba(63, 81, 181, 0.4);
+  padding: 30px 20px 40px;
+  background: linear-gradient(
+    135deg,
+    $secondary 0%,
+    $primary 70%,
+    #5c6bc0 100%
+  );
+  border-bottom-left-radius: 35px;
+  border-bottom-right-radius: 35px;
+}
+
+.greeting {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.label {
+  opacity: 0.85;
+}
+
+.chart-placeholder {
+  height: 140px;
+  background: $card-opacity;
+  backdrop-filter: blur(8px);
+  border-radius: 18px;
+
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  padding: 20px;
+  color: #1a237e;
+  font-size: 28px;
+  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.chart-placeholder .balance {
+  filter: drop-shadow(0 3px 5px rgba(0, 0, 0, 0.15));
+}
+</style>

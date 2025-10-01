@@ -1,2 +1,18 @@
 // app global css in SCSS form
 $footer-bg: rgba(255, 255, 255, 0.97);
+
+.positive-bg {
+  background-color: $bg-positive;
+}
+
+.q-page {
+  background-color: $bg-light;
+}
+
+.section {
+  padding: 0 20px 25px;
+}
+
+.mb {
+  margin-bottom: 100px;
+}
