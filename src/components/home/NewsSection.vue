@@ -1,27 +1,11 @@
 <script setup>
 import NewsCard from './NewsCard.vue';
 import SectionTitle from './SectionTitle.vue';
+import { useStoreNews } from 'src/stores/storeNews';
 
-const newsList = [
-  {
-    title: 'Mercado de ações fecha em alta com otimismo sobre economia',
-    source: 'Fonte: Bloomberg',
-    imageUrl: 'https://via.placeholder.com/300x200.png?text=Notícia+1',
-    link: '#'
-  },
-  {
-    title: 'Bitcoin atinge novo recorde histórico',
-    source: 'Fonte: CoinDesk',
-    imageUrl: 'https://via.placeholder.com/300x200.png?text=Notícia+2',
-    link: '#'
-  },
-  {
-    title: 'Setor de tecnologia lidera ganhos na bolsa',
-    source: 'Fonte: TechCrunch',
-    imageUrl: 'https://via.placeholder.com/300x200.png?text=Notícia+3',
-    link: '#'
-  },
-];
+const storeNews = useStoreNews();
+const newsList = storeNews.news;
+
 </script>
 
 
@@ -30,7 +14,7 @@ const newsList = [
     <SectionTitle title="Notícias de Mercado" icon="newspaper" seeAll />
 
     <div class="news-container">
-      <NewsCard v-for="(news, index) in newsList" :key="index" :news="news" />
+      <NewsCard v-for="(news, index) in newsList" :key="news.id" :news="news" />
     </div>
 
   </div>

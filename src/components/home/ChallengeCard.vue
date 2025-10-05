@@ -22,7 +22,7 @@ defineProps({
   </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .challenge-card {
   background-color: var(--card-bg);
   border-radius: 18px;

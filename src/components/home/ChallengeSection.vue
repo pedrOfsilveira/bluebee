@@ -1,29 +1,10 @@
 <script setup>
 import ChallengeCard from './ChallengeCard.vue';
 import SectionTitle from './SectionTitle.vue';
+import { useStoreChallenges } from 'src/stores/storeChallenges';
 
-const challenges = [
-  {
-    title: "Desafio 1",
-    desc: "Complete seu perfil para ganhar pontos",
-    icon: "person",
-  },
-  {
-    title: "Desafio 2",
-    desc: "Conecte sua conta bancária",
-    icon: "account_balance",
-  },
-  {
-    title: "Desafio 3",
-    desc: "Invista em seu primeiro ativo",
-    icon: "trending_up",
-  },
-  {
-    title: "Desafio 4",
-    desc: "Compartilhe o app com um amigo",
-    icon: "share",
-  },
-];
+const storeChallenges = useStoreChallenges();
+const challenges = storeChallenges.challenges;
 </script>
 
 <template>
