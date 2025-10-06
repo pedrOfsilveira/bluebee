@@ -10,9 +10,9 @@ import BigButton from 'src/components/BigButton.vue';
     <div class="login-form">
       <AuthInput label="Nome" type="text" icon="person" class="q-mb-lg"/>
       
-      <AuthInput label="Data de Nascimento" type="date" icon="calendar_today" class="q-mb-md" />
+      <AuthInput label="Data de Nascimento" type="date" icon="calendar_today" class="q-mb-lg" />
       <AuthInput label="Email" type="email" icon="email" class="q-mb-lg"/>
-      <AuthInput label="Senha" type="password" icon="key" class="q-mb-md" />
+      <AuthInput label="Senha" type="password" icon="key" class="q-mb-lg" />
       <AuthInput label="Confirmar Senha" type="password" icon="check_circle" class="q-mb-md" />
       <div class="options">
         <div class="forgot-password">
