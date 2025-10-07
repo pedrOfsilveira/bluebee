@@ -1,6 +1,6 @@
 <script setup>
 import NewsCard from './NewsCard.vue';
-import SectionTitle from './SectionTitle.vue';
+import SectionTitle from '../SectionTitle.vue';
 import { useStoreNews } from 'src/stores/storeNews';
 
 const storeNews = useStoreNews();

@@ -1,6 +1,6 @@
 <script setup>
 import ChallengeCard from './ChallengeCard.vue';
-import SectionTitle from './SectionTitle.vue';
+import SectionTitle from '../SectionTitle.vue';
 import { useStoreChallenges } from 'src/stores/storeChallenges';
 
 const storeChallenges = useStoreChallenges();

@@ -3,7 +3,7 @@
 defineProps({
   icon: {
     type: String,
-    required: true,
+    required: false,
   },
   title: {
     type: String,
@@ -18,9 +18,9 @@ defineProps({
 </script>
 
 <template>
-  <div class="section-title q-pa-sm">
-    <span class="text-weight-bolder ">
-      <q-icon :name="icon" size="sm" class="q-mr-sm" />
+  <div class="section-title">
+    <span class="text-weight-bolder text-h6 flex items-center">
+      <q-icon v-if="icon" :name="icon" size="sm" class="q-mr-sm" />
       {{ title }}
     </span>
     <a v-if="seeAll" class="text-weight-bold">Ver tudo</a>

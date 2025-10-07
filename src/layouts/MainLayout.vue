@@ -5,11 +5,27 @@
     </q-page-container>
 
     <div class="floating-footer">
-      <q-tabs no-caps active-color="primary" indicator-color="transparent" class="text-grey-8" active-bg-color="blue-1"
-        style="border-radius: 25px">
+      <q-tabs
+        no-caps
+        active-color="primary"
+        indicator-color="transparent"
+        class="text-grey-8"
+        active-bg-color="blue-1"
+        style="border-radius: 25px"
+      >
         <q-route-tab to="/" name="home" icon="home" label="Início" />
-        <q-route-tab to="/wallet" name="wallet" icon="wallet" label="Carteira" />
-        <q-route-tab to="/profile" name="profile" icon="person" label="Perfil" />
+        <q-route-tab
+          to="/wallet"
+          name="wallet"
+          icon="wallet"
+          label="Carteira"
+        />
+        <q-route-tab
+          to="/profile"
+          name="profile"
+          icon="person"
+          label="Perfil"
+        />
       </q-tabs>
     </div>
   </q-layout>
