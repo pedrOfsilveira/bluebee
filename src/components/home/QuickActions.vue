@@ -24,7 +24,7 @@
       <q-btn
         flat
         padding="md"
-        icon="star"
+        icon="rocket"
         text-color="primary"
         class="q-mb-sm"
       />

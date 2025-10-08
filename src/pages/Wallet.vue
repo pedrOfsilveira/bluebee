@@ -1,16 +1,62 @@
+<script setup>
+import SectionTitle from "src/components/SectionTitle.vue";
+import AssetsSection from "src/components/wallet/AssetsSection.vue";
+import DiversificationChart from "src/components/wallet/DiversificationChart.vue";
+import WalletHeader from "src/components/wallet/WalletHeader.vue";
+import { ref } from "vue";
+const tab = ref("ativos");
+
+const percentages = ref({
+  stocks: 25,
+  fii: 25,
+  fixed: 25,
+  crypto: 25,
+});
+
+const assets = ref([
+  {
+    name: "PETR4",
+    type: "Ações",
+    amount: "R$ 1.245,32",
+    change: "+2,3%",
+    category: "stocks",
+  },
+  {
+    name: "BBAS3",
+    type: "Ações",
+    amount: "R$ 2.500,00",
+    change: "-1,2%",
+    category: "stocks",
+  },
+  {
+    name: "XPTO11",
+    type: "FII",
+    amount: "R$ 3.100,75",
+    change: "+0,5%",
+    category: "fii",
+  },
+  {
+    name: "Tesouro Selic",
+    type: "Renda Fixa",
+    amount: "R$ 5.000,00",
+    change: "+0,1%",
+    category: "fixed",
+  },
+  {
+    name: "Bitcoin",
+    type: "Criptomoeda",
+    amount: "R$ 10.000,00",
+    change: "+3,8%",
+    category: "crypto",
+  },
+]);
+
+</script>
+
 <template>
-  <div class="home-top-container">
-    <div class="text-subtitle1 text-weight-regular">Total Investido</div>
-    <div class="text-h4 text-weight-bolder q-mt-sm">R$ 5.247,89</div>
-    <q-badge
-      transparent
-      align="middle"
-      label="+ R$245,12 (4,9%)"
-      class="q-mt-sm q-pa-sm text-weight-bold text-caption positive-bg"
-      text-color="positive"
-      id="badge"
-    />
-  </div>
+  <WalletHeader />
+
+  <DiversificationChart :percentages="percentages" />
 
   <q-tabs
     no-caps
@@ -20,12 +66,7 @@
     active-bg-color="blue-1"
     v-model="tab"
   >
-    <q-tab
-      name="ativos"
-      icon="account_balance"
-      label="Ativos"
-      class="tab"
-    />
+    <q-tab name="ativos" icon="account_balance" label="Ativos" class="tab" />
     <q-tab
       name="alarms"
       icon="currency_exchange"
@@ -36,49 +77,28 @@
 
   <q-tab-panels v-model="tab" animated>
     <q-tab-panel name="ativos">
-      <div class="section">
-        <SectionTitle title="Ativos"/>
-        <div class="text-body2 text-weight-regular q-mt-sm">
-          Aqui você verá todos os seus ativos financeiros.
-        </div>
-      </div>
+      <AssetsSection :assets="assets"/>
     </q-tab-panel>
 
     <q-tab-panel name="alarms">
       <div class="q-pa-md">
-        <SectionTitle title="Histórico"/>
+        <SectionTitle title="Histórico" />
         <div class="text-body2 text-weight-regular q-mt-sm">
           Aqui você verá o histórico de suas transações.
         </div>
+        <div class="mb"></div>
       </div>
     </q-tab-panel>
   </q-tab-panels>
 </template>
 
 <style scoped lang="scss">
-.home-top-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-  color: white;
-  overflow: hidden;
-  box-shadow: 0 12px 35px rgba(63, 81, 181, 0.4);
-  padding: 30px 20px 40px;
-  background: linear-gradient(
-    135deg,
-    $secondary 0%,
-    $primary 70%,
-    #5c6bc0 100%
-  );
-  border-bottom-left-radius: 35px;
-  border-bottom-right-radius: 35px;
-}
+
 .tabs {
   display: flex;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
-  margin: 20px;
+  margin: 0 20px;
   border-radius: 16px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
   padding: 6px;
@@ -96,19 +116,12 @@
   position: relative;
   overflow: hidden;
 }
+
+
+.q-tab-panel,
+.q-tab-panels {
+  background-color: transparent;
+}
+
+
 </style>
-
-<script setup>
-import SectionTitle from "src/components/SectionTitle.vue";
-import { ref } from "vue";
-const tab = ref("mails");
-
-/*
-<div class="flex w-full h-4 rounded-full overflow-hidden">
-  <div class="bg-blue-500 w-[40%]"></div>
-  <div class="bg-green-500 w-[20%]"></div>
-  <div class="bg-yellow-400 w-[30%]"></div>
-  <div class="bg-purple-500 w-[10%]"></div>
-</div>
-*/
-</script>

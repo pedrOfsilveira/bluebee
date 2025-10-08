@@ -19,7 +19,7 @@ defineProps({
 
 <template>
   <div class="section-title">
-    <span class="text-weight-bolder text-h6 flex items-center">
+    <span class="text-weight-bolder text-h6 flex items-center q-mb-sm">
       <q-icon v-if="icon" :name="icon" size="sm" class="q-mr-sm" />
       {{ title }}
     </span>
