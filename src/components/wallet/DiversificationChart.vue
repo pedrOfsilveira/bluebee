@@ -35,7 +35,7 @@ defineProps({
         ></div>
         <div
           class="bar bar-crypto"
-          :style="{ width: percentages.fixed + '%' }"
+          :style="{ width: percentages.crypto + '%' }"
         ></div>
       </div>
       <div class="diversification-legend">

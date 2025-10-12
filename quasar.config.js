@@ -35,6 +35,10 @@ export default defineConfig((/* ctx */) => {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-file#build
     build: {
+      env: {
+        SUPABASE_URL: 'https://jrlccthubxxfamvaapyf.supabase.co',
+        SUPABASE_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpybGNjdGh1Ynh4ZmFtdmFhcHlmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5NTgwMzYsImV4cCI6MjA3NTUzNDAzNn0.uLUgkO204UOvV8-H6dyjB5O-muo2JgktgFKZrpBhkeo'
+      },
       target: {
         browser: [ 'es2022', 'firefox115', 'chrome115', 'safari14' ],
         node: 'node20'
@@ -58,7 +62,7 @@ export default defineConfig((/* ctx */) => {
 
       // extendViteConf (viteConf) {},
       // viteVuePluginOptions: {},
-      
+
       // vitePlugins: [
       //   [ 'package-name', { ..pluginOptions.. }, { server: true, client: true } ]
       // ]

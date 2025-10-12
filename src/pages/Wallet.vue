@@ -7,9 +7,9 @@ import { ref } from "vue";
 const tab = ref("ativos");
 
 const percentages = ref({
-  stocks: 25,
-  fii: 25,
-  fixed: 25,
+  stocks: 15,
+  fii: 45,
+  fixed: 15,
   crypto: 25,
 });
 
