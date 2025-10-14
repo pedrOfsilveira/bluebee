@@ -1,16 +1,26 @@
 <script setup>
-import AuthHeader from 'src/components/auth/AuthHeader.vue';
-import AuthInput from 'src/components/auth/AuthInput.vue';
-import BigButton from 'src/components/BigButton.vue';
+import AuthHeader from "src/components/auth/AuthHeader.vue";
+import AuthInput from "src/components/auth/AuthInput.vue";
+import BigButton from "src/components/BigButton.vue";
+import { ref } from "vue";
+
+const register = ref(false);
+
+const switchRegister = () => {
+  register.value = !register.value;
+};
+
+const gender = ref(null);
 </script>
 
 <template>
+  <AuthHeader
+    title="Bem-vindo ao Blue Bee"
+    subtitle="Aprenda a investir de forma simples e gamificada"
+  />
   <div class="login-container">
-   <AuthHeader title="Bem-vindo ao Blue Bee" subtitle="Aprenda a investir de forma simples e gamificada"/>
-
-    <div class="login-form">
-      
-      <AuthInput label="Email" type="email" icon="email" class="q-mb-lg"/>
+    <div class="login-form" v-if="!register">
+      <AuthInput label="Email" type="email" icon="email" class="q-mb-lg" />
       <AuthInput label="Senha" type="password" icon="key" class="q-mb-md" />
       <div class="options">
         <div class="forgot-password">
@@ -18,17 +28,83 @@ import BigButton from 'src/components/BigButton.vue';
         </div>
       </div>
 
-      <BigButton title="Entrar" class="q-mb-lg"/>
-      
+      <BigButton title="Entrar" class="q-mb-lg" />
+
       <div class="signup-link">
-        Não tem uma conta? <a @click="$router.push('/register')">Cadastre-se</a>
+        Não tem uma conta?
+        <a @click="switchRegister">
+          {{ register ? "Faça login" : "Cadastre-se" }}</a
+        >
+      </div>
+    </div>
+    <div class="login-form" v-if="register">
+      <AuthInput label="Nome" type="text" icon="person" class="q-mb-lg" />
+
+      <AuthInput
+        label="Data de Nascimento"
+        type="date"
+        icon="calendar_today"
+        class="q-mb-lg"
+      />
+      <q-btn-toggle
+        flat
+        class="q-mb-lg"
+        name="gender"
+        v-model="gender"
+        toggle-color="primary"
+        :options="[
+          { value: 'male', icon: 'male' },
+          { value: 'female', icon: 'female' },
+          { value: 'other', label: 'Outro' },
+        ]"
+      />
+      <AuthInput label="Email" type="email" icon="email" class="q-mb-lg" />
+      <AuthInput label="Senha" type="password" icon="key" class="q-mb-lg" />
+      <AuthInput
+        label="Confirmar Senha"
+        type="password"
+        icon="check_circle"
+        class="q-mb-md"
+      />
+      <div class="options">
+        <div class="forgot-password">
+          <a href="#">Esqueceu sua senha?</a>
+        </div>
+      </div>
+
+      <BigButton title="Cadastrar" class="q-mb-lg" />
+
+      <div class="signup-link">
+        Já tem uma conta?
+        <a @click="switchRegister">
+          {{ register ? "Faça login" : "Cadastre-se" }}
+        </a>
       </div>
     </div>
   </div>
 </template>
 
 <style lang="scss">
+.q-btn[aria-pressed="true"] {
+  box-shadow: 0 0 0 3px rgba(91, 158, 240, 0.2), 0 4px 15px rgba(0, 0, 0, 0.2);
+  transform: translateY(-1px);
+  border: $primary 2px solid !important;
+}
 
+.q-btn-group {
+  width: 100%;
+  justify-content: space-between !important;
+}
+
+.q-btn-group .q-btn {
+  border-radius: 16px !important;
+  width: 32% !important;
+  background: linear-gradient(145deg, #ffffff 0%, #f8f9fd 100%);
+  border: 1px solid rgba(0, 0, 0, 0.24);
+  height: 56px !important;
+  transition: all 0.3s ease-in-out;
+  color:rgba(0, 0, 0, 0.54);
+}
 .options {
   display: flex;
   justify-content: space-between;
