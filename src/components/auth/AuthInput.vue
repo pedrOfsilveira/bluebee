@@ -32,14 +32,6 @@ defineProps({
 </template>
 
 <style lang="scss">
-.login-container {
-  overflow: hidden;
-}
-
-
-.login-form {
-  padding: 40px 30px 35px;
-}
 
 .login-input .q-field__control {
   border-radius: 16px;

@@ -85,26 +85,15 @@ const gender = ref(null);
 </template>
 
 <style lang="scss">
-.q-btn[aria-pressed="true"] {
-  box-shadow: 0 0 0 3px rgba(91, 158, 240, 0.2), 0 4px 15px rgba(0, 0, 0, 0.2);
-  transform: translateY(-1px);
-  border: $primary 2px solid !important;
+.login-container {
+  overflow: hidden;
 }
 
-.q-btn-group {
-  width: 100%;
-  justify-content: space-between !important;
+.login-form {
+  padding: 40px 30px 35px;
 }
 
-.q-btn-group .q-btn {
-  border-radius: 16px !important;
-  width: 32% !important;
-  background: linear-gradient(145deg, #ffffff 0%, #f8f9fd 100%);
-  border: 1px solid rgba(0, 0, 0, 0.24);
-  height: 56px !important;
-  transition: all 0.3s ease-in-out;
-  color:rgba(0, 0, 0, 0.54);
-}
+
 .options {
   display: flex;
   justify-content: space-between;
