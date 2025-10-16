@@ -1,4 +1,5 @@
 <script setup>
+import HomeHeader from 'src/components/home/HomeHeader.vue';
 import SectionTitle from "src/components/SectionTitle.vue";
 import AssetsSection from "src/components/wallet/AssetsSection.vue";
 import DiversificationChart from "src/components/wallet/DiversificationChart.vue";
@@ -54,7 +55,7 @@ const assets = ref([
 </script>
 
 <template>
-  <WalletHeader />
+  <HomeHeader/>
 
   <DiversificationChart :percentages="percentages" />
 
@@ -95,6 +96,7 @@ const assets = ref([
 <style scoped lang="scss">
 
 .tabs {
+   border: 1px solid #e8ecf4;
   display: flex;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);

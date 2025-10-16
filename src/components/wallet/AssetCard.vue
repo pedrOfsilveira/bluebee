@@ -59,7 +59,7 @@ const changeClass = computed(() => {
   display: flex;
   align-items: center;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid #e8ecf4;
   position: relative;
   overflow: hidden;
 }
@@ -71,12 +71,10 @@ const changeClass = computed(() => {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.2),
-    transparent
-  );
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 255, 255, 0.2),
+      transparent);
   transition: left 0.5s ease;
 }
 
@@ -147,7 +145,7 @@ const changeClass = computed(() => {
 .asset-amount {
   font-weight: 700;
   margin-bottom: 5px;
-  font-size: 16px;
+  font-size: 14px;
   color: #1a237e;
 }
 

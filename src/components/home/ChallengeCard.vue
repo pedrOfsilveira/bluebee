@@ -24,7 +24,8 @@ defineProps({
 
 <style lang="scss" scoped>
 .challenge-card {
-  background-color: var(--card-bg);
+   border: 1px solid #e8ecf4;
+  background-color: $bg-card;
   border-radius: 18px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
   padding: 20px;

@@ -32,11 +32,12 @@ const newsList = storeNews.news;
   display: flex;
   overflow-x: auto;
   gap: 18px;
-  padding: 5px 2px 15px 2px;
+  padding: 5px 2px 15px 0px;
   scrollbar-width: none;
 }
 
 .news-card {
+//  border: 1px solid #e8ecf4;
   min-width: 240px;
   background-color: white;
   border-radius: 18px;

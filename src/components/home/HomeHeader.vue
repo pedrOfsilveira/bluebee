@@ -20,7 +20,7 @@ const user = {
         <div class="text-subtitle2">Seu Patrimônio Atual</div>
         <div class="text-h4 text-weight-bolder balance">R$ {{ user.totalAssets.toFixed(2).replace('.', ',') }}</div>
         <q-badge
-          transparent
+
           align="middle"
           label="+ R$245,12 (4,9%)"
           class="q-pa-sm text-weight-bold positive-bg"

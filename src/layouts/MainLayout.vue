@@ -55,7 +55,8 @@
   padding: 8px;
 }
 
-.q-tab--active {
+.q-tab--active, .q-hoverable {
   border-radius: 17px;
 }
+
 </style>

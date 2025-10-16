@@ -44,10 +44,11 @@ const storeAuth = useStoreAuth()
 
 <style scoped lang="scss">
 .quick-actions {
+   border: 1px solid #e8ecf4;
   // background-color: $card-opacity;
   background-color: white;
   backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  // border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 18px;
   margin: -30px 20px 25px;
   padding: 20px;
@@ -63,7 +64,7 @@ const storeAuth = useStoreAuth()
   align-items: center;
   background: none;
   border: none;
-  color: var(--text-light);
+  color: $text-light;
   cursor: pointer;
   text-align: center;
   font-size: 12px;
@@ -73,6 +74,7 @@ const storeAuth = useStoreAuth()
 }
 
 .action-btn .q-btn {
+ border: 1px solid #e8ecf4;
   background: linear-gradient(145deg, #eef2f9, #f8f9fd);
   border-radius: 16px;
 }
