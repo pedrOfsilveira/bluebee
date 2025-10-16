@@ -21,7 +21,6 @@ defineProps({
   <q-input
     class="login-input"
     outlined
-    v-model="text"
     :label="label"
     :type="type"
   >

@@ -2,7 +2,13 @@
 import AuthHeader from "src/components/auth/AuthHeader.vue";
 import AuthInput from "src/components/auth/AuthInput.vue";
 import BigButton from "src/components/BigButton.vue";
-import { ref } from "vue";
+import { ref, reactive } from "vue";
+import { useStoreAuth } from "src/stores/storeAuth";
+import { useQuasar } from "quasar";
+
+const $q = useQuasar()
+
+const storeAuth = useStoreAuth()
 
 const register = ref(false);
 
@@ -10,7 +16,65 @@ const switchRegister = () => {
   register.value = !register.value;
 };
 
-const gender = ref(null);
+const credentialsLogin = reactive({
+  email: '',
+  password: ''
+})
+
+const credentialsRegister = reactive({
+  email: '',
+  password: '',
+  passwordConfirm: '',
+  name: '',
+  birth: '',
+  gender: ''
+})
+
+const credentialsVerify = credentials => {
+  let verify = true
+  for (var i in credentials) {
+    if (credentials[i] === '') verify = false
+  }
+  return verify
+}
+
+const credentialsPasswordVerify = credentials => {
+  let verify = true
+  if (credentials.passwordConfirm) {
+    if (credentials.passwordConfirm !== credentials.password) {
+      verify = false
+    }
+  }
+  return verify
+}
+
+const submitForm = credencials => {
+  if (!credentialsVerify(credencials)){
+    $q.dialog({
+      title: "Erro",
+      message: "Por favor preencha todas as lacunas"
+    })
+  }
+  else if (!credentialsPasswordVerify(credencials)){
+    $q.dialog({
+      title: "Erro",
+      message: "Certifique-se de que os campos senha e confirmar senha estão iguais"
+    })
+  }
+  else {
+    formSubmitSuccess()
+  }
+}
+
+const formSubmitSuccess = () => {
+  if (register.value) {
+    storeAuth.registerUser(credentialsRegister)
+  }
+  else {
+    storeAuth.loginUser(credentialsLogin)
+  }
+}
+
 </script>
 
 <template>
@@ -19,16 +83,20 @@ const gender = ref(null);
     subtitle="Aprenda a investir de forma simples e gamificada"
   />
   <div class="login-container">
-    <div class="login-form" v-if="!register">
-      <AuthInput label="Email" type="email" icon="email" class="q-mb-lg" />
-      <AuthInput label="Senha" type="password" icon="key" class="q-mb-md" />
+    <div class="login-form" v-if="!register" >
+      <AuthInput v-model="credentialsLogin.email" label="Email" type="email" icon="email" class="q-mb-lg" />
+      <AuthInput v-model="credentialsLogin.password" label="Senha" type="password" icon="key" class="q-mb-md" />
       <div class="options">
         <div class="forgot-password">
           <a href="#">Esqueceu sua senha?</a>
         </div>
       </div>
 
-      <BigButton title="Entrar" class="q-mb-lg" />
+      <BigButton
+        @click="submitForm(credentialsLogin)"
+        title="Entrar"
+        class="q-mb-lg"
+      />
 
       <div class="signup-link">
         Não tem uma conta?
@@ -38,29 +106,37 @@ const gender = ref(null);
       </div>
     </div>
     <div class="login-form" v-if="register">
-      <AuthInput label="Nome" type="text" icon="person" class="q-mb-lg" />
+      <AuthInput
+        v-model="credentialsRegister.name"
+        label="Nome"
+        type="text"
+        icon="person"
+        class="q-mb-lg"
+      />
 
       <AuthInput
+        v-model="credentialsRegister.birth"
         label="Data de Nascimento"
         type="date"
         icon="calendar_today"
         class="q-mb-lg"
       />
       <q-btn-toggle
+        v-model="credentialsRegister.gender"
         flat
         class="q-mb-lg"
         name="gender"
-        v-model="gender"
         toggle-color="primary"
         :options="[
-          { value: 'male', icon: 'male' },
-          { value: 'female', icon: 'female' },
-          { value: 'other', label: 'Outro' },
+          { value: 'masculino', icon: 'male' },
+          { value: 'feminino', icon: 'female' },
+          { value: 'outro', label: 'Outro' },
         ]"
       />
-      <AuthInput label="Email" type="email" icon="email" class="q-mb-lg" />
-      <AuthInput label="Senha" type="password" icon="key" class="q-mb-lg" />
+      <AuthInput v-model="credentialsRegister.email" label="Email" type="email" icon="email" class="q-mb-lg" />
+      <AuthInput v-model="credentialsRegister.password" label="Senha" type="password" icon="key" class="q-mb-lg" />
       <AuthInput
+        v-model="credentialsRegister.passwordConfirm"
         label="Confirmar Senha"
         type="password"
         icon="check_circle"
@@ -72,7 +148,11 @@ const gender = ref(null);
         </div>
       </div>
 
-      <BigButton title="Cadastrar" class="q-mb-lg" />
+      <BigButton
+        @click="submitForm(credentialsRegister)"
+        title="Cadastrar"
+        class="q-mb-lg"
+      />
 
       <div class="signup-link">
         Já tem uma conta?

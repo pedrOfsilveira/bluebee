@@ -1,44 +1,22 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
-import { uid } from "quasar";
+import { reactive } from "vue";
+import { useRouter } from 'vue-router'
+import { useShowErrorMessage } from 'src/use/useShowErrorMessage'
+import supabase from "src/config/supabase";
 
 export const useStoreAuth = defineStore("auth", () => {
   /* state */
 
-  const usuarios = ref([
-    {
-      id: uid(),
-      nome: "Roberto",
-      senha: "teste123",
-      nascimento: "01/01/2001",
-      // genero: "masculino",
-      email: "roberto@gamil.com",
-    },
-    {
-      id: uid(),
-      nome: "Joana",
-      senha: "teste123",
-      nascimento: "02/02/2002",
-      // genero: "feminino",
-      email: "joana@gamil.com",
-    },
-    {
-      id: uid(),
-      nome: "João",
-      senha: "teste123",
-      nascimento: "03/03/2003",
-      // genero: "masculino",
-      email: "joao@gamil.com",
-    },
-    {
-      id: uid(),
-      nome: "Maria",
-      senha: "teste123",
-      nascimento: "04/04/2004",
-      // genero: "feminino",
-      email: "maria@gamil.com",
-    },
-  ]);
+
+  const userDetailsDefault = {
+    id: null,
+    email: null
+
+  }
+
+  const userDetails = reactive({
+    ...userDetailsDefault
+  })
 
   /* getters */
 
@@ -46,7 +24,67 @@ export const useStoreAuth = defineStore("auth", () => {
 
   /* actions */
 
+  const init = () => {
+    const router = useRouter()
+
+    supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN" || event === "INITIAL_SESSION") {
+        if (session) {
+          userDetails.id = session.user.id
+          userDetails.email = session.user.email
+          router.push('/')
+        }
+      }
+      else if (event === 'SIGNED_OUT') {
+        Object.assign(userDetails, userDetailsDefault)
+        router.replace('/auth')
+      }
+    })
+  }
+
+  const registerUser = async ({ email, password, name, birth, gender }) => {
+    let { error: authError } = await supabase.auth.signUp({
+      email,
+      password
+    })
+
+    if (authError) useShowErrorMessage(authError.message)
+
+    const userId = authData.user.id
+
+    let { error: perfError } = await supabase
+      .from('perfil')
+      .update({
+        nome: name,
+        nascimento: birth,
+        genero: gender,
+        email
+      })
+      .eq('id', userId)
+
+    if (perfError) useShowErrorMessage(perfError.message)
+  }
+
+  const loginUser = async ({ email, password }) => {
+    let { error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    })
+
+    if (error) useShowErrorMessage(error.message)
+  }
+
+  const logoutUser = async () => {
+    let { error } = await supabase.auth.signOut()
+    if (error) useShowErrorMessage(error.message)
+  }
+
   return {
-    usuarios,
+    userDetails,
+
+    init,
+    registerUser,
+    loginUser,
+    logoutUser
   };
 });

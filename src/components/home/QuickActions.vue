@@ -1,7 +1,16 @@
+<script setup>
+// LEMBRAR DE TIRAR TUDO ISSO E O @CLICK DO BOTAO
+import { useStoreAuth } from "src/stores/storeAuth";
+
+const storeAuth = useStoreAuth()
+// ATE AQUI
+</script>
+
 <template>
   <div class="quick-actions">
     <button class="action-btn">
       <q-btn
+        @click="storeAuth.logoutUser"
         flat
         padding="md"
         icon="explore"
