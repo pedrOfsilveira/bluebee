@@ -1,9 +1,7 @@
 <script setup>
 import BlueHeader from 'src/components/BlueHeader.vue';
-import StatCard from 'src/components/profile/StatCard.vue';
+import StatList from 'src/components/profile/StatList.vue';
 import SectionTitle from 'src/components/SectionTitle.vue';
-
-
 </script>
 
 <template>
@@ -49,7 +47,7 @@ import SectionTitle from 'src/components/SectionTitle.vue';
   </BlueHeader>
   <div class="section q-mt-lg">
     <SectionTitle title="Relatório de Progresso" icon="analytics" />
-    <StatCard />
+    <StatList />
   </div>
 
 
@@ -103,20 +101,6 @@ import SectionTitle from 'src/components/SectionTitle.vue';
   box-shadow: 0 8px 20px rgba(255, 193, 7, 0.45);
 }
 
-.quick-actions {
-  background-color: white;
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 18px;
-  margin: -30px 20px 25px;
-  padding: 20px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
-}
-
-
 .profile-stats-container {
   display: flex;
   flex-direction: column;
@@ -129,6 +113,7 @@ import SectionTitle from 'src/components/SectionTitle.vue';
   position: relative;
   z-index: 2;
   border: 1px solid rgba(255, 255, 255, 0.15);
+  width: 100%;
 }
 
 .profile-stats {
@@ -137,7 +122,7 @@ import SectionTitle from 'src/components/SectionTitle.vue';
 
 
 .stat-item {
-  padding: 0 8px;
+  padding: 0 10px;
   text-align: center;
   transition: transform 0.3s ease;
   cursor: pointer;

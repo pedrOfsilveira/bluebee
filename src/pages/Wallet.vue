@@ -3,6 +3,7 @@ import HomeHeader from 'src/components/home/HomeHeader.vue';
 import SectionTitle from "src/components/SectionTitle.vue";
 import AssetsSection from "src/components/wallet/AssetsSection.vue";
 import DiversificationChart from "src/components/wallet/DiversificationChart.vue";
+import History from 'src/components/wallet/History.vue';
 import WalletHeader from "src/components/wallet/WalletHeader.vue";
 import { ref } from "vue";
 const tab = ref("ativos");
@@ -85,7 +86,7 @@ const assets = ref([
       <div class="q-pa-md">
         <SectionTitle title="Histórico" />
         <div class="text-body2 text-weight-regular q-mt-sm">
-          Aqui você verá o histórico de suas transações.
+          <History/>
         </div>
         <div class="mb"></div>
       </div>
@@ -96,7 +97,7 @@ const assets = ref([
 <style scoped lang="scss">
 
 .tabs {
-   border: 1px solid #e8ecf4;
+  border: 1px solid #e8ecf4;
   display: flex;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);

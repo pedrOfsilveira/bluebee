@@ -88,9 +88,9 @@ const changeClass = computed(() => {
 }
 
 .asset-icon {
+   border-radius: 18px;
   width: 50px;
   height: 50px;
-  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -99,10 +99,6 @@ const changeClass = computed(() => {
   color: white;
 
   transition: all 0.3s ease;
-}
-
-.asset-card:hover .asset-icon {
-  transform: rotate(360deg) scale(1.1);
 }
 
 .icon-stocks {
