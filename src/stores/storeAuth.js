@@ -1,17 +1,22 @@
 import { defineStore } from "pinia";
 import { reactive } from "vue";
-import { useRouter } from 'vue-router'
-import { useShowErrorMessage } from 'src/use/useShowErrorMessage'
+import { useRouter } from 'vue-router';
+import { useShowErrorMessage } from 'src/use/useShowErrorMessage';
 import supabase from "src/config/supabase";
+import { useStoreAssets } from "./storeAssets";
 
 export const useStoreAuth = defineStore("auth", () => {
   /* state */
 
+  const storeAssets = useStoreAssets()
 
   const userDetailsDefault = {
     id: null,
-    email: null
-
+    email: null,
+    nome: null,
+    nivel: null,
+    experiencia: null,
+    genero: null
   }
 
   const userDetails = reactive({
@@ -32,12 +37,16 @@ export const useStoreAuth = defineStore("auth", () => {
         if (session) {
           userDetails.id = session.user.id
           userDetails.email = session.user.email
+          loadUserDetails()
           router.push('/')
+          storeAssets.loadAssets()
         }
       }
       else if (event === 'SIGNED_OUT') {
         Object.assign(userDetails, userDetailsDefault)
         router.replace('/auth')
+        storeAssets.unsubscribeAssets()
+        storeAssets.clearAssets()
       }
     })
   }
@@ -77,6 +86,20 @@ export const useStoreAuth = defineStore("auth", () => {
   const logoutUser = async () => {
     let { error } = await supabase.auth.signOut()
     if (error) useShowErrorMessage(error.message)
+  }
+
+  const loadUserDetails = async () => {
+    let { data, error } = await supabase
+      .from('perfil')
+      .select("*")
+      .eq('id', userDetails.id)
+    if (error) useShowErrorMessage(error.message)
+    if (data) {
+      userDetails.nome = data[0].nome
+      userDetails.nivel = data[0].nivel
+      userDetails.experiencia = data[0].experiencia
+      userDetails.genero = data[0].genero
+    }
   }
 
   return {

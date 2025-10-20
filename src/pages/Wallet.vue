@@ -4,9 +4,11 @@ import SectionTitle from "src/components/SectionTitle.vue";
 import AssetsSection from "src/components/wallet/AssetsSection.vue";
 import DiversificationChart from "src/components/wallet/DiversificationChart.vue";
 import History from 'src/components/wallet/History.vue';
-import WalletHeader from "src/components/wallet/WalletHeader.vue";
+import { useStoreAssets } from "src/stores/storeAssets";
 import { ref } from "vue";
 const tab = ref("ativos");
+
+const storeAssets = useStoreAssets()
 
 const percentages = ref({
   stocks: 15,
@@ -15,43 +17,44 @@ const percentages = ref({
   crypto: 25,
 });
 
-const assets = ref([
-  {
-    name: "PETR4",
-    type: "Ações",
-    amount: "R$ 1.245,32",
-    change: "+2,3%",
-    category: "stocks",
-  },
-  {
-    name: "BBAS3",
-    type: "Ações",
-    amount: "R$ 2.500,00",
-    change: "-1,2%",
-    category: "stocks",
-  },
-  {
-    name: "XPTO11",
-    type: "FII",
-    amount: "R$ 3.100,75",
-    change: "+0,5%",
-    category: "fii",
-  },
-  {
-    name: "Tesouro Selic",
-    type: "Renda Fixa",
-    amount: "R$ 5.000,00",
-    change: "+0,1%",
-    category: "fixed",
-  },
-  {
-    name: "Bitcoin",
-    type: "Criptomoeda",
-    amount: "R$ 10.000,00",
-    change: "+3,8%",
-    category: "crypto",
-  },
-]);
+// const assets = ref([
+//   {
+//     name: "PETR4",
+//     type: "Ações",
+//     amount: "R$ 1.245,32",
+//     change: "+2,3%",
+//     category: "stocks",
+//   },
+//   {
+//     name: "BBAS3",
+//     type: "Ações",
+//     amount: "R$ 2.500,00",
+//     change: "-1,2%",
+//     category: "stocks",
+//   },
+//   {
+//     name: "XPTO11",
+//     type: "FII",
+//     amount: "R$ 3.100,75",
+//     change: "+0,5%",
+//     category: "fii",
+//   },
+//   {
+//     name: "Tesouro Selic",
+//     type: "Renda Fixa",
+//     amount: "R$ 5.000,00",
+//     change: "+0,1%",
+//     category: "fixed",
+//   },
+//   {
+//     name: "Bitcoin",
+//     type: "Criptomoeda",
+//     amount: "R$ 10.000,00",
+//     change: "+3,8%",
+//     category: "crypto",
+//   },
+// ]);
+
 
 </script>
 
@@ -79,7 +82,7 @@ const assets = ref([
 
   <q-tab-panels v-model="tab" animated>
     <q-tab-panel name="ativos">
-      <AssetsSection :assets="assets"/>
+      <AssetsSection :assets="storeAssets.assets"/>
     </q-tab-panel>
 
     <q-tab-panel name="alarms">

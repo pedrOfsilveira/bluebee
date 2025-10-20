@@ -2,6 +2,9 @@
 import BlueHeader from 'src/components/BlueHeader.vue';
 import StatList from 'src/components/profile/StatList.vue';
 import SectionTitle from 'src/components/SectionTitle.vue';
+import { useStoreAuth } from 'src/stores/storeAuth';
+
+const storeAuth = useStoreAuth()
 </script>
 
 <template>
@@ -10,11 +13,11 @@ import SectionTitle from 'src/components/SectionTitle.vue';
       <div class="profile-pic"></div>
     </div>
 
-    <div class="profile-name">Pedro Silveira</div>
+    <div class="profile-name">{{ storeAuth.userDetails.nome }}</div>
 
     <div class="profile-level">
       <q-icon name="star" size="16px" class="q-mr-2" />
-      Nível 5 - Investidor Junior
+      {{ storeAuth.userDetails.nivel }} - Investidor Junior
     </div>
 
     <div class="profile-stats-container">
@@ -38,7 +41,7 @@ import SectionTitle from 'src/components/SectionTitle.vue';
         <div class="stat-item" style="flex:2">
           <div class="flex items-center justify-center">
             <q-icon name="star" size="20px" class="q-mr-1" />
-            <div class="stat-value">15</div>
+            <div class="stat-value">{{ storeAuth.userDetails.experiencia }}</div>
           </div>
           <div class="stat-label">Experiência</div>
         </div>

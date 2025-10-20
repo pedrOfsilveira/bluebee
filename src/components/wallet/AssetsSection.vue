@@ -2,6 +2,9 @@
 import SectionTitle from "../SectionTitle.vue";
 import { defineProps } from "vue";
 import AssetCard from "./AssetCard.vue";
+import { useStoreAssets } from "src/stores/storeAssets";
+
+const storeAssets = useStoreAssets()
 
 defineProps({
   assets: {
@@ -10,6 +13,7 @@ defineProps({
     default: () => [],
   },
 });
+
 </script>
 
 <template>

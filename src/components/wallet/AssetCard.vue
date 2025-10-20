@@ -1,19 +1,29 @@
 <script setup>
 import { defineProps, computed } from "vue";
+import { useStoreAssets } from "src/stores/storeAssets";
+import { useCurrencify } from "src/use/useCurrencify";
+
+const storeAssets = useStoreAssets()
+
+// const props = defineProps({
+//   asset: {
+//     type: Object,
+//     required: true, // É uma boa prática tornar a prop principal requerida
+//     default: () => ({
+//       name: "Ativo Genérico",
+//       amount: "R$ 0,00",
+//       change: "+0,0%",
+//       category: "stocks",
+//     }),
+//   },
+// });
 
 const props = defineProps({
   asset: {
     type: Object,
-    required: true, // É uma boa prática tornar a prop principal requerida
-    default: () => ({
-      name: "Ativo Genérico",
-      amount: "R$ 0,00",
-      change: "+0,0%",
-      category: "stocks",
-    }),
+    required: true
   },
 });
-
 
 const categoryMap = {
   stocks: { label: 'Ações', iconClass: 'icon-stocks', emoji: '📈' },
@@ -28,9 +38,10 @@ const categoryInfo = computed(() => {
 
 const { label: assetTypeLabel, iconClass, emoji: iconEmoji } = categoryInfo.value;
 
-const changeClass = computed(() => {
-  return props.asset.change.trim().startsWith('+') ? 'change-positive' : 'change-negative';
-});
+// const changeClass = computed(() => {
+//   console.log(props.asset)
+//   return props.asset.change.trim().startsWith('+') ? 'change-positive' : 'change-negative';
+// });
 
 </script>
 
@@ -38,12 +49,12 @@ const changeClass = computed(() => {
   <div class="asset-card">
     <div class="asset-icon" :class="iconClass">{{ iconEmoji }}</div>
     <div class="asset-info">
-      <div class="asset-name">{{ asset.name }}</div>
-      <div class="asset-type">{{ assetTypeLabel }}</div>
+      <div class="asset-name">{{ asset.ativos.nome }}</div>
+      <div class="asset-type">{{ asset.ativos.tipo }}</div>
     </div>
     <div class="asset-value">
-      <div class="asset-amount">{{ asset.amount }}</div>
-      <div class="asset-change" :class="changeClass">{{ asset.change }}</div>
+      <div class="asset-amount">{{ useCurrencify(asset.quantidade * asset.ativos.valor_min) }}</div>
+      <div class="asset-change" :class="changeClass">{{ asset.ativos.valor_max - asset.ativos.valor_min}}</div>
     </div>
   </div>
 </template>
