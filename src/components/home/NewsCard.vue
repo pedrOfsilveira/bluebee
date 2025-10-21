@@ -9,7 +9,7 @@ defineProps({
 
 <template>
   <div class="news-card">
-    <img :src="news.imageUrl" :alt="news.title" class="news-image" />
+    <img v-if="news.imageUrl" :src="news.imageUrl" :alt="news.title" class="news-image" />
 
     <div class="news-content">
       <div class="news-title">
@@ -17,7 +17,7 @@ defineProps({
       </div>
 
       <div class="news-source">
-        {{ news.source }}
+        {{ news.pubDateFormatted }}
       </div>
     </div>
   </div>

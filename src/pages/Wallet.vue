@@ -73,7 +73,7 @@ const percentages = ref({
   >
     <q-tab name="ativos" icon="account_balance" label="Ativos" class="tab" />
     <q-tab
-      name="alarms"
+      name="history"
       icon="currency_exchange"
       label="Histórico"
       class="tab"
@@ -85,7 +85,7 @@ const percentages = ref({
       <AssetsSection :assets="storeAssets.assets"/>
     </q-tab-panel>
 
-    <q-tab-panel name="alarms">
+    <q-tab-panel name="a">
       <div class="q-pa-md">
         <SectionTitle title="Histórico" />
         <div class="text-body2 text-weight-regular q-mt-sm">

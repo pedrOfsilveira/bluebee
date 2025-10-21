@@ -95,6 +95,7 @@ export const useStoreAuth = defineStore("auth", () => {
       .eq('id', userDetails.id)
     if (error) useShowErrorMessage(error.message)
     if (data) {
+      console.log(data[0])
       userDetails.nome = data[0].nome
       userDetails.nivel = data[0].nivel
       userDetails.experiencia = data[0].experiencia
