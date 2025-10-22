@@ -1,9 +1,9 @@
 <script setup>
 import HomeHeader from 'src/components/home/HomeHeader.vue';
 import SectionTitle from "src/components/SectionTitle.vue";
-import AssetsSection from "src/components/wallet/AssetsSection.vue";
 import DiversificationChart from "src/components/wallet/DiversificationChart.vue";
 import History from 'src/components/wallet/History.vue';
+import MyAssetsSection from 'src/components/wallet/MyAssetsSection.vue';
 import { useStoreAssets } from "src/stores/storeAssets";
 import { ref } from "vue";
 const tab = ref("ativos");
@@ -82,7 +82,7 @@ const percentages = ref({
 
   <q-tab-panels v-model="tab" animated>
     <q-tab-panel name="ativos">
-      <AssetsSection :assets="storeAssets.assets"/>
+      <MyAssetsSection :assets="storeAssets.assets"/>
     </q-tab-panel>
 
     <q-tab-panel name="a">

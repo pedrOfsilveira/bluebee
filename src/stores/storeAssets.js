@@ -21,6 +21,24 @@ export const useStoreAssets = defineStore("assets", () => {
 
 
   /* actions */
+// essa daqui tu troca pra chamar os ativos da pessoa
+  const loadMyAssets = async () => {
+    assetsLoaded.value = false
+
+    let { data, error } = await supabase
+      .from('ativos') // troquei isso aqui tb, mas só botei qualquer coisa pq parei de fazer
+      .select(`
+       *
+      `)
+      // .eq('perfil_id', storeAuth.userDetails.id)
+
+    if (error) useShowErrorMessage(error.message)
+    if (data) {
+      assets.value = data
+      assetsLoaded.value = true
+      subscribeAssets()
+    }
+  }
 
   const loadAssets = async () => {
     assetsLoaded.value = false
@@ -80,7 +98,7 @@ export const useStoreAssets = defineStore("assets", () => {
 
   return {
     assets,
-
+    loadMyAssets,
     loadAssets,
     unsubscribeAssets,
     clearAssets

@@ -10,7 +10,7 @@ const storeAuth = useStoreAuth()
   <div class="quick-actions">
     <button class="action-btn">
       <q-btn
-        @click="storeAuth.logoutUser"
+       to="/explore"
         flat
         padding="md"
         icon="explore"

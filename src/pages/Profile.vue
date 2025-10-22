@@ -1,5 +1,6 @@
 <script setup>
 import BlueHeader from 'src/components/BlueHeader.vue';
+import LogoutButton from 'src/components/profile/LogoutButton.vue';
 import StatList from 'src/components/profile/StatList.vue';
 import SectionTitle from 'src/components/SectionTitle.vue';
 import { useStoreAuth } from 'src/stores/storeAuth';
@@ -52,7 +53,10 @@ const storeAuth = useStoreAuth()
     <SectionTitle title="Relatório de Progresso" icon="analytics" />
     <StatList />
   </div>
-
+  <div class="section">
+    <LogoutButton/>
+  </div>
+  <div class="mb"></div>
 
 </template>
 

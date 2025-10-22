@@ -66,7 +66,6 @@ import StatMessage from "./StatMessage.vue";
       />
     </div>
   </StatSection>
-  <div class="mb"></div>
 </template>
 
 <style lang="scss" scoped>

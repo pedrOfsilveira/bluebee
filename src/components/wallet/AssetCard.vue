@@ -36,7 +36,6 @@ const categoryInfo = computed(() => {
   return categoryMap[props.asset.category] || categoryMap.stocks;
 });
 
-const { label: assetTypeLabel, iconClass, emoji: iconEmoji } = categoryInfo.value;
 
 // const changeClass = computed(() => {
 //   console.log(props.asset)
@@ -47,14 +46,16 @@ const { label: assetTypeLabel, iconClass, emoji: iconEmoji } = categoryInfo.valu
 
 <template>
   <div class="asset-card">
-    <div class="asset-icon" :class="iconClass">{{ iconEmoji }}</div>
+    <div class="asset-icon" :class="categoryInfo.iconClass">{{ categoryInfo.emoji }}</div>
     <div class="asset-info">
-      <div class="asset-name">{{ asset.ativos.nome }}</div>
-      <div class="asset-type">{{ asset.ativos.tipo }}</div>
+      <!-- <div class="asset-name">{{ asset.ativos.nome }}</div> -->
+      <div class="asset-name">{{ asset.name }}</div>
+      <!-- <div class="asset-type">{{ asset.ativos.tipo }}</div> -->
+      <div class="asset-type">{{ categoryInfo.label }}</div>
     </div>
     <div class="asset-value">
-      <div class="asset-amount">{{ useCurrencify(asset.quantidade * asset.ativos.valor_min) }}</div>
-      <div class="asset-change" :class="changeClass">{{ asset.ativos.valor_max - asset.ativos.valor_min}}</div>
+      <!-- <div class="asset-amount">{{ useCurrencify(asset.quantidade * asset.ativos.valor_min) }}</div> -->
+      <!-- <div class="asset-change" :class="changeClass">{{ asset.ativos.valor_max - asset.ativos.valor_min}}</div> -->
     </div>
   </div>
 </template>

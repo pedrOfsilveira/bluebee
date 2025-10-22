@@ -2,7 +2,46 @@
 import BlueHeader from 'src/components/BlueHeader.vue';
 import AssetsSection from 'src/components/wallet/AssetsSection.vue';
 import { ref } from 'vue';
-const tab = ref();
+const tab = ref('all');
+
+const testAssets = ref([
+  {
+    name: "PETR4",
+    type: "Ações",
+    amount: "R$ 1.245,32",
+    change: "+2,3%",
+    category: "stocks",
+  },
+  {
+    name: "BBAS3",
+    type: "Ações",
+    amount: "R$ 2.500,00",
+    change: "-1,2%",
+    category: "stocks",
+  },
+  {
+    name: "XPTO11",
+    type: "FII",
+    amount: "R$ 3.100,75",
+    change: "+0,5%",
+    category: "fii",
+  },
+  {
+    name: "Tesouro Selic",
+    type: "Renda Fixa",
+    amount: "R$ 5.000,00",
+    change: "+0,1%",
+    category: "fixed",
+  },
+  {
+    name: "Bitcoin",
+    type: "Criptomoeda",
+    amount: "R$ 10.000,00",
+    change: "+3,8%",
+    category: "crypto",
+  },
+]);
+
 </script>
 
 <template>
@@ -33,7 +72,9 @@ const tab = ref();
   </q-tabs>
   </BlueHeader>
 
-  <AssetsSection/>
+  <div class="q-mb-lg"></div>
+
+  <AssetsSection :filter="tab" :assets="testAssets"/>
 </template>
 
 <style lang="scss">

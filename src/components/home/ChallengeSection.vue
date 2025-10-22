@@ -9,7 +9,7 @@ const challenges = storeChallenges.challenges;
 
 <template>
   <div class="section">
-    <SectionTitle title="Seus Desafios Ativos" icon="rocket" seeAll />
+    <SectionTitle title="Meus Desafios Ativos" icon="rocket" seeAll />
     <div class="challenges-container">
       <ChallengeCard v-for="(challenge, index) in challenges" :key="index" :challenge="challenge" />
     </div>
