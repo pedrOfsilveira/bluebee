@@ -1,4 +1,15 @@
 <script setup>
+import { useCurrencify } from 'src/use/useCurrencify';
+import { useStoreAuth } from 'src/stores/storeAuth';
+import { computed } from 'vue';
+
+const storeAuth = useStoreAuth();
+
+const formattedSaldo = computed(() => {
+  const saldo = (storeAuth.userDetails && storeAuth.userDetails.saldo != null) ? storeAuth.userDetails.saldo : 0;
+  return useCurrencify(saldo);
+});
+
 const user = {
   name: "Investidor",
   accountBalance: 2500.00,
@@ -10,10 +21,10 @@ const user = {
 
 <template>
   <div class="home-top-container">
-    <div class="greeting text-h6">Olá, {{ user.name }}! 👋</div>
+    <div class="greeting text-h6">Olá, {{ storeAuth.userDetails.nome }}! 👋</div>
     <div class="balance-info q-mb-sm">
       <div class="label text-subtitle2 text-weight-regular">Saldo Conta</div>
-      <div class="balance text-h5 text-weight-bolder">R$ {{ user.accountBalance.toFixed(2).replace('.', ',') }}</div>
+      <div class="balance text-h5 text-weight-bolder">{{ formattedSaldo }}</div>
     </div>
     <div class="chart-placeholder flex">
       <div>

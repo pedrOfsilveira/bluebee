@@ -16,7 +16,8 @@ export const useStoreAuth = defineStore("auth", () => {
     nome: null,
     nivel: null,
     experiencia: null,
-    genero: null
+    genero: null,
+    saldo: null
   }
 
   const userDetails = reactive({
@@ -52,7 +53,7 @@ export const useStoreAuth = defineStore("auth", () => {
   }
 
   const registerUser = async ({ email, password, name, birth, gender }) => {
-    let { error: authError } = await supabase.auth.signUp({
+    let { data: authData, error: authError } = await supabase.auth.signUp({
       email,
       password
     })
@@ -100,6 +101,7 @@ export const useStoreAuth = defineStore("auth", () => {
       userDetails.nivel = data[0].nivel
       userDetails.experiencia = data[0].experiencia
       userDetails.genero = data[0].genero
+      userDetails.saldo = data[0].saldo
     }
   }
 
