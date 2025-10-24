@@ -2,46 +2,18 @@
 import BlueHeader from 'src/components/BlueHeader.vue';
 import AssetsSection from 'src/components/wallet/AssetsSection.vue';
 import { useStoreAssets } from 'src/stores/storeAssets';
-import { ref } from 'vue';
-const tab = ref('todos');
+import { onUnmounted, ref } from 'vue';
 
-const testAssets = ref([
-  {
-    name: "PETR4",
-    type: "Ações",
-    amount: "R$ 1.245,32",
-    change: "+2,3%",
-    category: "stocks",
-  },
-  {
-    name: "BBAS3",
-    type: "Ações",
-    amount: "R$ 2.500,00",
-    change: "-1,2%",
-    category: "stocks",
-  },
-  {
-    name: "XPTO11",
-    type: "FII",
-    amount: "R$ 3.100,75",
-    change: "+0,5%",
-    category: "fii",
-  },
-  {
-    name: "Tesouro Selic",
-    type: "Renda Fixa",
-    amount: "R$ 5.000,00",
-    change: "+0,1%",
-    category: "fixed",
-  },
-  {
-    name: "Bitcoin",
-    type: "Criptomoeda",
-    amount: "R$ 10.000,00",
-    change: "+3,8%",
-    category: "crypto",
-  },
-]);
+const tab = ref('todos'),
+      search = ref('')
+
+const handleSearch = (val) => {
+  storeAssets.searchAssets(val)
+}
+
+onUnmounted( () => {
+  storeAssets.searchAssets('')
+})
 
 const storeAssets = useStoreAssets();
 
@@ -53,9 +25,14 @@ const storeAssets = useStoreAssets();
       <q-icon name="explore" class="q-mr-sm" />
       Explorar Ativos
     </div>
-    <q-input class="search-input" outlined placeholder="Buscar por nome ou ticker...">
+    <q-input
+      @update:model-value="handleSearch"
+      v-model="search"
+      class="search-input"
+      outlined placeholder="Buscar por nome ou ticker..."
+    >
        <template v-slot:prepend>
-      <q-icon name="search" />
+      <q-icon name="search"/>
     </template>
     </q-input>
     <q-tabs
@@ -77,7 +54,6 @@ const storeAssets = useStoreAssets();
 
   <div class="q-mb-lg"></div>
 
-  <!-- <AssetsSection :filter="tab" :assets="testAssets"/> -->
   <AssetsSection :filter="tab" :assets="storeAssets.assets"/>
 
 </template>

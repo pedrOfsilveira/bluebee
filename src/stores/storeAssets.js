@@ -40,10 +40,25 @@ export const useStoreAssets = defineStore("assets", () => {
     assets.value = []
   }
 
+  const searchAssets = async (search) => {
+    console.log(search)
+    let { data, error } = await supabase
+      .from('ativos')
+      .select('*')
+      .ilike('nome', `%${search}%`)
+      .order('nome', {ascending: true})
+
+      if (error) useShowErrorMessage(error.message)
+      if (data) {
+        assets.value = data
+      }
+  }
+
   return {
     assets,
 
     loadAssets,
-    clearAssets
+    clearAssets,
+    searchAssets
   };
 });
