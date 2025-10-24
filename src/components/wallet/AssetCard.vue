@@ -1,9 +1,9 @@
 <script setup>
 import { defineProps, computed } from "vue";
-import { useStoreAssets } from "src/stores/storeAssets";
+import { useStoreUserAssets } from "src/stores/storeUserAssets";
 import { useCurrencify } from "src/use/useCurrencify";
 
-const storeAssets = useStoreAssets()
+const storeUserAssets = useStoreUserAssets()
 
 // const props = defineProps({
 //   asset: {
@@ -26,16 +26,17 @@ const props = defineProps({
 });
 
 const categoryMap = {
-  stocks: { label: 'Ações', iconClass: 'icon-stocks', emoji: '📈' },
-  fii: { label: 'FIIs', iconClass: 'icon-fii', emoji: '🏢' },
+  'Ações': { label: 'Ações', iconClass: 'icon-stocks', emoji: '📈' },
+  'Fundo Imobiliário': { label: 'FIIs', iconClass: 'icon-fii', emoji: '🏢' },
   fixed: { label: 'Renda Fixa', iconClass: 'icon-fixed', emoji: '🔒' },
   crypto: { label: 'Cripto', iconClass: 'icon-crypto', emoji: '₿' },
 };
 
 const categoryInfo = computed(() => {
-  return categoryMap[props.asset.category] || categoryMap.stocks;
+  return props.asset.tipo
+          ? categoryMap[props.asset.tipo] || categoryMap['Ações']
+          : categoryMap[props.asset.ativos.tipo] || categoryMap['Ações'];
 });
-
 
 // const changeClass = computed(() => {
 //   console.log(props.asset)
@@ -47,15 +48,17 @@ const categoryInfo = computed(() => {
 <template>
   <div class="asset-card">
     <div class="asset-icon" :class="categoryInfo.iconClass">{{ categoryInfo.emoji }}</div>
-    <div class="asset-info">
-      <!-- <div class="asset-name">{{ asset.ativos.nome }}</div> -->
-      <div class="asset-name">{{ asset.name }}</div>
-      <!-- <div class="asset-type">{{ asset.ativos.tipo }}</div> -->
-      <div class="asset-type">{{ categoryInfo.label }}</div>
+    <div v-if="asset.nome" class="asset-info">
+      <div class="asset-name">{{ asset.nome }}</div>
+      <div class="asset-type">{{ asset.tipo }}</div>
+    </div>
+    <div v-else class="asset-info">
+      <div class="asset-name" >{{ asset.ativos.nome }}</div>
+      <div class="asset-type" >{{ asset.ativos.tipo }}</div>
     </div>
     <div class="asset-value">
       <!-- <div class="asset-amount">{{ useCurrencify(asset.quantidade * asset.ativos.valor_min) }}</div> -->
-      <!-- <div class="asset-change" :class="changeClass">{{ asset.ativos.valor_max - asset.ativos.valor_min}}</div> -->
+      <!-- <div class="asset-change" :class="changeClass">{{ asset.ativos.valor_max - asset.ativos.valor_min }}</div> -->
     </div>
   </div>
 </template>

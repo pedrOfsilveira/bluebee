@@ -10,12 +10,11 @@ const storeAssets = useStoreAssets()
 const props = defineProps({
   assets: {
     type: Array,
-    required: false,
-    default: () => [],
+    required: true
   },
   filter: {
     type: String,
-    default: 'all'
+    default: 'todos'
   },
 });
 
@@ -23,11 +22,11 @@ console.log(props.assets)
 const filteredAssets = computed(() => {
   // const allAssets = storeAssets.assets;
   const allAssets = props.assets // teste
-  if (props.filter === 'all') {
+  if (props.filter === 'todos') {
     return allAssets;
   }
 
-  return allAssets.filter(asset => asset.category === props.filter);
+  return allAssets.filter(asset => asset.tipo === props.filter);
 });
 </script>
 

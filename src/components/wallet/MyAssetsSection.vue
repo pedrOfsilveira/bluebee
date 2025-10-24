@@ -2,15 +2,14 @@
 import SectionTitle from "../SectionTitle.vue";
 import { defineProps } from "vue";
 import AssetCard from "./AssetCard.vue";
-import { useStoreAssets } from "src/stores/storeAssets";
+import { useStoreUserAssets } from "src/stores/storeUserAssets";
 
-const storeAssets = useStoreAssets()
+const storeUserAssets = useStoreUserAssets()
 
 defineProps({
   assets: {
     type: Array,
     required: false,
-    default: () => [],
   },
 });
 
@@ -18,7 +17,7 @@ defineProps({
 
 <template>
   <div class="section text-body2 text-weight-regular">
-    <SectionTitle title="Meus Ativos" />
+    <SectionTitle title="Meus Ativos"/>
     <div class="assets-list">
      <AssetCard v-for="asset in assets" :asset="asset"/>
     </div>

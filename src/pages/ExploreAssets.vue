@@ -1,8 +1,9 @@
 <script setup>
 import BlueHeader from 'src/components/BlueHeader.vue';
 import AssetsSection from 'src/components/wallet/AssetsSection.vue';
+import { useStoreAssets } from 'src/stores/storeAssets';
 import { ref } from 'vue';
-const tab = ref('all');
+const tab = ref('todos');
 
 const testAssets = ref([
   {
@@ -42,6 +43,8 @@ const testAssets = ref([
   },
 ]);
 
+const storeAssets = useStoreAssets();
+
 </script>
 
 <template>
@@ -63,9 +66,9 @@ const testAssets = ref([
     active-bg-color="accent"
     v-model="tab"
   >
-    <q-tab name="all" label="Todos" class="subtab" />
-    <q-tab name="stocks" label="Ações" class="subtab" />
-    <q-tab name="fii" label="FIIs" class="subtab" />
+    <q-tab name="todos" label="Todos" class="subtab" />
+    <q-tab name="Ação" label="Ações" class="subtab" />
+    <q-tab name="Fundo Imobiliário" label="FIIs" class="subtab" />
     <q-tab name="etf" label="ETFs" class="subtab" />
     <q-tab name="fixed" label="Renda Fixa" class="subtab" />
     <q-tab name="crypto" label="Cripto" class="subtab" />
@@ -74,7 +77,9 @@ const testAssets = ref([
 
   <div class="q-mb-lg"></div>
 
-  <AssetsSection :filter="tab" :assets="testAssets"/>
+  <!-- <AssetsSection :filter="tab" :assets="testAssets"/> -->
+  <AssetsSection :filter="tab" :assets="storeAssets.assets"/>
+
 </template>
 
 <style lang="scss">

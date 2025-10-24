@@ -4,11 +4,11 @@ import SectionTitle from "src/components/SectionTitle.vue";
 import DiversificationChart from "src/components/wallet/DiversificationChart.vue";
 import History from 'src/components/wallet/History.vue';
 import MyAssetsSection from 'src/components/wallet/MyAssetsSection.vue';
-import { useStoreAssets } from "src/stores/storeAssets";
+import { useStoreUserAssets } from "src/stores/storeUserAssets";
 import { ref } from "vue";
 const tab = ref("ativos");
 
-const storeAssets = useStoreAssets()
+const storeUserAssets = useStoreUserAssets()
 
 const percentages = ref({
   stocks: 15,
@@ -82,7 +82,7 @@ const percentages = ref({
 
   <q-tab-panels v-model="tab" animated>
     <q-tab-panel name="ativos">
-      <MyAssetsSection :assets="storeAssets.assets"/>
+      <MyAssetsSection :assets="storeUserAssets.assets"/>
     </q-tab-panel>
 
     <q-tab-panel name="a">

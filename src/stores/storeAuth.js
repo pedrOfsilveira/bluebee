@@ -4,11 +4,13 @@ import { useRouter } from 'vue-router';
 import { useShowErrorMessage } from 'src/use/useShowErrorMessage';
 import supabase from "src/config/supabase";
 import { useStoreAssets } from "./storeAssets";
+import { useStoreUserAssets } from "./storeUserAssets";
 
 export const useStoreAuth = defineStore("auth", () => {
   /* state */
 
   const storeAssets = useStoreAssets()
+  const storeUserAssets = useStoreUserAssets()
 
   const userDetailsDefault = {
     id: null,
@@ -41,12 +43,14 @@ export const useStoreAuth = defineStore("auth", () => {
           loadUserDetails()
           router.push('/')
           storeAssets.loadAssets()
+          storeUserAssets.loadUserAssets()
         }
       }
       else if (event === 'SIGNED_OUT') {
         Object.assign(userDetails, userDetailsDefault)
         router.replace('/auth')
-        storeAssets.unsubscribeAssets()
+        storeUserAssets.unsubscribeAssets()
+        storeUserAssets.clearUserAssets()
         storeAssets.clearAssets()
       }
     })
