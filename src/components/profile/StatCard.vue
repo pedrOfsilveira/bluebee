@@ -25,6 +25,9 @@ defineProps({
 
 <style lang="scss" scoped>
 .stat-card {
+  overflow-wrap: break-word; /* Quebra palavras longas */
+  word-break: break-word;
+  text-wrap: wrap;
   min-width: 120px;
   background: linear-gradient(145deg, #eef2f9, #f8f9fd);
   padding: 20px 15px;
@@ -51,7 +54,9 @@ defineProps({
 }
 
 .stat-value {
-  font-size: 24px;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  font-size: 20px;
   /* Maior */
   font-weight: 700;
   color: $text-dark;
@@ -59,6 +64,8 @@ defineProps({
 }
 
 .stat-label {
+  overflow-wrap: break-word;
+  word-break: break-word;
   font-size: 13px;
   color: $text-light;
   font-weight: 500;

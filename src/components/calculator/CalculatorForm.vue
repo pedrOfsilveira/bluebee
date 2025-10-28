@@ -1,10 +1,11 @@
-<script setup>
+<script setup lang="js">
 import AuthInput from "../auth/AuthInput.vue";
 import { reactive, ref, watch, computed } from "vue";
 import vSelectAll from "src/directives/directiveSelectAll.js";
 import StatSection from "../profile/StatSection.vue";
 import SectionTitle from "../SectionTitle.vue";
 import StatCard from "../profile/StatCard.vue";
+import html2canvas from 'html2canvas';
 
 const options = ref([
   "Nenhum (usar rentabilidade acima)",
@@ -27,6 +28,9 @@ const finalAmount = ref(0);
 const totalInvested = ref(0);
 const totalInterest = ref(0);
 const ipcaWarning = ref(false);
+const percentGain = ref(0);
+
+const shareLoading = ref(false);
 
 const formatBRL = (value) => {
   if (value === null || isNaN(value)) return "R$ 0,00";
@@ -85,6 +89,7 @@ const calculateCompoundInterest = () => {
     totalInterest.value = 0;
     finalAmount.value = invested;
     showResults.value = true;
+    percentGain.value = 0;
     return;
   }
   const monthlyRate = Math.pow(1 + annualRate / 100, 1 / 12) - 1;
@@ -98,11 +103,17 @@ const calculateCompoundInterest = () => {
   const total = fvInitial + fvMonthly;
   const invested = initial + monthly * totalMonths;
   const interest = total - invested;
+  
+  let gainPercentage = 0;
+  if (invested > 0) {
+    gainPercentage = ((interest / invested) * 100);
+  }
 
   finalAmount.value = total;
   totalInvested.value = invested;
   totalInterest.value = interest;
   showResults.value = true;
+  percentGain.value = gainPercentage.toFixed(2);
 };
 
 const resetCalculator = () => {
@@ -118,6 +129,109 @@ const resetCalculator = () => {
   finalAmount.value = 0;
   totalInvested.value = 0;
   totalInterest.value = 0;
+  percentGain.value = 0;
+};
+
+const downloadImage = (dataUrl, filename) => {
+  const a = document.createElement('a');
+  a.href = dataUrl;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  alert('A imagem foi baixada, pois o compartilhamento nativo não está disponível.');
+};
+
+const shareResultsAsImage = async () => {
+  shareLoading.value = true;
+  const resultsElement = document.getElementById('simulation-results');
+
+  if (!resultsElement) {
+    console.error('Elemento de resultados não encontrado para captura.');
+    shareLoading.value = false;
+    return;
+  }
+  
+  const originalStyle = resultsElement.style.cssText;
+
+  resultsElement.style.backgroundColor = 'transparent';
+  resultsElement.style.boxShadow = 'none';
+  resultsElement.style.border = 'none'; 
+
+  const computedStyle = getComputedStyle(resultsElement);
+  const elementBackgroundColor = computedStyle.backgroundColor === 'rgba(0, 0, 0, 0)' || computedStyle.backgroundColor === 'transparent'
+                                ? '#FFFFFF' 
+                                : computedStyle.backgroundColor;
+  
+  await new Promise(resolve => setTimeout(resolve, 50));
+
+  try {
+    const originalCanvas = await html2canvas(resultsElement, {
+      useCORS: true,
+      scale: 2, 
+      logging: false,
+      backgroundColor: elementBackgroundColor 
+    });
+
+    const targetRatio = 9 / 16;
+    
+    const originalWidth = originalCanvas.width;
+    const originalHeight = originalCanvas.height;
+    const originalRatio = originalWidth / originalHeight;
+
+    let destWidth;
+    let destHeight;
+    let x = 0; 
+    let y = 0; 
+
+    if (originalRatio > targetRatio) {
+      destWidth = originalWidth;
+      destHeight = Math.round(originalWidth / targetRatio);
+      y = Math.round((destHeight - originalHeight) / 2);
+    } else {
+      destHeight = originalHeight;
+      destWidth = Math.round(originalHeight * targetRatio);
+      x = Math.round((destWidth - originalWidth) / 2);
+    }
+    
+    const destCanvas = document.createElement('canvas');
+    destCanvas.width = destWidth;
+    destCanvas.height = destHeight;
+    const destCtx = destCanvas.getContext('2d');
+
+    destCtx.fillStyle = elementBackgroundColor;
+    destCtx.fillRect(0, 0, destWidth, destHeight);
+
+    destCtx.drawImage(originalCanvas, x, y);
+    
+    const imageDataUrl = destCanvas.toDataURL('image/png');
+
+
+    if (navigator.share) {
+      const blob = await (await fetch(imageDataUrl)).blob();
+      const file = new File([blob], 'bluebee-simulacao.png', { type: 'image/png' });
+
+      try {
+        await navigator.share({
+          files: [file],
+          title: 'Minha Simulação de Investimento Bluebee!',
+          text: 'Confira a simulação que fiz no Bluebee e comece a investir você também!',
+          url: window.location.href, 
+        });
+      } catch (error) {
+        console.warn('Compartilhamento nativo falhou ou foi cancelado:', error);
+      }
+    } else {
+      downloadImage(imageDataUrl, 'bluebee-simulacao.png');
+    }
+
+  } catch (error) {
+    console.error('Erro ao gerar a imagem:', error);
+    alert('Não foi possível gerar a imagem para compartilhamento.');
+  } finally {
+    resultsElement.style.cssText = originalStyle;
+    shareLoading.value = false;
+  }
 };
 </script>
 
@@ -189,7 +303,11 @@ const resetCalculator = () => {
     </div>
   </q-form>
 
-  <StatSection v-if="showResults">
+  <StatSection
+    v-if="showResults"
+    id="simulation-results"
+    class="results-section-with-share"
+  >
     <SectionTitle
       class="bb"
       title="Resultado da Simulação"
@@ -211,20 +329,48 @@ const resetCalculator = () => {
         :value="formatBRL(totalInterest)"
         label="Ganho Estimado"
       />
+      <div class="dois">
+        <StatCard 
+          icon="calendar_today"
+          :value="calculatorForm.periodYears ? calculatorForm.periodYears + ' anos' : '0 anos'"
+          label="Período de Investimento"
+        />
+        <StatCard 
+          icon="percent"
+          :value="percentGain ? percentGain + '%' : '0%'"
+          label="Ganho Percentual Estimado"
+        />
+      </div>
     </div>
+
+    <q-btn
+      data-html2canvas-ignore="true"
+      class="bottom-right-share-btn"
+      round
+      flat
+      padding="md"
+      icon="share"
+      @click="shareResultsAsImage"
+      :loading="shareLoading"
+    />
+
   </StatSection>
   <div class="mb"></div>
 </template>
 
 <style lang="scss" scoped>
+.dois {
+  display: flex;
+  gap: 16px;
+  > * {
+    flex: 1 !important;     
+    min-width: 0 !important;
+  }
+}
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-  /* Responsivo */
-  gap: 18px;
-  /* Mais espaço */
+  gap: 16px;
   margin-bottom: 10px;
-  /* Ajustado */
 }
 
 .bb {
@@ -273,20 +419,26 @@ const resetCalculator = () => {
   box-shadow: 0 12px 30px rgba(255, 193, 7, 0.5);
 }
 
-.results-container {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #f9f9f9;
+.results-section-with-share {
+  position: relative; 
+  overflow: hidden; 
 }
 
-.result-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 1.1em;
+.bottom-right-share-btn {
+  position: absolute; 
+  bottom: 10px;      
+  right: 10px;       
+  z-index: 10;       
+  
+  background: linear-gradient(135deg, $accent, #ffa000); 
+  color: $secondary; 
+  box-shadow: 0 4px 15px rgba(255, 193, 7, 0.6); 
+  transition: all 0.3s ease-in-out; 
+  
+}
 
-  span {
-    color: #555;
-  }
+.bottom-right-share-btn:hover {
+  transform: scale(1.05); 
+  box-shadow: 0 6px 20px rgba(255, 193, 7, 0.8);
 }
 </style>
