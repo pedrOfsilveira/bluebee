@@ -10,7 +10,7 @@ const storeAuth = useStoreAuth()
   <div class="quick-actions">
     <button class="action-btn">
       <q-btn
-       to="/explore"
+        to="/explore"
         flat
         padding="md"
         icon="explore"
@@ -21,6 +21,7 @@ const storeAuth = useStoreAuth()
     </button>
     <button class="action-btn">
       <q-btn
+        to="/calculator"
         flat
         padding="md"
         icon="calculate"

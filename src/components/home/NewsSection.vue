@@ -76,9 +76,12 @@ onMounted(() => {
 </template>
 
 <style lang="scss">
+.my-card::-webkit-scrollbar {
+  display: none;
+} 
 
-.my-card {
-
+.q-dialog__inner > div {
+  border-radius: 16px !important;
 }
 .news-image {
   height: 120px;
@@ -96,7 +99,7 @@ onMounted(() => {
 }
 
 .news-card {
-  //  border: 1px solid #e8ecf4;
+  border: 1px solid #e8ecf4;
   min-width: 240px;
   background-color: white;
   border-radius: 18px;
@@ -133,7 +136,7 @@ onMounted(() => {
   background: linear-gradient(135deg, #1a237e 0%, #3f51b5 50%, #5c6bc0 100%);
   color: white;
   border: none;
-  border-radius: 14px;
+  border-radius: 6px;
   font-weight: 600;
   cursor: pointer;
   // box-shadow: 0 8px 25px rgba(63, 81, 181, 0.3);
