@@ -1,4 +1,6 @@
 <script setup>
+import { color } from 'chart.js/helpers';
+
 
 defineProps({
   icon: {
@@ -9,7 +11,15 @@ defineProps({
     type: String,
     required: true,
   },
+  textColor: {
+    type: String,
+    default: 'secondary',
+  },
   seeAll: {
+    type: Boolean,
+    default: false,
+  },
+  bb: {
     type: Boolean,
     default: false,
   }
@@ -18,8 +28,8 @@ defineProps({
 </script>
 
 <template>
-  <div class="section-title">
-    <span class="text-weight-bolder text-h6 flex items-center q-mb-sm">
+  <div class="section-title" :class="`text-${textColor} ${bb ? 'bb' : ''}` ">
+    <span class="text-weight-bolder text-h6 flex items-center">
       <q-icon v-if="icon" :name="icon" size="sm" class="q-mr-sm" />
       {{ title }}
     </span>
@@ -32,7 +42,6 @@ defineProps({
 .section-title {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  color: $secondary;
+  align-items: center;;
 }
 </style>

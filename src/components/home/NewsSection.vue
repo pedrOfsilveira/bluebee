@@ -32,7 +32,7 @@ onMounted(() => {
 
 <template>
   <div class="section">
-    <SectionTitle title="Notícias de Mercado" icon="newspaper" seeAll />
+    <SectionTitle title="Notícias de Mercado" icon="newspaper" seeAll bb/>
 
     <div class="news-container">
       <div v-if="storeNews.newsState.loading" class="flex justify-center full-width">
@@ -78,7 +78,7 @@ onMounted(() => {
 <style lang="scss">
 .my-card::-webkit-scrollbar {
   display: none;
-} 
+}
 
 .q-dialog__inner > div {
   border-radius: 16px !important;
@@ -149,5 +149,9 @@ onMounted(() => {
   text-transform: none; // Remove o texto em maiúsculas dos botões
   font-weight: bold;
 
+}
+
+.my-card {
+  background-color: $bg-light;
 }
 </style>

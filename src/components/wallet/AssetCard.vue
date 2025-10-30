@@ -1,7 +1,6 @@
 <script setup>
-import { defineProps, computed } from "vue";
+import { defineEmits, computed } from "vue";
 import { useStoreUserAssets } from "src/stores/storeUserAssets";
-import { useCurrencify } from "src/use/useCurrencify";
 
 const storeUserAssets = useStoreUserAssets()
 
@@ -18,12 +17,14 @@ const storeUserAssets = useStoreUserAssets()
 //   },
 // });
 
+
+const emit = defineEmits(['open-details']);
+
 const props = defineProps({
   asset: {
     type: Object,
     required: true
-  },
-});
+  },});
 
 const categoryMap = {
   'Ações': { label: 'Ações', iconClass: 'icon-stocks', emoji: '📈' },
@@ -43,10 +44,13 @@ const categoryInfo = computed(() => {
 //   return props.asset.change.trim().startsWith('+') ? 'change-positive' : 'change-negative';
 // });
 
+const openDetails = () => {
+  emit('open-details', props.asset)
+}
 </script>
 
 <template>
-  <div class="asset-card">
+  <div class="asset-card" @click="openDetails">
     <div class="asset-icon" :class="categoryInfo.iconClass">{{ categoryInfo.emoji }}</div>
     <div v-if="asset.nome" class="asset-info">
       <div class="asset-name">{{ asset.nome }}</div>

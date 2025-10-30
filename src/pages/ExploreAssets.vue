@@ -16,7 +16,7 @@ onUnmounted( () => {
 })
 
 const storeAssets = useStoreAssets();
-
+console.log(storeAssets.assets[0])
 </script>
 
 <template>

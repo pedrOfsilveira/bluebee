@@ -16,3 +16,15 @@ $footer-bg: rgba(255, 255, 255, 0.97);
 .mb {
   margin-bottom: 100px;
 }
+
+.bb {
+  border-bottom: 2px solid #e8ecf4;
+  margin-bottom: 16px;
+}
+
+.useful-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 16px;
+  margin-bottom: 10px;
+}

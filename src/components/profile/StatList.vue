@@ -69,10 +69,7 @@ import StatMessage from "./StatMessage.vue";
 </template>
 
 <style lang="scss" scoped>
-.bb {
-  border-bottom: 2px solid #e8ecf4;
-  margin-bottom: 18px;
-}
+
 
 .stats-grid {
   display: grid;
