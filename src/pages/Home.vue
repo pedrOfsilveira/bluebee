@@ -13,7 +13,8 @@ import ChallengeSection from 'src/components/home/ChallengeSection.vue';
     <QuickActions />
 
     <div class="sections">
-      <NewsSection />
+      <!-- DEPOIS TIRAR ISSO -->
+      <!-- <NewsSection /> -->
       <ChallengeSection />
     </div>
 

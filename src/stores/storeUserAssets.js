@@ -15,11 +15,30 @@ export const useStoreUserAssets = defineStore("userAssets", () => {
 
   const assetsLoaded = ref(false)
 
+  let timer = 0;
   /* getters */
 
 
 
   /* actions */
+
+  // teste
+  const dividend = (assets) => {
+    // if (!timer % 3) {
+    //   let { data, error } = await supabase
+    //     .from('perfil_ativos')
+    //     .select('*')
+    //     .eq('tipo', 'Ação')
+    // }
+
+    assets.forEach(asset => {
+      let assetDividend = asset.ativos.dividendos ? asset.ativos.dividendos*asset.quantidade : 0
+      console.log(asset.ativos.dividendos*asset.quantidade)
+
+      storeAuth.userDetails.saldo += assetDividend
+    })
+  }
+  //
 
   const loadUserAssets = async () => {
     assetsLoaded.value = false
@@ -37,6 +56,7 @@ export const useStoreUserAssets = defineStore("userAssets", () => {
       assets.value = data
       assetsLoaded.value = true
       subscribeAssets()
+      timer = setInterval(() => {dividend(assets.value)}, 4000)
     }
   }
 
