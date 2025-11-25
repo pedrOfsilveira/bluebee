@@ -1,26 +1,17 @@
 <script setup>
+import { ref, onMounted } from 'vue';
+import { useStoreNews } from 'src/stores/storeNews';
 import NewsCard from './NewsCard.vue';
 import SectionTitle from '../SectionTitle.vue';
-import { useStoreNews } from 'src/stores/storeNews';
-import { onMounted } from 'vue';
-import { ref } from 'vue';
-import BigButton from '../BigButton.vue';
 
 const storeNews = useStoreNews();
-
-// --- LÓGICA DO DIÁLOGO ---
-// 1. Variável para controlar se o diálogo está visível ou não
 const dialogVisible = ref(false);
-// 2. Variável para guardar os dados da notícia que foi clicada
 const selectedNews = ref(null);
 
-// 3. Função que será chamada no clique
 const showNewsDetails = (news) => {
-  selectedNews.value = news;   // Guarda a notícia clicada
-  dialogVisible.value = true;  // Abre o diálogo
+  selectedNews.value = news;
+  dialogVisible.value = true;
 };
-
-// --- FIM DA LÓGICA DO DIÁLOGO ---
 
 onMounted(() => {
   if (!storeNews.newsState.noticias.length) {
@@ -29,27 +20,30 @@ onMounted(() => {
 });
 </script>
 
-
 <template>
   <div class="section">
-    <SectionTitle title="Notícias de Mercado" icon="newspaper" seeAll bb/>
+    <SectionTitle title="Notícias de Mercado" icon="newspaper" bb />
 
     <div class="news-container">
       <div v-if="storeNews.newsState.loading" class="flex justify-center full-width">
         <q-spinner color="secondary" size="3em" :thickness="5" />
       </div>
 
-      <NewsCard v-for="(news, index) in storeNews.newsState.noticias" :key="index" :news="news"
-        @click="showNewsDetails(news)" />
-
+      <NewsCard 
+        v-for="(news, index) in storeNews.newsState.noticias" 
+        :key="index" 
+        :news="news"
+        @click="showNewsDetails(news)" 
+      />
     </div>
-    <q-dialog v-model="dialogVisible" v-if="selectedNews">
-      <q-card class="my-card no-scrollbar" style="width: 100%; max-width: 500px;">
+
+    <q-dialog v-model="dialogVisible">
+      <q-card v-if="selectedNews" class="my-card no-scrollbar" style="width: 100%; max-width: 500px;">
         <q-img :src="selectedNews.imageUrl" />
 
         <q-card-section>
           <div class="row no-wrap items-center q-mt-md">
-           <SectionTitle :title="selectedNews.title"/>
+            <SectionTitle :title="selectedNews.title" />
           </div>
           <div class="text-caption text-grey q-mb-sm">
             <q-icon name="event" />
@@ -67,8 +61,13 @@ onMounted(() => {
 
         <q-card-actions align="right">
           <q-btn v-close-popup flat color="grey" label="Fechar" />
-          <q-btn class="my-btn" label="Ler notícia completa" icon-right="launch" :href="selectedNews.link"
-            target="_blank" />
+          <q-btn 
+            class="my-btn" 
+            label="Ler notícia completa" 
+            icon-right="launch" 
+            :href="selectedNews.url"
+            target="_blank" 
+          />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -76,20 +75,6 @@ onMounted(() => {
 </template>
 
 <style lang="scss">
-.my-card::-webkit-scrollbar {
-  display: none;
-}
-
-.q-dialog__inner > div {
-  border-radius: 16px !important;
-}
-.news-image {
-  height: 120px;
-  width: 100%;
-  object-fit: cover;
-  transition: transform 0.4s ease;
-}
-
 .news-container {
   display: flex;
   overflow-x: auto;
@@ -107,6 +92,13 @@ onMounted(() => {
   overflow: hidden;
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
+}
+
+.news-image {
+  height: 120px;
+  width: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
 }
 
 .news-title {
@@ -132,6 +124,23 @@ onMounted(() => {
   font-weight: 500;
 }
 
+.my-card {
+  background-color: $bg-light;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  .q-card__actions {
+    padding: 10px;
+
+    .q-btn {
+      text-transform: none;
+      font-weight: bold;
+    }
+  }
+}
+
 .my-btn {
   background: linear-gradient(135deg, #1a237e 0%, #3f51b5 50%, #5c6bc0 100%);
   color: white;
@@ -139,19 +148,9 @@ onMounted(() => {
   border-radius: 6px;
   font-weight: 600;
   cursor: pointer;
-  // box-shadow: 0 8px 25px rgba(63, 81, 181, 0.3);
-
-}
-.my-card .q-card__actions {
-  padding: 10px;
-}
-.my-card .q-card__actions .q-btn {
-  text-transform: none; // Remove o texto em maiúsculas dos botões
-  font-weight: bold;
-
 }
 
-.my-card {
-  background-color: $bg-light;
+.q-dialog__inner>div {
+  border-radius: 16px !important;
 }
 </style>

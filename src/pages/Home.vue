@@ -14,7 +14,7 @@ import ChallengeSection from 'src/components/home/ChallengeSection.vue';
 
     <div class="sections">
       <!-- DEPOIS TIRAR ISSO -->
-      <!-- <NewsSection /> -->
+      <NewsSection />
       <ChallengeSection />
     </div>
 

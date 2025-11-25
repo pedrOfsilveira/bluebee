@@ -3,14 +3,15 @@ import { reactive } from "vue";
 import { useShowErrorMessage } from 'src/use/useShowErrorMessage';
 
 const parseDescriptionHtml = (htmlString) => {
-  if (!htmlString) {
-    return { imageUrl: null, textContent: '' };
-  }
+  if (!htmlString) return { imageUrl: null, textContent: '' };
+
   const tempDiv = document.createElement('div');
   tempDiv.innerHTML = htmlString;
+
   const imgTag = tempDiv.querySelector('img');
   const imageUrl = imgTag ? imgTag.src : null;
   const textContent = tempDiv.textContent.trim();
+
   return { imageUrl, textContent };
 }
 
@@ -20,40 +21,66 @@ export const useStoreNews = defineStore("news", () => {
     loading: false,
     error: null
   };
+
   const newsState = reactive({ ...newsStateDefault });
 
-  const fetchNoticias = async (count = 5) => {
+  const fetchNoticias = async () => {
     newsState.loading = true;
     newsState.error = null;
-    const apiKey = 'd040f821-06e8-4e20-9029-17a58b19dbd5';
-    const apiUrl = 'https://api.parse.bot/scraper/17669cbf-095a-4c47-bb53-2fca4b72de88/run';
+
+    const rssUrl = 'https://rss.uol.com.br/feed/economia.xml';
+    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(rssUrl)}`;
 
     try {
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-API-Key': apiKey,
-        },
-        body: JSON.stringify({ count: count.toString() }),
-      });
+      const response = await fetch(proxyUrl);
 
       if (!response.ok) {
-        throw new Error(`Erro na API: ${response.status} ${response.statusText}`);
+        throw new Error(`Erro ao acessar RSS: ${response.status}`);
       }
 
-      const data = await response.json();
+      const arrayBuffer = await response.arrayBuffer();
+      const decoder = new TextDecoder('iso-8859-1');
+      const textData = decoder.decode(arrayBuffer);
 
-      const noticiasFormatadas = data.data.map(noticia => {
-        const parsedContent = parseDescriptionHtml(noticia.description || '');
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(textData, "text/xml");
 
-        const formattedDate = noticia.pubDate ? noticia.pubDate.split(' ').slice(0, 4).join(' ') : '';
+      const parseError = xmlDoc.querySelector("parsererror");
+      if (parseError) {
+        throw new Error("Erro ao ler o formato XML do feed.");
+      }
+
+      const items = Array.from(xmlDoc.querySelectorAll("item"));
+
+      const noticiasFormatadas = items.map(item => {
+        const title = item.querySelector("title")?.textContent || "Sem título";
+        const link = item.querySelector("link")?.textContent || "#";
+        const pubDate = item.querySelector("pubDate")?.textContent || "";
+
+        const rawDescription =
+          item.querySelector("description")?.textContent ||
+          item.querySelector("content\\:encoded")?.textContent ||
+          "";
+
+        const parsedContent = parseDescriptionHtml(rawDescription);
+
+        let finalImageUrl = parsedContent.imageUrl;
+        if (!finalImageUrl) {
+          const enclosure = item.querySelector("enclosure");
+          if (enclosure && enclosure.getAttribute("type")?.includes("image")) {
+            finalImageUrl = enclosure.getAttribute("url");
+          }
+        }
+
+        const formattedDate = pubDate ? pubDate.split(' ').slice(0, 4).join(' ') : '';
 
         return {
-          ...noticia,
-          imageUrl: parsedContent.imageUrl,
+          title,
+          url: link,
+          imageUrl: finalImageUrl,
           textContent: parsedContent.textContent,
-          pubDateFormatted: formattedDate
+          pubDateFormatted: formattedDate,
+          rawDate: pubDate
         };
       });
 
