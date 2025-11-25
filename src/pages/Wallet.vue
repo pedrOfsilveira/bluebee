@@ -71,10 +71,10 @@ const percentages = ref({
     active-bg-color="blue-1"
     v-model="tab"
   >
-    <q-tab name="ativos" icon="account_balance" label="Ativos" class="tab" />
+    <q-tab name="ativos" icon="fas fa-landmark" label="Ativos" class="tab" />
     <q-tab
       name="history"
-      icon="currency_exchange"
+      icon="fas fa-clock-rotate-left"
       label="Histórico"
       class="tab"
     />

@@ -22,7 +22,7 @@ onMounted(() => {
 
 <template>
   <div class="section">
-    <SectionTitle title="Notícias de Mercado" icon="newspaper" bb />
+    <SectionTitle title="Notícias de Mercado" icon="fas fa-newspaper" bb />
 
     <div class="news-container">
       <div v-if="storeNews.newsState.loading" class="flex justify-center full-width">
@@ -46,7 +46,7 @@ onMounted(() => {
             <SectionTitle :title="selectedNews.title" />
           </div>
           <div class="text-caption text-grey q-mb-sm">
-            <q-icon name="event" />
+            <q-icon name="fas fa-calendar-day" />
             {{ selectedNews.pubDateFormatted }}
           </div>
         </q-card-section>
@@ -64,7 +64,8 @@ onMounted(() => {
           <q-btn 
             class="my-btn" 
             label="Ler notícia completa" 
-            icon-right="launch" 
+            icon-right="fas fa-arrow-up-right-from-square"
+             
             :href="selectedNews.url"
             target="_blank" 
           />

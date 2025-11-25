@@ -13,7 +13,7 @@ const storeAuth = useStoreAuth()
         to="/explore"
         flat
         padding="md"
-        icon="explore"
+        icon="fas fa-compass"
         text-color="primary"
         class="q-mb-sm"
       />
@@ -24,7 +24,7 @@ const storeAuth = useStoreAuth()
         to="/calculator"
         flat
         padding="md"
-        icon="calculate"
+        icon="fas fa-calculator"
         text-color="primary"
         class="q-mb-sm"
       />
@@ -34,7 +34,7 @@ const storeAuth = useStoreAuth()
       <q-btn
         flat
         padding="md"
-        icon="rocket"
+        icon="fas fa-rocket"
         text-color="primary"
         class="q-mb-sm"
       />

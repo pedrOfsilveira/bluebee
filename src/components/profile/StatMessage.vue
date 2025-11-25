@@ -8,8 +8,8 @@ const props = defineProps({
 });
 
 const categoryMap = {
-  attention: { icon: 'lightbulb', messageClass: 'attention-item' },
-  suggestion: { icon: 'check_circle', messageClass: 'suggestion-item' },
+  attention: { icon: 'fas fa-lightbulb', messageClass: 'attention-item' },
+  suggestion: { icon: 'fas fa-circle-check', messageClass: 'suggestion-item' },
 };
 
 const categoryInfo = computed(() => {

@@ -18,7 +18,7 @@ defineProps({
 
 <template>
   <div class="section q-mt-md">
-    <SectionTitle title="Diversificação" icon="data_usage" class="q-mt-lg" />
+    <SectionTitle title="Diversificação" icon="fas fa-chart-pie" class="q-mt-lg" />
     <div class="diversification">
       <div class="diversification-chart">
         <div

@@ -1,7 +1,7 @@
 <template>
   <BlueHeader>
     <div class="flex text-h5 text-weight-bolder items-center q-">
-      <q-icon name="calculate" class="q-mr-sm" />
+      <q-icon name="fas fa-calculator" class="q-mr-sm" />
       Simulação
     </div>
   </BlueHeader>

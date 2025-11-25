@@ -13,17 +13,17 @@
         active-bg-color="blue-1"
         style="border-radius: 25px"
       >
-        <q-route-tab to="/" name="home" icon="home" label="Início" />
+        <q-route-tab to="/" name="home" icon="fas fa-home" label="Início" />
         <q-route-tab
           to="/wallet"
           name="wallet"
-          icon="wallet"
+          icon="fas fa-wallet"
           label="Carteira"
         />
         <q-route-tab
           to="/profile"
           name="profile"
-          icon="person"
+          icon="fas fa-user"
           label="Perfil"
         />
       </q-tabs>

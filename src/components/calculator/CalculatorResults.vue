@@ -40,32 +40,32 @@ const resultsElementId = "simulation-results";
     <SectionTitle
       class="bb"
       title="Resultado da Simulação"
-      icon="trending_up"
+      icon="fas fa-money-bill-trend-up"
     />
     <div class="stats-grid">
       <StatCard
-        icon="account_balance_wallet"
+        icon="fas fa-wallet"
         :value="formatBRL(totalInvested)"
         label="Total Investido"
       />
       <StatCard
-        icon="attach_money"
+        icon="fas fa-dollar-sign"
         :value="formatBRL(finalAmount)"
         label="Valor Final Estimado"
       />
       <StatCard
-        icon="trending_up"
+        icon="fas fa-arrow-trend-up"
         :value="formatBRL(totalInterest)"
         label="Ganho Estimado"
       />
       <div class="dois">
         <StatCard
-          icon="calendar_month"
+          icon="fas fa-calendar-days"
           :value="periodYears ? periodYears + ' anos' : '0 anos'"
           label="Período de Investimento"
         />
         <StatCard
-          icon="percent"
+          icon="fas fa-percent"
           :value="percentGain ? percentGain + '%' : '0%'"
           label="Ganho Percentual Estimado"
         />
@@ -78,7 +78,7 @@ const resultsElementId = "simulation-results";
       round
       flat
       padding="md"
-      icon="share"
+      icon="fas fa-share-nodes"
       @click="shareElementAsImage(resultsElementId)"
       :loading="shareLoading"
     />

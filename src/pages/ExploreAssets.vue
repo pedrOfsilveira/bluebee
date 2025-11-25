@@ -22,7 +22,7 @@ console.log(storeAssets.assets[0])
 <template>
   <BlueHeader>
     <div class="flex text-h5 text-weight-bolder items-center q-mb-lg">
-      <q-icon name="explore" class="q-mr-sm" />
+      <q-icon name="fas fa-compass" class="q-mr-sm" />
       Explorar Ativos
     </div>
     <q-input
@@ -32,7 +32,7 @@ console.log(storeAssets.assets[0])
       outlined placeholder="Buscar por nome ou ticker..."
     >
        <template v-slot:prepend>
-      <q-icon name="search"/>
+      <q-icon name="fas fa-search"/>
     </template>
     </q-input>
     <q-tabs

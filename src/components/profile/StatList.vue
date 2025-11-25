@@ -7,15 +7,15 @@ import StatMessage from "./StatMessage.vue";
 
 <template>
   <StatSection>
-    <SectionTitle class="bb" title="Estatísticas de Uso" icon="bar_chart" />
+    <SectionTitle class="bb" title="Estatísticas de Uso" icon="fas fa-chart-simple" />
     <div class="stats-grid">
       <StatCard
-        icon="timer"
+        icon="fas fa-stopwatch"
         value="18h"
         label="Tempo de Uso"
       />
       <StatCard
-        icon="workspace_premium"
+        icon="fas fa-medal"
         value="15"
         label="Desafios Concluídos"
       />
@@ -24,7 +24,7 @@ import StatMessage from "./StatMessage.vue";
 
   <StatSection>
 
-    <SectionTitle class="bb" title="Sugestões e Atenções" icon="error" />
+    <SectionTitle class="bb" title="Sugestões e Atenções" icon="fas fa-circle-exclamation" />
     <StatMessage category="attention">
       Investir mais em <strong>Renda Fixa</strong> para equilibrar a carteira
     </StatMessage>
@@ -37,7 +37,7 @@ import StatMessage from "./StatMessage.vue";
   </StatSection>
 
   <StatSection>
-    <SectionTitle class="bb" title="Conquistas Recentes" icon="emoji_events" />
+    <SectionTitle class="bb" title="Conquistas Recentes" icon="fas fa-trophy" />
 
     <StatMessage category="suggestion">
       Parabéns pelo seu desempenho em FIIs! Continue explorando novos fundos.
@@ -50,18 +50,18 @@ import StatMessage from "./StatMessage.vue";
   </StatSection>
 
   <StatSection>
-    <SectionTitle class="bb" title="Medalhas" icon="workspace_premium" seeAll/>
+    <SectionTitle class="bb" title="Medalhas" icon="fas fa-medal" seeAll/>
     <div class="stats-medal-grid">
       <StatCard
-        icon="emoji_events"
+        icon="fas fa-trophy"
         label="Rei do Mercado"
       />
       <StatCard
-        icon="emoji_events"
+        icon="fas fa-trophy"
         label="Guru dos Investimentos"
       />
       <StatCard
-        icon="emoji_events"
+        icon="fas fa-trophy"
         label="Imobilista"
       />
     </div>

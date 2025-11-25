@@ -52,7 +52,7 @@ const formatCurrency = (fieldName) => {
       @blur="formatCurrency('initialValue')"
       label="Valor Inicial (R$)"
       appendIcon
-      icon="account_balance"
+      icon="fas fa-landmark"
       v-select-all
     />
     <AuthInput
@@ -63,7 +63,7 @@ const formatCurrency = (fieldName) => {
       @blur="formatCurrency('monthlyContribution')"
       label="Aporte Mensal (R$)"
       appendIcon
-      icon="savings"
+      icon="fas fa-piggy-bank"
       v-select-all
     />
     <AuthInput
@@ -73,7 +73,7 @@ const formatCurrency = (fieldName) => {
       v-model.number="calculatorForm.periodYears"
       label="Periodo (Anos)"
       appendIcon
-      icon="calendar_month"
+      icon="fas fa-calendar-days"
       v-select-all
     />
     <AuthInput
@@ -83,7 +83,7 @@ const formatCurrency = (fieldName) => {
       v-model.number="calculatorForm.annualReturn"
       label="Rentabilidade Anual Estimada (%)"
       appendIcon
-      icon="payments"
+      icon="fas fa-money-bills"
       :disable="isAnnualReturnDisabled"
       v-select-all
     />
@@ -99,7 +99,7 @@ const formatCurrency = (fieldName) => {
       <q-btn
         class="bradius"
         padding="md"
-        icon="delete"
+        icon="fas fa-trash-can"
         type="reset"
         color="grey"
       />

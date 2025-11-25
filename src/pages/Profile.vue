@@ -17,7 +17,7 @@ const storeAuth = useStoreAuth()
     <div class="profile-name">{{ storeAuth.userDetails.nome }}</div>
 
     <div class="profile-level">
-      <q-icon name="star" size="16px" class="q-mr-2" />
+      <q-icon name="fas fa-star" size="16px" class="q-mr-2" />
       {{ storeAuth.userDetails.nivel }} - Investidor Junior
     </div>
 
@@ -27,21 +27,21 @@ const storeAuth = useStoreAuth()
 
         <div class="stat-item" style="flex:2">
           <div class="flex items-center justify-center">
-            <q-icon name="workspace_premium" size="20px" class="q-mr-1" />
+            <q-icon name="fas fa-medal" size="20px" class="q-mr-sm" />
             <div class="stat-value">15</div>
           </div>
           <div class="stat-label">Conquistas</div>
         </div>
         <div class="stat-item" style="flex:2">
           <div class="flex items-center justify-center">
-            <q-icon name="local_fire_department" size="20px" class="q-mr-1" />
+            <q-icon name="fas fa-fire" size="20px" class="q-mr-sm" />
             <div class="stat-value">15</div>
           </div>
           <div class="stat-label">Sequência</div>
         </div>
         <div class="stat-item" style="flex:2">
           <div class="flex items-center justify-center">
-            <q-icon name="star" size="20px" class="q-mr-1" />
+            <q-icon name="fas fa-star" size="20px" class="q-mr-sm" />
             <div class="stat-value">{{ storeAuth.userDetails.experiencia }}</div>
           </div>
           <div class="stat-label">Experiência</div>
@@ -50,7 +50,7 @@ const storeAuth = useStoreAuth()
     </div>
   </BlueHeader>
   <div class="section q-mt-lg">
-    <SectionTitle title="Relatório de Progresso" icon="analytics" />
+    <SectionTitle title="Relatório de Progresso" icon="fas fa-square-poll-vertical" />
     <StatList />
   </div>
   <div class="section">
