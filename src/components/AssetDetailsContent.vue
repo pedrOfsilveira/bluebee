@@ -1,3 +1,19 @@
+<script setup>
+import { defineProps } from "vue";
+import { useColorRisk, useColorPercentage } from "src/use/useColor";
+import { useCurrencify } from "src/use/useCurrencify";
+import { usePercentageCalculator } from "src/use/usePercentageCalculator";
+
+const props = defineProps({
+  asset: {
+    type: Object,
+    default: () => null,
+  }
+});
+
+let precoMedio = (props.asset.valor_min+props.asset.valor_max)/2;
+</script>
+
 <template>
   <div class="asset-details-content q-mt-lg">
     <div class="section-title">Estatísticas Chave</div>
@@ -5,42 +21,48 @@
     <!-- dá pra tirar varios desse ou trocar por coisas mais didaticas -->
     <div class="info-grid">
       <div class="info-item">
+        <!-- nao muito necessario -->
         <div class="info-label">Setor</div>
         <div class="info-value">Petróleo, Gás e Biocombustíveis</div>
       </div>
       <div class="info-item">
         <div class="info-label">Risco do Ativo</div>
-        <div class="info-value" style="color: #f57c00">Médio</div>
+        <!-- cor antiga = #f57c00 -->
+        <div class="info-value" :style="useColorRisk(props.asset.risco)">{{ props.asset.risco }}</div>
       </div>
       <div class="info-item">
-        <div class="info-label">Patrimônio Inicial</div>
-        <div class="info-value">R$ 133,40</div>
+        <div class="info-label">Preço Atual</div>
+        <div class="info-value">{{ useCurrencify(props.asset.valor_atual) }}</div>
       </div>
       <div class="info-item">
-        <div class="info-label">Movimentações</div>
-        <div class="info-value">R$ 429,82</div>
+        <div class="info-label">Preço Médio</div>
+        <div class="info-value">{{ useCurrencify(precoMedio) }}</div>
       </div>
+      <!-- talvez nao precise desse aqui, e sim so no header -->
+      <div class="info-item">
+        <div class="info-label">Alocação</div>
+        <div class="info-value"
+          :style="useColorPercentage(usePercentageCalculator(precoMedio,props.asset.valor_atual))"
+        >
+          {{ usePercentageCalculator(precoMedio,props.asset.valor_atual).toFixed(2) }}%
+        </div>
+      </div>
+
+      <!-- seção para ativos do perfil -->
+      <!-- <div class="info-item">
+        <div class="info-label">Valor Aplicado</div>
+        <div class="info-value">R$ 600,61</div>
+      </div>
+
       <div class="info-item">
         <div class="info-label">Rentabilidade</div>
-        <div class="info-value" style="color: #388e3c">8,7%</div>
+        <div class="info-value" style="color: #71F588">20,12%</div>
       </div>
-      <div class="info-item">
-        <div class="info-label">Patrimônio Final</div>
-        <div class="info-value">R$ 729,61</div>
-      </div>
-    </div>
 
-    <!-- não acho que precise disso aqui  -->
-    <div class="about-section">
-      <div class="section-title">Sobre a Petrobras (PETR4)</div>
-      <div class="about-text">
-        A Petróleo Brasileiro S.A. - Petrobras é uma empresa de capital aberto
-        (sociedade anônima), cujo acionista majoritário é o Governo do Brasil
-        (União), sendo, portanto, uma empresa estatal de economia mista. Atua
-        como uma empresa de energia nos setores de exploração e produção,
-        refino, comercialização, transporte, petroquímica, distribuição de
-        derivados, gás natural, energia elétrica, gás-química e biocombustíveis.
-      </div>
+      <div class="info-item">
+        <div class="info-label">Valor Final</div>
+        <div class="info-value">R$ 729,61</div>
+      </div> -->
     </div>
   </div>
 </template>

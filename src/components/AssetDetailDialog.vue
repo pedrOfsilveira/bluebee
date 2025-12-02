@@ -76,7 +76,7 @@ const handleSell = () => {
         <!-- esse gráfico não funciona ainda, mas nao quero me prender mto nele, entao a gente ve dps como vamos fazer -->
         <AssetChart />
 
-        <AssetDetailsContent />
+        <AssetDetailsContent :asset="props.asset"/>
       </q-card-section>
 
       <q-separator />

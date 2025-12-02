@@ -15,7 +15,8 @@ export const useStoreUserAssets = defineStore("userAssets", () => {
 
   const assetsLoaded = ref(false)
 
-  let timer = 0;
+  let intervalOf4 = 0;
+  let intervalOf12 = 0;
   /* getters */
 
 
@@ -23,18 +24,19 @@ export const useStoreUserAssets = defineStore("userAssets", () => {
   /* actions */
 
   // teste
-  const dividend = (assets) => {
-    // if (!timer % 3) {
-    //   let { data, error } = await supabase
-    //     .from('perfil_ativos')
-    //     .select('*')
-    //     .eq('tipo', 'Ação')
-    // }
-
+  const filterByTime = (assets) => {
+    let assetsOf4 = []
+    let assetsOf12 = []
     assets.forEach(asset => {
-      let assetDividend = asset.ativos.dividendos ? asset.ativos.dividendos*asset.quantidade : 0
-      console.log(asset.ativos.dividendos*asset.quantidade)
+      asset.ativos.tempo == 4 ? assetsOf4.push(asset) : assetsOf12.push(asset)
+    })
+    intervalOf4 = setInterval(() => {dividend(assetsOf4)}, 4000)
+    intervalOf12 = setInterval(() => {dividend(assetsOf12)}, 12000)
+  }
 
+  const dividend = (assets) => {
+    assets.forEach(asset => { //foreach que puxa cada ativo que vem do intervalo do loadUserAssets para colocar os dividendos
+      let assetDividend = asset.ativos.dividendos ? asset.ativos.dividendos*asset.quantidade : 0
       storeAuth.userDetails.saldo += assetDividend
     })
   }
@@ -56,7 +58,7 @@ export const useStoreUserAssets = defineStore("userAssets", () => {
       assets.value = data
       assetsLoaded.value = true
       subscribeAssets()
-      timer = setInterval(() => {dividend(assets.value)}, 4000)
+      filterByTime(assets.value) //filtra pelo tempo de cada ativo, dividindo em arrays
     }
   }
 

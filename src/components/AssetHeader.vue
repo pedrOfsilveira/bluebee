@@ -1,6 +1,8 @@
 <script setup>
 import BlueHeader from "src/components/BlueHeader.vue";
 import AssetCard from './wallet/AssetCard.vue';
+import { useCurrencify } from "src/use/useCurrencify";
+import { usePercentageCalculator } from "src/use/usePercentageCalculator";
 
 const props = defineProps({
   asset: {
@@ -8,6 +10,8 @@ const props = defineProps({
     default: () => null,
   },
 });
+
+let precoMedio = (props.asset.valor_min+props.asset.valor_max)/2;
 </script>
 
 <template>
@@ -28,15 +32,15 @@ const props = defineProps({
     </div>
 
       <AssetCard :asset="asset" class="my-asset" />
-      
+
     <div class="asset-price-info">
 
       <!-- TROCAR PARA O PREÇO DE VDD -->
-    
-      <div class="current-price">R$ 32,15</div>
-    
+
+      <div class="current-price">{{ useCurrencify(props.asset.valor_atual) }}</div>
+
       <div class="price-change change-positive">
-        <q-icon name="fas fa-caret-up"/> +1,20% (R$ 0,38)
+        <q-icon name="fas fa-caret-up"/> {{ usePercentageCalculator(precoMedio,props.asset.valor_atual).toFixed(2) }}%
       </div>
 
     </div>
