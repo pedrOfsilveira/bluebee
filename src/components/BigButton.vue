@@ -1,15 +1,20 @@
 <script setup>
-import { defineProps } from 'vue';
 defineProps({
   title: {
     type: String,
     default: 'Clique aqui'
+  },
+  disable: {
+    type: Boolean,
+    default: false
   }
 });
 </script>
 
 <template>
-  <button class="big-btn">{{ title }}</button>
+  <button class="big-btn" :disabled="disable">
+    {{ title }}
+  </button>
 </template>
 
 <style lang="scss">
@@ -28,9 +33,14 @@ defineProps({
   box-shadow: 0 8px 25px rgba(63, 81, 181, 0.3);
   position: relative;
   overflow: hidden;
-}
 
-.big-btn:active {
-  transform: translateY(-1px);
+  &:disabled {
+    background: #e0e0e0;
+    color: #9e9e9e;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+    pointer-events: none;
+  }
 }
 </style>

@@ -39,8 +39,12 @@ let precoMedio = (props.asset.valor_min+props.asset.valor_max)/2;
 
       <div class="current-price">{{ useCurrencify(props.asset.valor_atual) }}</div>
 
-      <div class="price-change change-positive">
+      <div class="price-change change-positive positive-bg" v-if="usePercentageCalculator(precoMedio,props.asset.valor_atual) >= 0">
         <q-icon name="fas fa-caret-up"/> {{ usePercentageCalculator(precoMedio,props.asset.valor_atual).toFixed(2) }}%
+      </div>
+
+      <div class="price-change change-negative negative-bg" v-else>
+        <q-icon name="fas fa-caret-down"/> {{ usePercentageCalculator(precoMedio,props.asset.valor_atual).toFixed(2) }}%
       </div>
 
     </div>
@@ -52,6 +56,7 @@ let precoMedio = (props.asset.valor_min+props.asset.valor_max)/2;
   width: 100%;
   max-width: 500px;
 }
+
 
 
 .header-top-row {
@@ -110,14 +115,16 @@ let precoMedio = (props.asset.valor_min+props.asset.valor_max)/2;
   display: inline-flex;
   align-items: center;
   gap: 5px;
+  padding: 8px;
+  border-radius: 4px;
 }
 
 .change-positive {
-  color: #a5d6a7;
+  color: $positive;
 }
 
 /* Verde mais claro */
 .change-negative {
-  color: #ef9a9a;
+  color: $negative;
 }
 </style>

@@ -32,6 +32,7 @@ const storeAuth = useStoreAuth()
     </button>
     <button class="action-btn">
       <q-btn
+      to="/investprofile"
         flat
         padding="md"
         icon="fas fa-rocket"

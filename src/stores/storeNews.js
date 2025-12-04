@@ -29,7 +29,7 @@ export const useStoreNews = defineStore("news", () => {
     newsState.error = null;
 
     const rssUrl = 'https://rss.uol.com.br/feed/economia.xml';
-    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(rssUrl)}`;
+   const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(rssUrl)}`;
 
     try {
       const response = await fetch(proxyUrl);

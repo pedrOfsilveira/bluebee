@@ -10,7 +10,7 @@ export function useCompoundInterest() {
       isIPCA: false,
     },
     {
-      label: "CDI (11,25$ a.a.)",
+      label: "CDI (11,25% a.a.)",
       value: 11.25,
       isIPCA: false,
     },
