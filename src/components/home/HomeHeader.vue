@@ -22,7 +22,7 @@ const user = {
 <template>
   <div class="home-top-container">
     <div class="greeting text-h6">Olá, {{ storeAuth.userDetails.nome }}! 👋</div>
-    <div class="balance-info q-mb-sm">
+    <div class="balance-info q-mb-sm" id="saldo-box">
       <div class="label text-subtitle2 text-weight-regular">Saldo Conta</div>
       <div class="balance text-h5 text-weight-bolder">{{ formattedSaldo }}</div>
     </div>

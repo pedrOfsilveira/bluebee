@@ -1,14 +1,14 @@
 <script setup>
-import BigButton from 'src/components/BigButton.vue';
+import BigButton from "src/components/BigButton.vue";
 import BlueHeader from "src/components/BlueHeader.vue";
-import { useStoreQuiz } from "src/stores/storeQuiz";
+import { useStoreInvestorProfile } from "src/stores/storeInvestorProfile";
 import { computed } from "vue";
 
-const store = useStoreQuiz();
+const store = useStoreInvestorProfile();
 
 const currentAnswer = computed({
   get: () => store.answers[store.currentQuestion.id],
-  set: (val) => store.setAnswer(val)
+  set: (val) => store.setAnswer(val),
 });
 
 const finalizarQuiz = () => {
@@ -27,7 +27,6 @@ const finalizarQuiz = () => {
   </BlueHeader>
 
   <div class="section q-mt-lg">
-
     <div class="flex justify-center q-mb-md">
       <q-pagination
         v-model="store.currentStep"
@@ -54,7 +53,6 @@ const finalizarQuiz = () => {
     />
 
     <div v-if="store.currentStep === store.totalQuestions" class="q-mt-md">
-
       <BigButton
         title="Finalizar Quiz"
         @click="finalizarQuiz"
@@ -64,9 +62,7 @@ const finalizarQuiz = () => {
       <div v-if="!store.isCompleted" class="text-caption text-center text-grey">
         Responda todas as perguntas para finalizar.
       </div>
-
     </div>
-
   </div>
   <div class="mb"></div>
 </template>
@@ -94,5 +90,11 @@ const finalizarQuiz = () => {
   margin-bottom: 18px;
   transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
+}
+
+.q-pagination__content {
+  & .q-btn__content {
+    font-size: 1.4rem;
+  }
 }
 </style>

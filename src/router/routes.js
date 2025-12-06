@@ -30,6 +30,21 @@ const routes = [
     children: [{ path: "", component: () => import("pages/Calculator.vue") }],
   },
   {
+    path: "/glossary",
+    component: () => import("layouts/MainLayout.vue"),
+    children: [{ path: "", component: () => import("pages/Glossary.vue") }],
+  },
+  {
+    path: "/security",
+    component: () => import("layouts/MainLayout.vue"),
+    children: [{ path: "", component: () => import("pages/Security.vue") }],
+  },
+  {
+    path: "/quiz",
+    component: () => import("layouts/MainLayout.vue"),
+    children: [{ path: "", component: () => import("pages/Quiz.vue") }],
+  },
+  {
     path: "/investprofile",
     component: () => import("layouts/MainLayout.vue"),
     children: [{ path: "", component: () => import("pages/InvestorProfile.vue") }],

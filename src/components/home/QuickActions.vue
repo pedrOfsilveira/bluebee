@@ -21,6 +21,17 @@ const storeAuth = useStoreAuth()
     </button>
     <button class="action-btn">
       <q-btn
+        to="/glossary"
+        flat
+        padding="md"
+        icon="fas fa-book"
+        text-color="primary"
+        class="q-mb-sm"
+      />
+      <span>Glossário</span>
+    </button>
+    <button class="action-btn">
+      <q-btn
         to="/calculator"
         flat
         padding="md"
@@ -40,6 +51,28 @@ const storeAuth = useStoreAuth()
         class="q-mb-sm"
       />
       <span>Desafios</span>
+    </button>
+    <button class="action-btn">
+      <q-btn
+      to="/security"
+        flat
+        padding="md"
+        icon="fas fa-shield-alt"
+        text-color="primary"
+        class="q-mb-sm"
+      />
+      <span>Anti-Golpe</span>
+    </button>
+    <button class="action-btn">
+      <q-btn
+      to="/quiz"
+        flat
+        padding="md"
+        icon="fas fa-puzzle-piece"
+        text-color="primary"
+        class="q-mb-sm"
+      />
+      <span>Quiz</span>
     </button>
   </div>
 </template>
