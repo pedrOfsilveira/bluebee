@@ -2,8 +2,10 @@ import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 
 export const useStoreInvestorProfile = defineStore("investorProfile", () => {
-  const currentStep = ref(1);
-  const answers = ref({});
+  // Estado
+  const currentStep = ref(0); // Index baseado em 0 (igual ao outro quiz)
+  const showResult = ref(false);
+  const userPoints = ref([]); // Array para guardar os pontos de cada resposta
 
   const questions = ref([
     {
@@ -53,54 +55,79 @@ export const useStoreInvestorProfile = defineStore("investorProfile", () => {
     }
   ]);
 
-  const currentQuestion = computed(() => {
-    return questions.value[currentStep.value - 1];
-  });
+  // Ações
+  const submitAnswer = (option) => {
+    // Salva os pontos da resposta escolhida
+    userPoints.value.push(option.points);
 
-  const totalQuestions = computed(() => questions.value.length);
-
-  const isCompleted = computed(() => {
-    return questions.value.every(q => !!answers.value[q.id]);
-  });
-
-  const missingCount = computed(() => {
-    return questions.value.filter(q => !answers.value[q.id]).length;
-  });
-
-  const setAnswer = (value) => {
-    const qId = currentQuestion.value.id;
-    answers.value[qId] = value;
+    if (currentStep.value < questions.value.length - 1) {
+      currentStep.value++;
+    } else {
+      showResult.value = true;
+    }
   };
 
-  const clearQuiz = () => {
-    answers.value = {};
-    currentStep.value = 1;
+  const prevQuestion = () => {
+    if (currentStep.value > 0) {
+      userPoints.value.pop(); // Remove a pontuação da última pergunta
+      currentStep.value--;
+    }
   };
 
-  const calculateProfile = () => {
-    let score = 0;
-
-    questions.value.forEach(q => {
-      const selectedValue = answers.value[q.id];
-      const option = q.options.find(opt => opt.value === selectedValue);
-      if (option) score += option.points;
-    });
-
-    if (score <= 7) return "Conservador";
-    if (score <= 11) return "Moderado";
-    return "Arrojado";
+  const restartQuiz = () => {
+    currentStep.value = 0;
+    showResult.value = false;
+    userPoints.value = [];
   };
+
+  // Cálculos
+  const totalScore = computed(() => userPoints.value.reduce((a, b) => a + b, 0));
+
+  // Pontuação máxima possível (3 pontos * numero de questões)
+  const maxScore = computed(() => questions.value.length * 3);
+
+  const resultProfile = computed(() => {
+    const score = totalScore.value;
+
+    if (score <= 7) {
+      return {
+        title: "Conservador",
+        msg: "Você prioriza a segurança. Seu foco é não perder dinheiro, mesmo que renda menos. Investimentos ideais: Tesouro Selic, CDBs e LCI/LCA.",
+        icon: "fas fa-shield-alt",
+        color: "secondary", // Azul/Verde
+        route: "/explore" // Rota sugerida (ex: Renda Fixa)
+      };
+    }
+    else if (score <= 11) {
+      return {
+        title: "Moderado",
+        msg: "Você aceita correr alguns riscos para ter retornos melhores que a poupança, mas ainda preza por segurança. Carteira ideal: Renda Fixa + Fundos Imobiliários.",
+        icon: "fas fa-balance-scale",
+        color: "warning", // Laranja
+        route: "/explore"
+      };
+    }
+    else {
+      return {
+        title: "Arrojado",
+        msg: "Você entende o mercado e aceita oscilações em busca de alta rentabilidade no longo prazo. Carteira ideal: Ações, FIIs, Cripto e ETFs.",
+        icon: "fas fa-rocket",
+        color: "negative", // Vermelho/Roxo
+        route: "/explore"
+      };
+    }
+  });
 
   return {
-    currentStep,
-    answers,
     questions,
-    currentQuestion,
-    totalQuestions,
-    isCompleted,
-    missingCount,
-    setAnswer,
-    clearQuiz,
-    calculateProfile
+    currentStep,
+    showResult,
+    userPoints,
+    submitAnswer,
+    prevQuestion,
+    restartQuiz,
+    totalScore,
+    maxScore,
+    resultProfile
   };
 });
