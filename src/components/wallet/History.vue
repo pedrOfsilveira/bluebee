@@ -1,13 +1,74 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useStoreHistory } from "src/stores/storeHistory";
+import { useStoreAssets } from "src/stores/storeAssets";
 import { useReturnObjectDate } from "src/use/useReturnObjectDate";
 
-const tab = ref();
+const tab = ref("all");
 const storeHistory = useStoreHistory();
+const storeAssets = useStoreAssets();
 
+const filteredHistory = computed(() => {
+  if (!tab.value || tab.value === "all") {
+    return storeHistory.history;
+  }
+  return storeHistory.history.filter((transaction) => {
+    const type = getTransactionType(transaction.compra_venda);
+    return type === tab.value;
+  });
+});
 
+const groupedHistory = computed(() => {
+  const groups = {};
+  filteredHistory.value.forEach((transaction) => {
+    const dateKey = useReturnObjectDate(new Date(transaction.created_at)).data;
+    if (!groups[dateKey]) {
+      groups[dateKey] = [];
+    }
+    groups[dateKey].push(transaction);
+  });
+  return groups;
+});
 
+const getTransactionType = (compra_venda) => {
+  if (typeof compra_venda === "boolean") {
+    return compra_venda ? "buy" : "sell";
+  }
+  return compra_venda;
+};
+
+const getTransactionIcon = (compra_venda) => {
+  const type = getTransactionType(compra_venda);
+  switch (type) {
+    case "buy":
+      return "fas fa-shopping-cart";
+    case "sell":
+      return "fas fa-money-bill-wave";
+    case "dividend":
+      return "fas fa-hand-holding-usd";
+    default:
+      return "fas fa-exchange-alt";
+  }
+};
+
+const getTransactionLabel = (compra_venda) => {
+  const type = getTransactionType(compra_venda);
+  switch (type) {
+    case "buy":
+      return "Compra";
+    case "sell":
+      return "Venda";
+    case "dividend":
+      return "Dividendo";
+    default:
+      return type;
+  }
+};
+
+const getAssetName = (transaction) => {
+  const asset = storeAssets.assets.find((a) => a.id === transaction.ativo_id);
+  return asset ? asset.nome : `Ativo ${transaction.ativo_id}`;
+};
 </script>
 
 <template>
@@ -22,68 +83,56 @@ const storeHistory = useStoreHistory();
     <q-tab name="all" label="Todos" class="subtab" />
     <q-tab name="buy" label="Compras" class="subtab" />
     <q-tab name="sell" label="Vendas" class="subtab" />
-    <!-- retirar -->
-    <q-tab name="dividend" label="Dividendos" class="subtab" />
   </q-tabs>
 
   <div class="history-list">
-    <div class="date-divider">{{ useReturnObjectDate(new Date(storeHistory.history[0].created_at)).data }}</div>
-    <div class="transaction-card" data-type="buy">
-      <div class="transaction-icon buy">
-        <i class="fas fa-shopping-cart"></i>
-      </div>
-      <div class="transaction-info">
-        <div class="transaction-title">Compra de HGLG11</div>
-        <div class="transaction-date">{{ useReturnObjectDate(new Date(storeHistory.history[0].created_at)).tempo }}</div>
-      </div>
-      <div class="transaction-value value-negative">- R$ 985,47</div>
-    </div>
-
-    <div class="date-divider">20 de Maio</div>
-    <div class="transaction-card" data-type="dividend">
-      <div class="transaction-icon dividend">
-        <i class="fas fa-hand-holding-usd"></i>
-      </div>
-      <div class="transaction-info">
-        <div class="transaction-title">Dividendo de PETR4</div>
-        <div class="transaction-date">10:00:00</div>
-      </div>
-      <div class="transaction-value value-dividend">+ R$ 55,20</div>
-    </div>
-
-    <div class="date-divider">15 de Maio</div>
-    <div class="transaction-card" data-type="sell">
-      <div class="transaction-icon sell">
-        <i class="fas fa-money-bill-wave"></i>
-      </div>
-      <div class="transaction-info">
-        <div class="transaction-title">Venda de MGLU3</div>
-        <div class="transaction-date">11:15:30</div>
-      </div>
-      <div class="transaction-value value-positive">+ R$ 350,00</div>
-    </div>
-
-    <div class="date-divider">10 de Maio</div>
-    <div class="transaction-card" data-type="buy">
-      <div class="transaction-icon buy">
-        <i class="fas fa-shopping-cart"></i>
-      </div>
-      <div class="transaction-info">
-        <div class="transaction-title">Compra de PETR4</div>
-        <div class="transaction-date">16:05:00</div>
-      </div>
-      <div class="transaction-value value-negative">- R$ 1.245,32</div>
-    </div>
-    <div class="transaction-card" data-type="dividend">
-      <div class="transaction-icon dividend">
-        <i class="fas fa-hand-holding-usd"></i>
-      </div>
-      <div class="transaction-info">
-        <div class="transaction-title">JCP de ITSA4</div>
-        <div class="transaction-date">09:30:00</div>
-      </div>
-      <div class="transaction-value value-dividend">+ R$ 32,80</div>
-    </div>
+    <template v-if="filteredHistory.length === 0">
+      <div class="empty-message">Nenhuma transação encontrada</div>
+    </template>
+    <template v-else>
+      <template v-for="(transactions, date) in groupedHistory" :key="date">
+        <div class="date-divider">{{ date }}</div>
+        <div
+          v-for="transaction in transactions"
+          :key="transaction.id"
+          class="transaction-card"
+          :data-type="transaction.compra_venda"
+        >
+          <div
+            class="transaction-icon"
+            :class="getTransactionType(transaction.compra_venda)"
+          >
+            <i :class="getTransactionIcon(transaction.compra_venda)"></i>
+          </div>
+          <div class="transaction-info">
+            <div class="transaction-title">
+              {{ getTransactionLabel(transaction.compra_venda) }} de
+              {{ getAssetName(transaction) }}
+            </div>
+            <div class="transaction-date">
+              {{
+                useReturnObjectDate(new Date(transaction.created_at)).tempo
+              }}
+            </div>
+          </div>
+          <div
+            class="transaction-value"
+            :class="{
+              'value-negative': getTransactionType(transaction.compra_venda) === 'buy',
+              'value-positive': getTransactionType(transaction.compra_venda) === 'sell',
+              'value-dividend': getTransactionType(transaction.compra_venda) === 'dividend',
+            }"
+          >
+            {{
+              getTransactionType(transaction.compra_venda) === 'buy'
+                ? '- R$ '
+                : '+ R$ '
+            }}
+            {{ Math.abs(transaction.valor_total).toFixed(2).replace('.', ',') }}
+          </div>
+        </div>
+      </template>
+    </template>
   </div>
 </template>
 
@@ -108,132 +157,99 @@ const storeHistory = useStoreHistory();
 }
 
 .date-divider {
-            color: $text-light;
-            font-weight: 600;
-            /* Mais peso */
-            margin: 25px 0 15px;
-            font-size: 14px;
-            text-transform: uppercase;
-            /* Opcional: para dar mais destaque */
-            padding-bottom: 5px;
-            border-bottom: 1px solid var(--border-color);
-            animation: fadeInElement 0.5s ease-out forwards;
-            opacity: 0;
-        }
+  color: $text-light;
+  font-weight: 600;
+  margin: 25px 0 15px;
+  font-size: 14px;
+  text-transform: uppercase;
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--border-color);
+}
 
-        .transaction-card {
-            border: 1px solid #e8ecf4;
-            background-color: $bg-card;
-            border-radius: 18px;
-            /* Mais arredondado */
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-            padding: 18px 20px;
-            /* Padding aumentado */
-            margin-bottom: 18px;
-            display: flex;
-            align-items: center;
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            border-left: 5px solid transparent;
-            /* Borda lateral para tipo de transação */
-            animation: fadeInElement 0.5s ease-out forwards;
-            opacity: 0;
-        }
+.transaction-card {
+  border: 1px solid #e8ecf4;
+  background-color: $bg-card;
+  border-radius: 18px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  padding: 18px 20px;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  border-left: 5px solid transparent;
+}
 
-        /* Animação escalonada para os cards */
-        .transaction-card:nth-of-type(1) {
-            animation-delay: 0.3s;
-        }
+.transaction-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+}
 
-        .transaction-card:nth-of-type(2) {
-            animation-delay: 0.4s;
-        }
+.transaction-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 18px;
+  font-size: 20px;
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
 
-        .transaction-card:nth-of-type(3) {
-            animation-delay: 0.5s;
-        }
+.buy {
+  background: linear-gradient(135deg, $positive, #5cb85c);
+  border-left-color: $positive;
+}
 
-        .transaction-card:nth-of-type(4) {
-            animation-delay: 0.6s;
-        }
+.sell {
+  background: linear-gradient(135deg, $negative, #d9534f);
+  border-left-color: $negative;
+}
 
-        @keyframes fadeInElement {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
+.dividend {
+  background: linear-gradient(135deg, $accent, #f0ad4e);
+  border-left-color: $accent;
+}
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+.transaction-info {
+  flex: 1;
+}
 
-        .transaction-card:hover {
-            transform: translateY(-4px) scale(1.01);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
-        }
+.transaction-title {
+  font-weight: 600;
+  margin-bottom: 4px;
+  font-size: 16px;
+  color: $text-dark;
+}
 
-        .transaction-icon {
-            width: 48px;
-            /* Aumentado */
-            height: 48px;
-            border-radius: 14px;
-            /* Mais quadrado-arredondado */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 18px;
-            font-size: 20px;
-            color: white;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
+.transaction-date {
+  font-size: 13px;
+  color: $text-light;
+}
 
-        .buy {
-            background: linear-gradient(135deg, $positive, #5cb85c);
-            border-left-color: $positive;
-        }
+.transaction-value {
+  text-align: right;
+  font-weight: 700;
+  font-size: 16px;
+}
 
-        .sell {
-            background: linear-gradient(135deg, $negative, #d9534f);
-            border-left-color: $negative;
-        }
+.value-positive {
+  color: $positive;
+}
 
-        .dividend {
-            background: linear-gradient(135deg, $accent, #f0ad4e);
-            border-left-color: $accent;
-        }
+.value-negative {
+  color: $negative;
+}
 
-        .transaction-info {
-            flex: 1;
-        }
+.value-dividend {
+  color: $accent;
+}
 
-        .transaction-title {
-            font-weight: 600;
-            margin-bottom: 4px;
-            font-size: 16px;
-            color: $text-dark;
-        }
-
-        .transaction-date {
-            font-size: 13px;
-            color: $text-light;
-        }
-
-        .transaction-value {
-            text-align: right;
-            font-weight: 700;
-            font-size: 16px;
-        }
-
-        .value-positive {
-            color: $positive;
-        }
-
-        .value-negative {
-            color: $negative;
-        }
-
-        .value-dividend {
-            color: $accent;
-        }
+.empty-message {
+  text-align: center;
+  padding: 40px 20px;
+  color: $text-light;
+  font-size: 16px;
+}
 </style>
