@@ -16,7 +16,6 @@ onUnmounted( () => {
 })
 
 const storeAssets = useStoreAssets();
-console.log(storeAssets.assets[0])
 </script>
 
 <template>
@@ -46,9 +45,8 @@ console.log(storeAssets.assets[0])
     <q-tab name="todos" label="Todos" class="subtab" />
     <q-tab name="Ação" label="Ações" class="subtab" />
     <q-tab name="Fundo Imobiliário" label="FIIs" class="subtab" />
-    <q-tab name="etf" label="ETFs" class="subtab" />
-    <q-tab name="fixed" label="Renda Fixa" class="subtab" />
-    <q-tab name="crypto" label="Cripto" class="subtab" />
+    <q-tab name="ETF" label="ETFs" class="subtab" />
+    <q-tab name="Criptomoeda" label="Cripto" class="subtab" />
   </q-tabs>
   </BlueHeader>
 

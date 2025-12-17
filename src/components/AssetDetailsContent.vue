@@ -1,17 +1,32 @@
 <script setup>
-import { defineProps } from "vue";
+import { defineProps, ref, computed, onMounted } from "vue";
 import { useColorRisk, useColorPercentage } from "src/use/useColor";
 import { useCurrencify } from "src/use/useCurrencify";
 import { usePercentageCalculator } from "src/use/usePercentageCalculator";
+import { useStoreAssets } from "src/stores/storeAssets";
+
+const storeAssets = useStoreAssets();
 
 const props = defineProps({
   asset: {
     type: Object,
     default: () => null,
-  }
+  },
+  //teste
+  register: {
+    type: Object,
+    default: () => null,
+  },
 });
 
-let precoMedio = (props.asset.valor_min+props.asset.valor_max)/2;
+// preco medio como computed (seguro contra props nulas)
+const precoMedio = computed(() => {
+  const min = Number(props.asset?.valor_min ?? 0);
+  const max = Number(props.asset?.valor_max ?? 0);
+  return (min + max) / 2;
+});
+
+const precoAtual = props.register[0].preco_atual // nao posso fazer assim, isso aqui é teste
 </script>
 
 <template>
@@ -21,18 +36,13 @@ let precoMedio = (props.asset.valor_min+props.asset.valor_max)/2;
     <!-- dá pra tirar varios desse ou trocar por coisas mais didaticas -->
     <div class="info-grid">
       <div class="info-item">
-        <!-- nao muito necessario -->
-        <div class="info-label">Setor</div>
-        <div class="info-value">Petróleo, Gás e Biocombustíveis</div>
-      </div>
-      <div class="info-item">
         <div class="info-label">Risco do Ativo</div>
         <!-- cor antiga = #f57c00 -->
         <div class="info-value" :style="useColorRisk(props.asset.risco)">{{ props.asset.risco }}</div>
       </div>
       <div class="info-item">
         <div class="info-label">Preço Atual</div>
-        <div class="info-value">{{ useCurrencify(props.asset.valor_atual) }}</div>
+        <div class="info-value">{{ useCurrencify(precoAtual) }}</div>
       </div>
       <div class="info-item">
         <div class="info-label">Preço Médio</div>
@@ -42,9 +52,9 @@ let precoMedio = (props.asset.valor_min+props.asset.valor_max)/2;
       <div class="info-item">
         <div class="info-label">Alocação</div>
         <div class="info-value"
-          :style="useColorPercentage(usePercentageCalculator(precoMedio,props.asset.valor_atual))"
+          :style="useColorPercentage(usePercentageCalculator(precoMedio,precoAtual))"
         >
-          {{ usePercentageCalculator(precoMedio,props.asset.valor_atual).toFixed(2) }}%
+          {{ usePercentageCalculator(precoMedio,precoAtual).toFixed(2) }}%
         </div>
       </div>
 

@@ -3,7 +3,6 @@ import HomeHeader from "src/components/home/HomeHeader.vue"
 import QuickActions from "src/components/home/QuickActions.vue"
 import NewsSection from 'src/components/home/NewsSection.vue';
 import ChallengeSection from 'src/components/home/ChallengeSection.vue';
-import { onMounted } from "vue";
 import { useStoreTutorial } from "src/stores/storeTutorial";
 
 // const storeTutorial = useStoreTutorial();
@@ -13,6 +12,7 @@ import { useStoreTutorial } from "src/stores/storeTutorial";
 //     storeTutorial.startTutorial();
 //   }, 1000);
 // });
+
 </script>
 
 

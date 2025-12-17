@@ -1,22 +1,10 @@
 <script setup>
 import { defineEmits, computed } from "vue";
 import { useStoreUserAssets } from "src/stores/storeUserAssets";
+import { useStoreAssets } from "src/stores/storeAssets";
 
 const storeUserAssets = useStoreUserAssets()
-
-// const props = defineProps({
-//   asset: {
-//     type: Object,
-//     required: true, // É uma boa prática tornar a prop principal requerida
-//     default: () => ({
-//       name: "Ativo Genérico",
-//       amount: "R$ 0,00",
-//       change: "+0,0%",
-//       category: "stocks",
-//     }),
-//   },
-// });
-
+const storeAssets = useStoreAssets()
 
 const emit = defineEmits(['open-details']);
 
@@ -29,7 +17,6 @@ const props = defineProps({
 const categoryMap = {
   'Ações': { label: 'Ações', iconClass: 'icon-stocks', emoji: '📈' },
   'Fundo Imobiliário': { label: 'FIIs', iconClass: 'icon-fii', emoji: '🏢' },
-  fixed: { label: 'Renda Fixa', iconClass: 'icon-fixed', emoji: '🔒' },
   crypto: { label: 'Cripto', iconClass: 'icon-crypto', emoji: '₿' },
 };
 
@@ -44,14 +31,22 @@ const categoryInfo = computed(() => {
 //   return props.asset.change.trim().startsWith('+') ? 'change-positive' : 'change-negative';
 // });
 
-const openDetails = () => {
-  emit('open-details', props.asset)
+// ORIGINAL
+// const openDetails = () => {
+//   emit('open-details', props.asset)
+// }
+
+// TESTE
+const openDetails = async () => {
+  const register = await storeAssets.returnPrice(props.asset)
+  emit('open-details', props.asset, register)
 }
+
 </script>
 
 <template>
   <div class="asset-card" @click="openDetails">
-    <div class="asset-icon" :class="categoryInfo.iconClass">{{ categoryInfo.emoji }}</div>
+    <!-- <div class="asset-icon" :class="categoryInfo.iconClass">{{ categoryInfo.emoji }}</div> -->
     <div v-if="asset.nome" class="asset-info">
       <div class="asset-name">{{ asset.nome }}</div>
       <div class="asset-type">{{ asset.tipo }}</div>

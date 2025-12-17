@@ -1,6 +1,13 @@
 <script setup>
 import { ref } from "vue";
+import { useStoreHistory } from "src/stores/storeHistory";
+import { useReturnObjectDate } from "src/use/useReturnObjectDate";
+
 const tab = ref();
+const storeHistory = useStoreHistory();
+
+
+
 </script>
 
 <template>
@@ -15,18 +22,19 @@ const tab = ref();
     <q-tab name="all" label="Todos" class="subtab" />
     <q-tab name="buy" label="Compras" class="subtab" />
     <q-tab name="sell" label="Vendas" class="subtab" />
+    <!-- retirar -->
     <q-tab name="dividend" label="Dividendos" class="subtab" />
   </q-tabs>
 
   <div class="history-list">
-    <div class="date-divider">Hoje, 29 de Maio</div>
+    <div class="date-divider">{{ useReturnObjectDate(new Date(storeHistory.history[0].created_at)).data }}</div>
     <div class="transaction-card" data-type="buy">
       <div class="transaction-icon buy">
         <i class="fas fa-shopping-cart"></i>
       </div>
       <div class="transaction-info">
         <div class="transaction-title">Compra de HGLG11</div>
-        <div class="transaction-date">14:30:15</div>
+        <div class="transaction-date">{{ useReturnObjectDate(new Date(storeHistory.history[0].created_at)).tempo }}</div>
       </div>
       <div class="transaction-value value-negative">- R$ 985,47</div>
     </div>

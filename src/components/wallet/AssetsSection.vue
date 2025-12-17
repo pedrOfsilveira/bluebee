@@ -15,7 +15,6 @@ const props = defineProps({
   },
 });
 
-console.log(props.assets);
 const filteredAssets = computed(() => {
   // const allAssets = storeAssets.assets;
   const allAssets = props.assets; // teste
@@ -28,9 +27,17 @@ const filteredAssets = computed(() => {
 
 const isDialogVisible = ref(false);
 const selectedAsset = ref(null);
+const selectedRegister = ref(null); //teste
+// ORIGINAL
+// const showAssetDetails = (asset) => {
+//   selectedAsset.value = asset;
+//   isDialogVisible.value = true;
+// };
 
-const showAssetDetails = (asset) => {
+// TESTE
+const showAssetDetails = (asset, register) => {
   selectedAsset.value = asset;
+  selectedRegister.value = register
   isDialogVisible.value = true;
 };
 </script>
@@ -52,6 +59,7 @@ const showAssetDetails = (asset) => {
   <AssetDetailDialog
       v-model="isDialogVisible"
       :asset="selectedAsset"
+      :register="selectedRegister"
   />
 </template>
 

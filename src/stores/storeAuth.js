@@ -5,12 +5,14 @@ import { useShowErrorMessage } from 'src/use/useShowErrorMessage';
 import supabase from "src/config/supabase";
 import { useStoreAssets } from "./storeAssets";
 import { useStoreUserAssets } from "./storeUserAssets";
+import { useStoreHistory } from "./storeHistory";
 
 export const useStoreAuth = defineStore("auth", () => {
   /* state */
 
   const storeAssets = useStoreAssets()
   const storeUserAssets = useStoreUserAssets()
+  const storeHistory = useStoreHistory()
 
   const userDetailsDefault = {
     id: null,
@@ -44,6 +46,7 @@ export const useStoreAuth = defineStore("auth", () => {
           router.push('/')
           storeAssets.loadAssets()
           storeUserAssets.loadUserAssets()
+          storeHistory.loadHistory()
         }
       }
       else if (event === 'SIGNED_OUT') {
@@ -52,6 +55,7 @@ export const useStoreAuth = defineStore("auth", () => {
         storeUserAssets.unsubscribeAssets()
         storeUserAssets.clearUserAssets()
         storeAssets.clearAssets()
+        storeHistory.clearHistory()
       }
     })
   }
@@ -100,7 +104,6 @@ export const useStoreAuth = defineStore("auth", () => {
       .eq('id', userDetails.id)
     if (error) useShowErrorMessage(error.message)
     if (data) {
-      console.log(data[0])
       userDetails.nome = data[0].nome
       userDetails.nivel = data[0].nivel
       userDetails.experiencia = data[0].experiencia

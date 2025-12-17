@@ -35,7 +35,7 @@ export const useStoreAssets = defineStore("assets", () => {
     if (data) {
       assets.value = data
       assetsLoaded.value = true
-      setPriceAssets(assets.value)
+      //setPriceAssets(assets.value)
     }
   }
 
@@ -54,6 +54,7 @@ export const useStoreAssets = defineStore("assets", () => {
       if (error) useShowErrorMessage(error.message)
       if (data) {
         assets.value = data
+        //setPriceAssets(assets.value)
       }
   }
 
@@ -76,11 +77,65 @@ export const useStoreAssets = defineStore("assets", () => {
     });
   }
 
+  // teste, funcao que procura no registro se existe um preco atual de um certo ativo e retorna o registro
+  const returnPrice = async asset => {
+    let searchData = await searchRegister(asset.id)
+
+    if (searchData.length >= 1) {
+      let unixOld = Math.floor(searchData[0].unix_id/24)
+      let unixNew = Math.floor((Date.now()/1000)/24)
+      if (unixOld < unixNew) {
+        console.log(unixOld, unixNew)
+        console.log("Funcionou")
+        const { error, data } = await supabase
+          .from('ativo_registro')
+          .update({
+            unix_id: Math.floor(Date.now()/1000),
+            preco_atual: randomNumber(asset.valor_min, asset.valor_max)
+          })
+          .eq('ativo_id', asset.id)
+          .select()
+
+        if (error) useShowErrorMessage(error.message)
+        if (data) return data
+      }
+      else {
+        return searchData
+      }
+    }
+    else {
+      const { error, data } = await supabase
+        .from('ativo_registro')
+        .insert({
+          ativo_id: asset.id,
+          unix_id: Math.floor(Date.now()/1000),
+          preco_atual: randomNumber(asset.valor_min, asset.valor_max)
+        })
+        .select()
+      if (error) useShowErrorMessage(error.message)
+      if (data) return data
+    }
+  }
+
+  // helpers
+
+  // procura se ja existe algum registro de um certo ativo no banco
+  const searchRegister = async asset_id => {
+    let { data, error } = await supabase
+      .from('ativo_registro')
+      .select("*")
+      .eq('ativo_id', asset_id)
+
+    if (error) useShowErrorMessage(error.message)
+    if (data) return data
+  }
+
   return {
     assets,
 
     loadAssets,
     clearAssets,
-    searchAssets
+    searchAssets,
+    returnPrice
   };
 });

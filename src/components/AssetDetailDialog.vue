@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, defineEmits, computed } from "vue";
+import { defineProps, defineEmits, computed, reactive } from "vue";
 import BlueHeader from "./BlueHeader.vue";
 import SectionTitle from "./SectionTitle.vue";
 import AssetCard from "./wallet/AssetCard.vue";
@@ -7,8 +7,14 @@ import StatCard from "./profile/StatCard.vue";
 import AssetHeader from "./AssetHeader.vue";
 import AssetChart from "./AssetChart.vue";
 import AssetDetailsContent from "./AssetDetailsContent.vue";
+import { useStoreUserAssets } from "src/stores/storeUserAssets";
 // Importe o que mais precisar (ex: useCurrencify)
-// import { useCurrencify } from "src/use/useCurrencify";
+import { useCurrencify } from "src/use/useCurrencify";
+import { useStoreHistory } from "src/stores/storeHistory";
+import { valueOrDefault } from "chart.js/helpers";
+
+const storeUserAssets = useStoreUserAssets()
+const storeHistory = useStoreHistory()
 
 const props = defineProps({
   // modelValue é o padrão para o v-model (controla se o dialog está aberto)
@@ -21,7 +27,24 @@ const props = defineProps({
     type: Object,
     default: () => null,
   },
+  //teste
+  register: {
+    type: Object,
+    default: () => null,
+  }
 });
+
+// tem que trocar isso depois
+
+const transactionDetailsDefault = {
+  quantidade: 1,
+  compra_venda: true,
+  valor_total: 0
+}
+
+const transactionDetails = reactive({
+  ...transactionDetailsDefault
+})
 
 const emit = defineEmits(["update:modelValue"]); // Necessário para o v-model
 
@@ -46,14 +69,18 @@ const assetType = computed(() => {
 });
 
 // Funções placeholder
-const handleBuy = () => {
-  console.log("Comprando:", assetName.value);
-  // Lógica de compra aqui
+const handleBuy = async () => {
+  transactionDetails.valor_total = -(props.register[0].preco_atual*transactionDetails.quantidade);
+  await storeUserAssets.buyAsset(props.asset, transactionDetails);
+  await storeHistory.addHistory(props.asset,transactionDetails);
+  Object.assign(transactionDetails, transactionDetailsDefault);
 };
 
-const handleSell = () => {
-  console.log("Vendendo:", assetName.value);
-  // Lógica de venda aqui
+const handleSell = async () => {
+  transactionDetails.compra_venda = false;
+  transactionDetails.valor_total = props.register[0].preco_atual*transactionDetails.quantidade;
+  await storeUserAssets.sellAsset(props.asset, transactionDetails);
+  Object.assign(transactionDetails, transactionDetailsDefault);
 };
 </script>
 
@@ -61,7 +88,7 @@ const handleSell = () => {
   <q-dialog v-model="showDialog" content-class="asset-dialog-container">
     <q-card class="asset-dialog-card">
       <q-card-section class="asset-dialog-header row items-center q-pb-none">
-        <AssetHeader :asset="props.asset" />
+        <AssetHeader :asset="props.asset" :register="props.register" />
       </q-card-section>
 
       <q-card-section v-if="asset" class="asset-dialog-body q-mt-lg">
@@ -76,11 +103,15 @@ const handleSell = () => {
         <!-- esse gráfico não funciona ainda, mas nao quero me prender mto nele, entao a gente ve dps como vamos fazer -->
         <AssetChart />
 
-        <AssetDetailsContent :asset="props.asset"/>
+        <AssetDetailsContent :asset="props.asset" :register="props.register"/>
       </q-card-section>
 
       <q-separator />
 
+        <!-- mudar esse input e o separator que eu coloquei em baixo -->
+        <q-input v-model.number="transactionDetails.quantidade" type="number" label="Quantidade"/>
+
+      <q-separator />
 
       <!-- BOTÕES DE COMPRA E DE VENDA, BOA SORTE ! -->
       <q-card-actions align="right" class="asset-dialog-actions q-pa-md">

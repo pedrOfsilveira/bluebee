@@ -85,7 +85,7 @@ const percentages = ref({
       <MyAssetsSection :assets="storeUserAssets.assets"/>
     </q-tab-panel>
 
-    <q-tab-panel name="a">
+    <q-tab-panel name="history">
       <div class="q-pa-md">
         <SectionTitle title="Histórico" />
         <div class="text-body2 text-weight-regular q-mt-sm">

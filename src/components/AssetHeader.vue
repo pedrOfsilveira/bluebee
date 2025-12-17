@@ -1,17 +1,33 @@
 <script setup>
+import { defineProps, ref, computed, onMounted } from "vue";
 import BlueHeader from "src/components/BlueHeader.vue";
 import AssetCard from './wallet/AssetCard.vue';
 import { useCurrencify } from "src/use/useCurrencify";
 import { usePercentageCalculator } from "src/use/usePercentageCalculator";
+import { useStoreAssets } from "src/stores/storeAssets";
+
+const storeAssets = useStoreAssets();
 
 const props = defineProps({
   asset: {
     type: Object,
     default: () => null,
   },
+  //teste
+  register: {
+    type: Object,
+    default: () => null,
+  },
 });
 
-let precoMedio = (props.asset.valor_min+props.asset.valor_max)/2;
+// preco medio como computed (seguro contra props nulas)
+const precoMedio = computed(() => {
+  const min = Number(props.asset?.valor_min ?? 0);
+  const max = Number(props.asset?.valor_max ?? 0);
+  return (min + max) / 2;
+});
+
+const precoAtual = props.register[0].preco_atual //nao posso fazer assim, isso é teste
 </script>
 
 <template>
@@ -37,14 +53,14 @@ let precoMedio = (props.asset.valor_min+props.asset.valor_max)/2;
 
       <!-- TROCAR PARA O PREÇO DE VDD -->
 
-      <div class="current-price">{{ useCurrencify(props.asset.valor_atual) }}</div>
+      <div class="current-price">{{ useCurrencify(precoAtual) }}</div>
 
-      <div class="price-change change-positive positive-bg" v-if="usePercentageCalculator(precoMedio,props.asset.valor_atual) >= 0">
-        <q-icon name="fas fa-caret-up"/> {{ usePercentageCalculator(precoMedio,props.asset.valor_atual).toFixed(2) }}%
+      <div class="price-change change-positive positive-bg" v-if="usePercentageCalculator(precoMedio,precoAtual) >= 0">
+        <q-icon name="fas fa-caret-up"/> {{ usePercentageCalculator(precoMedio,precoAtual).toFixed(2) }}%
       </div>
 
       <div class="price-change change-negative negative-bg" v-else>
-        <q-icon name="fas fa-caret-down"/> {{ usePercentageCalculator(precoMedio,props.asset.valor_atual).toFixed(2) }}%
+        <q-icon name="fas fa-caret-down"/> {{ usePercentageCalculator(precoMedio,precoAtual).toFixed(2) }}%
       </div>
 
     </div>

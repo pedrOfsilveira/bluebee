@@ -1,9 +1,39 @@
 <script setup>
 import { useCurrencify } from 'src/use/useCurrencify';
 import { useStoreAuth } from 'src/stores/storeAuth';
-import { computed } from 'vue';
+import { onMounted, computed, ref } from 'vue';
+import { useStoreUserAssets } from "src/stores/storeUserAssets";
+import { useStoreAssets } from "src/stores/storeAssets";
 
 const storeAuth = useStoreAuth();
+
+// TESTE ele demora pra carregar e aparece por menos de um segundo o zero toda vez que carrega
+const storeUserAssets = useStoreUserAssets();
+const storeAssets = useStoreAssets();
+const patrimonio = ref(0);
+
+onMounted(async () => {
+  const loadedStore = await loadStore(storeUserAssets)
+  if (loadedStore.length >= 1) {
+    loadedStore.forEach(async asset => {
+      const register = await storeAssets.returnPrice(asset.ativos)
+      patrimonio.value += register[0].preco_atual*asset.quantidade
+    })
+  }
+})
+
+const loadStore = async store => {
+  if (store.assets.length >= 1) {
+    console.log("Carregou a tempo")
+    return store.assets
+  }
+  else {
+    console.log("Não carregou a tempo")
+    await store.loadUserAssets();
+    return store.assets
+  }
+}
+// FIM TESTE
 
 const formattedSaldo = computed(() => {
   const saldo = (storeAuth.userDetails && storeAuth.userDetails.saldo != null) ? storeAuth.userDetails.saldo : 0;
@@ -29,7 +59,7 @@ const user = {
     <div class="chart-placeholder flex">
       <div>
         <div class="text-subtitle2">Seu Patrimônio Atual</div>
-        <div class="text-h4 text-weight-bolder balance">R$ {{ user.totalAssets.toFixed(2).replace('.', ',') }}</div>
+        <div class="text-h4 text-weight-bolder balance">R$ {{ patrimonio.toFixed(2).replace('.', ',') }}</div>
         <q-badge
 
           align="middle"
