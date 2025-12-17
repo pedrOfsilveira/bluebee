@@ -42,8 +42,7 @@ const precoAtual = props.register[0].preco_atual //nao posso fazer assim, isso Ã
         v-close-popup
       />
 
-      <!-- botÃ£o de favorito ainda nao funciona -->
-      <q-btn flat round icon="fa-regular fa-star" class="back-btn" size="sm" />
+
 
     </div>
 

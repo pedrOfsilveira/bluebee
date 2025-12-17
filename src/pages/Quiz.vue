@@ -117,7 +117,10 @@ const handleSwipe = ({ direction }) => {
           Análise de Desempenho
         </div>
 
-        <q-card class="quiz-card feedback-card q-mb-lg">
+        <q-card
+          class="quiz-card feedback-card q-mb-lg"
+          :style="{ borderLeftColor: (store.feedback && store.feedback.color) === 'positive' ? '#21BA45' : '#F2C037' }"
+        >
           <q-card-section class="row items-center no-wrap">
             <div class="col-auto q-mr-md">
               <q-avatar :color="store.feedback.color" text-color="white" :icon="store.feedback.icon" />
@@ -200,6 +203,5 @@ const handleSwipe = ({ direction }) => {
 /* Feedback Card Destaque */
 .feedback-card {
   border-left: 5px solid;
-  border-left-color: v-bind('store.feedback.color === "positive" ? "#21BA45" : "#F2C037"');
 }
 </style>

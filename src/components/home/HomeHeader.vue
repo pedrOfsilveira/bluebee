@@ -10,15 +10,23 @@ const storeAuth = useStoreAuth();
 // TESTE ele demora pra carregar e aparece por menos de um segundo o zero toda vez que carrega
 const storeUserAssets = useStoreUserAssets();
 const storeAssets = useStoreAssets();
-const patrimonio = ref(0);
+const patrimonio = ref(null);
 
 onMounted(async () => {
   const loadedStore = await loadStore(storeUserAssets)
   if (loadedStore.length >= 1) {
-    loadedStore.forEach(async asset => {
-      const register = await storeAssets.returnPrice(asset.ativos)
-      patrimonio.value += register[0].preco_atual*asset.quantidade
-    })
+    const totals = await Promise.all(
+      loadedStore.map(async asset => {
+        const register = await storeAssets.returnPrice(asset.ativos)
+        const price = register?.[0]?.preco_atual || 0
+        const qty = Number(asset.quantidade) || 0
+        return price * qty
+      })
+    )
+    const sum = totals.reduce((a,b) => a + b, 0)
+    patrimonio.value = Number(sum.toFixed(2))
+  } else {
+    patrimonio.value = 0
   }
 })
 
@@ -59,7 +67,8 @@ const user = {
     <div class="chart-placeholder flex">
       <div>
         <div class="text-subtitle2">Seu Patrimônio Atual</div>
-        <div class="text-h4 text-weight-bolder balance">R$ {{ patrimonio.toFixed(2).replace('.', ',') }}</div>
+        <div v-if="patrimonio !== null" class="text-h4 text-weight-bolder balance">R$ {{ patrimonio.toFixed(2).replace('.', ',') }}</div>
+        <q-skeleton v-else type="text" class="text-h4 balance" width="180px" />
         <q-badge
 
           align="middle"

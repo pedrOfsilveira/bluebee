@@ -8,7 +8,7 @@ defineProps({
     default: () => ({
       stocks: 0,
       fii: 0,
-      fixed: 0,
+      etf: 0,
       crypto: 0,
     }),
   },
@@ -30,8 +30,8 @@ defineProps({
           :style="{ width: percentages.fii + '%' }"
         ></div>
         <div
-          class="bar bar-fixed"
-          :style="{ width: percentages.fixed + '%' }"
+          class="bar bar-etf"
+          :style="{ width: percentages.etf + '%' }"
         ></div>
         <div
           class="bar bar-crypto"
@@ -58,7 +58,7 @@ defineProps({
             class="legend-dot"
             style="background: linear-gradient(135deg, #ffee58, #fbc02d)"
           ></span>
-          Renda Fixa ({{ percentages.fixed }}%)
+          ETF ({{ percentages.etf }}%)
         </div>
         <div class="legend-item">
           <span
@@ -122,12 +122,12 @@ defineProps({
   background: linear-gradient(135deg, #66bb6a, #43a047);
 }
 
-.bar-fixed {
-  background: linear-gradient(135deg, #ffee58, #fbc02d);
-}
-
 .bar-crypto {
   background: linear-gradient(135deg, #ab47bc, #8e24aa);
+}
+
+.bar-etf {
+  background: linear-gradient(135deg, #ffee58, #fbc02d);
 }
 
 .diversification-legend {

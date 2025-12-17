@@ -5,17 +5,52 @@ import DiversificationChart from "src/components/wallet/DiversificationChart.vue
 import History from 'src/components/wallet/History.vue';
 import MyAssetsSection from 'src/components/wallet/MyAssetsSection.vue';
 import { useStoreUserAssets } from "src/stores/storeUserAssets";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 const tab = ref("ativos");
 
 const storeUserAssets = useStoreUserAssets()
 
-const percentages = ref({
-  stocks: 15,
-  fii: 45,
-  fixed: 15,
-  crypto: 25,
-});
+const normalizeType = (t) => {
+  const s = (t || '').toString().toLowerCase()
+  if (s.includes('fundo') || s === 'fii') return 'fii'
+  if (s.includes('cripto') || s === 'crypto') return 'crypto'
+  // Map any renda fixa/fixed income into ETF bucket since fixed is removed
+  if (s.includes('renda fixa') || s.includes('fixa') || s.includes('tesouro')) return 'etf'
+  if (s.includes('etf')) return 'etf'
+  if (s.includes('ação') || s.includes('acoes') || s.includes('ações') || s.includes('acao') || s.includes('stock')) return 'stocks'
+  return 'stocks'
+}
+
+const percentages = computed(() => {
+  const acc = { stocks: 0, fii: 0, etf: 0, crypto: 0 }
+  const list = storeUserAssets.assets || []
+  let total = 0
+  list.forEach(a => {
+    const tipo = a?.tipo || a?.ativos?.tipo
+    const key = normalizeType(tipo)
+    const qty = typeof a?.quantidade === 'number' && a.quantidade > 0 ? a.quantidade : 1
+    if (acc[key] === undefined) acc[key] = 0
+    acc[key] += qty
+    total += qty
+  })
+  if (total === 0) return acc
+  const pct = {
+    stocks: Math.round((acc.stocks / total) * 100),
+    fii: Math.round((acc.fii / total) * 100),
+    etf: Math.round((acc.etf / total) * 100),
+    crypto: Math.round((acc.crypto / total) * 100),
+  }
+  // Adjust to ensure sum = 100
+  const sum = pct.stocks + pct.fii + pct.etf + pct.crypto
+  if (sum !== 100) {
+    // add/subtract the difference to the largest bucket
+    const entries = Object.entries(pct)
+    entries.sort((a,b) => b[1]-a[1])
+    const [largestKey] = entries[0]
+    pct[largestKey] += (100 - sum)
+  }
+  return pct
+})
 
 // const assets = ref([
 //   {

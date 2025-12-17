@@ -427,6 +427,8 @@ export const useQuizStore = defineStore('quiz', () => {
 
   // --- FEEDBACK PERSONALIZADO ---
   const feedback = computed(() => {
+    // Only compute feedback after a completed quiz with at least one answer
+    if (!showResult.value || userAnswers.value.length === 0) return null
     const stats = {
       security: { total: 0, wrong: 0, name: 'Segurança Digital', route: '/security', icon: 'fas fa-shield-alt' },
       glossary: { total: 0, wrong: 0, name: 'Termos Técnicos', route: '/glossary', icon: 'fas fa-book' },
