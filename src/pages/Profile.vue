@@ -1,11 +1,21 @@
 <script setup>
+import { computed } from 'vue';
 import BlueHeader from 'src/components/BlueHeader.vue';
 import LogoutButton from 'src/components/profile/LogoutButton.vue';
 import StatList from 'src/components/profile/StatList.vue';
+import AccountSettings from 'src/components/profile/AccountSettings.vue';
 import SectionTitle from 'src/components/SectionTitle.vue';
 import { useStoreAuth } from 'src/stores/storeAuth';
 
 const storeAuth = useStoreAuth()
+
+const investorProfileColor = computed(() => {
+  const p = (storeAuth.userDetails.investor_profile || '').toLowerCase()
+  if (p.includes('conserv')) return 'secondary'
+  if (p.includes('moder')) return 'warning'
+  if (p.includes('arroj')) return 'negative'
+  return 'primary'
+})
 </script>
 
 <template>
@@ -22,7 +32,13 @@ const storeAuth = useStoreAuth()
     </div>
 
     <div class="profile-stats-container">
-      <div class="text-subtitle1 text-weight-bold q-mb-sm">Visão Geral</div>
+      <div class="profile-stats-header">
+        <div class="text-subtitle1 text-weight-bold">Visão Geral</div>
+        <q-badge v-if="storeAuth.userDetails.investor_profile" class="profile-badge">
+          <q-icon name="fas fa-circle" :color="investorProfileColor" size="8px" class="q-mr-sm" />
+          {{ storeAuth.userDetails.investor_profile }}
+        </q-badge>
+      </div>
       <div class="profile-stats">
 
         <div class="stat-item" style="flex:2">
@@ -52,6 +68,25 @@ const storeAuth = useStoreAuth()
   <div class="section q-mt-lg">
     <SectionTitle title="Relatório de Progresso" icon="fas fa-square-poll-vertical" />
     <StatList />
+  </div>
+  <div class="section q-mt-lg pad">
+    <q-expansion-item expand-separator dense header-class="settings-header" expand-icon-class="text-grey-6">
+      <template v-slot:header>
+        <div class="row full-width items-center no-wrap">
+          <div class="settings-icon q-mr-md">
+            <q-icon name="fas fa-user-gear" size="xs" color="white" />
+          </div>
+          <div class="col text-weight-bold text-grey-9 text-body1 text-left">
+            Configurações da Conta
+          </div>
+        </div>
+      </template>
+      <q-card flat>
+        <q-card-section class="q-pa-none">
+          <AccountSettings />
+        </q-card-section>
+      </q-card>
+    </q-expansion-item>
   </div>
   <div class="section">
     <LogoutButton/>
@@ -161,5 +196,47 @@ const storeAuth = useStoreAuth()
   font-size: 13px;
   opacity: 0.85;
   font-weight: 500;
+}
+
+
+.profile-stats-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.profile-badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 16px;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 13px;
+  font-weight: 500;
+  backdrop-filter: blur(10px);
+  box-shadow: none;
+}
+
+.settings-header {
+  padding: 15px;
+}
+
+.pad .q-item {
+  padding: 0 !important;
+}
+
+.settings-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+  background: linear-gradient(135deg, #1a237e 0%, #3f51b5 50%, #5c6bc0 100%);
 }
 </style>

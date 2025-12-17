@@ -117,9 +117,9 @@ const handleSwipe = ({ direction }) => {
           O que isso significa?
         </div>
 
-        <q-card class="quiz-card feedback-card q-mb-lg">
+        <q-card class="quiz-card feedback-card q-mb-lg" :style="{ borderLeftColor: `var(--q-${store.resultProfile.color})` }">
           <q-card-section>
-            <div class="text-body1 text-grey-8" style="line-height: 1.6;">
+            <div class="text-body1 text-grey-8 text-justify" style="line-height: 1.6;">
               {{ store.resultProfile.msg }}
             </div>
           </q-card-section>
@@ -130,9 +130,9 @@ const handleSwipe = ({ direction }) => {
             <q-btn
               flat
               color="primary"
-              label="Ver Investimentos Ideais"
+              label="Ir para o Dashboard"
               icon-right="fas fa-arrow-right"
-              @click="router.push(store.resultProfile.route); store.restartQuiz()"
+              @click="(async () => { await store.saveResult?.(); router.push('/'); store.restartQuiz(); })()"
             />
           </q-card-actions>
         </q-card>
@@ -198,6 +198,5 @@ const handleSwipe = ({ direction }) => {
 /* Borda colorida no card de feedback baseada no perfil */
 .feedback-card {
   border-left: 5px solid;
-  border-left-color: v-bind('store.resultProfile.color === "secondary" ? "#26A69A" : store.resultProfile.color === "warning" ? "#F2C037" : "#FF5252"');
 }
 </style>

@@ -1,5 +1,8 @@
 import { defineStore } from "pinia";
 import { ref, computed } from "vue";
+import supabase from "src/config/supabase";
+import { useStoreAuth } from "./storeAuth";
+import { useShowErrorMessage } from "src/use/useShowErrorMessage";
 
 export const useStoreInvestorProfile = defineStore("investorProfile", () => {
   // Estado
@@ -92,18 +95,18 @@ export const useStoreInvestorProfile = defineStore("investorProfile", () => {
     if (score <= 7) {
       return {
         title: "Conservador",
-        msg: "Você prioriza a segurança. Seu foco é não perder dinheiro, mesmo que renda menos. Investimentos ideais: Tesouro Selic, CDBs e LCI/LCA.",
+        msg: "Você prioriza a segurança. Prefira exposição a FIIs e ETFs amplos, além de ações de empresas consolidadas (blue chips).",
         icon: "fas fa-shield-alt",
-        color: "secondary", // Azul/Verde
-        route: "/explore" // Rota sugerida (ex: Renda Fixa)
+        color: "secondary",
+        route: "/explore"
       };
     }
     else if (score <= 11) {
       return {
         title: "Moderado",
-        msg: "Você aceita correr alguns riscos para ter retornos melhores que a poupança, mas ainda preza por segurança. Carteira ideal: Renda Fixa + Fundos Imobiliários.",
+        msg: "Você aceita correr alguns riscos, mas ainda preza por estabilidade. Carteira ideal: FIIs e ETFs, com uma parcela em Ações.",
         icon: "fas fa-balance-scale",
-        color: "warning", // Laranja
+        color: "warning",
         route: "/explore"
       };
     }
@@ -118,6 +121,53 @@ export const useStoreInvestorProfile = defineStore("investorProfile", () => {
     }
   });
 
+  // Persist result to Supabase perfil table and sync auth store
+  const saveResult = async () => {
+    try {
+      const auth = useStoreAuth()
+      const userId = auth.userDetails.id
+      if (!userId) {
+        useShowErrorMessage('Usuário não autenticado.')
+        return { ok: false }
+      }
+
+      const title = resultProfile.value?.title
+      if (!title) {
+        useShowErrorMessage('Resultado do perfil não encontrado.')
+        return { ok: false }
+      }
+
+      // Use 'perfil_investidor' as the canonical column
+      let { error } = await supabase
+        .from('perfil')
+        .update({ perfil_investidor: title })
+        .eq('id', userId)
+
+      if (error) {
+        // If column missing, try alternative 'investor_profile'
+        if (error.code === '42703') {
+          const fallback = await supabase
+            .from('perfil')
+            .update({ investor_profile: title })
+            .eq('id', userId)
+          if (fallback.error) {
+            useShowErrorMessage(fallback.error.message)
+            return { ok: false, message: fallback.error.message }
+          }
+        } else {
+          useShowErrorMessage(error.message)
+          return { ok: false, message: error.message }
+        }
+      }
+
+      auth.userDetails.investor_profile = title
+      return { ok: true }
+    } catch (e) {
+      useShowErrorMessage(e.message || 'Erro ao salvar perfil do investidor')
+      return { ok: false, message: e.message }
+    }
+  }
+
   return {
     questions,
     currentStep,
@@ -128,6 +178,7 @@ export const useStoreInvestorProfile = defineStore("investorProfile", () => {
     restartQuiz,
     totalScore,
     maxScore,
-    resultProfile
+    resultProfile,
+    saveResult
   };
 });

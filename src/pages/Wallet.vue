@@ -14,14 +14,15 @@ const normalizeType = (t) => {
   const s = (t || '').toString().toLowerCase()
   if (s.includes('fundo') || s === 'fii') return 'fii'
   if (s.includes('cripto') || s === 'crypto') return 'crypto'
-  if (s.includes('renda fixa') || s.includes('fixa') || s.includes('tesouro')) return 'fixed'
+  // Map any renda fixa/fixed income into ETF bucket since fixed is removed
+  if (s.includes('renda fixa') || s.includes('fixa') || s.includes('tesouro')) return 'etf'
   if (s.includes('etf')) return 'etf'
   if (s.includes('ação') || s.includes('acoes') || s.includes('ações') || s.includes('acao') || s.includes('stock')) return 'stocks'
   return 'stocks'
 }
 
 const percentages = computed(() => {
-  const acc = { stocks: 0, fii: 0, etf: 0, fixed: 0, crypto: 0 }
+  const acc = { stocks: 0, fii: 0, etf: 0, crypto: 0 }
   const list = storeUserAssets.assets || []
   let total = 0
   list.forEach(a => {
@@ -37,11 +38,10 @@ const percentages = computed(() => {
     stocks: Math.round((acc.stocks / total) * 100),
     fii: Math.round((acc.fii / total) * 100),
     etf: Math.round((acc.etf / total) * 100),
-    fixed: Math.round((acc.fixed / total) * 100),
     crypto: Math.round((acc.crypto / total) * 100),
   }
   // Adjust to ensure sum = 100
-  const sum = pct.stocks + pct.fii + pct.etf + pct.fixed + pct.crypto
+  const sum = pct.stocks + pct.fii + pct.etf + pct.crypto
   if (sum !== 100) {
     // add/subtract the difference to the largest bucket
     const entries = Object.entries(pct)
