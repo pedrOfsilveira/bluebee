@@ -15,15 +15,26 @@ const props = defineProps({
   },});
 
 const categoryMap = {
-  'Ações': { label: 'Ações', iconClass: 'icon-stocks', emoji: '📈' },
-  'Fundo Imobiliário': { label: 'FIIs', iconClass: 'icon-fii', emoji: '🏢' },
-  crypto: { label: 'Cripto', iconClass: 'icon-crypto', emoji: '₿' },
+  stocks: { label: 'Ações', iconClass: 'icon-stocks', iconName: 'fas fa-chart-line' },
+  fii: { label: 'FIIs', iconClass: 'icon-fii', iconName: 'fas fa-building' },
+  crypto: { label: 'Cripto', iconClass: 'icon-crypto', iconName: 'fab fa-bitcoin' },
+  etf: { label: 'ETF', iconClass: 'icon-fixed', iconName: 'fas fa-chart-pie' },
 };
 
-const categoryInfo = computed(() => {
-  return props.asset.tipo
-          ? categoryMap[props.asset.tipo] || categoryMap['Ações']
-          : categoryMap[props.asset.ativos.tipo] || categoryMap['Ações'];
+const normalizedType = computed(() => {
+  const t = (props.asset?.tipo || props.asset?.ativos?.tipo || '').toString().toLowerCase();
+  if (!t) return 'stocks'
+  if (t.includes('fundo') || t === 'fii') return 'fii'
+  if (t.includes('cripto') || t === 'crypto') return 'crypto'
+  if (t.includes('etf')) return 'etf'
+  if (t.includes('ação') || t.includes('acoes') || t.includes('ações') || t.includes('acao') || t.includes('stock')) return 'stocks'
+  return 'stocks'
+});
+
+const categoryInfo = computed(() => categoryMap[normalizedType.value] || categoryMap.stocks);
+
+const displayQuantity = computed(() => {
+  return typeof props.asset?.quantidade === 'number' ? props.asset.quantidade : null;
 });
 
 // const changeClass = computed(() => {
@@ -36,17 +47,20 @@ const categoryInfo = computed(() => {
 //   emit('open-details', props.asset)
 // }
 
-// TESTE
+// Open dialog with normalized asset shape (ensure id exists)
 const openDetails = async () => {
-  const register = await storeAssets.returnPrice(props.asset)
-  emit('open-details', props.asset, register)
+  const normalizedAsset = props.asset?.id ? props.asset : props.asset?.ativos
+  const register = await storeAssets.returnPrice(normalizedAsset)
+  emit('open-details', normalizedAsset, register)
 }
 
 </script>
 
 <template>
   <div class="asset-card" @click="openDetails">
-    <!-- <div class="asset-icon" :class="categoryInfo.iconClass">{{ categoryInfo.emoji }}</div> -->
+    <div class="asset-icon" :class="categoryInfo.iconClass">
+      <q-icon :name="categoryInfo.iconName" size="22px" />
+    </div>
     <div v-if="asset.nome" class="asset-info">
       <div class="asset-name">{{ asset.nome }}</div>
       <div class="asset-type">{{ asset.tipo }}</div>
@@ -56,7 +70,7 @@ const openDetails = async () => {
       <div class="asset-type" >{{ asset.ativos.tipo }}</div>
     </div>
     <div class="asset-value">
-      <!-- <div class="asset-amount">{{ useCurrencify(asset.quantidade * asset.ativos.valor_min) }}</div> -->
+      <div v-if="displayQuantity !== null" class="asset-amount">Qtd: {{ displayQuantity }}</div>
       <!-- <div class="asset-change" :class="changeClass">{{ asset.ativos.valor_max - asset.ativos.valor_min }}</div> -->
     </div>
   </div>

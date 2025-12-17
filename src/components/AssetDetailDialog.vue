@@ -5,7 +5,6 @@ import SectionTitle from "./SectionTitle.vue";
 import AssetCard from "./wallet/AssetCard.vue";
 import StatCard from "./profile/StatCard.vue";
 import AssetHeader from "./AssetHeader.vue";
-import AssetChart from "./AssetChart.vue";
 import AssetDetailsContent from "./AssetDetailsContent.vue";
 import { useStoreUserAssets } from "src/stores/storeUserAssets";
 // Importe o que mais precisar (ex: useCurrencify)
@@ -169,8 +168,7 @@ const increaseQuantity = () => {
           >.
         </p>
 
-        <!-- esse gráfico não funciona ainda, mas nao quero me prender mto nele, entao a gente ve dps como vamos fazer -->
-        <AssetChart />
+
 
         <AssetDetailsContent :asset="props.asset" :register="props.register"/>
       </q-card-section>
