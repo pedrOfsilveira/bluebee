@@ -39,7 +39,7 @@ onMounted(() => {
 <template>
   <q-page>
 
-    <BlueHeader>
+    <BlueHeader id="quiz-info">
       <div class="flex justify-between items-center q-mb-md">
         <div class="text-h5 text-weight-bolder flex items-center">
           <q-icon name="fas fa-brain" class="q-mr-sm" />

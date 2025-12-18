@@ -231,7 +231,7 @@ const medals = computed(() => {
 </script>
 
 <template>
-  <StatSection>
+  <StatSection id="estatistica">
     <SectionTitle class="bb" title="Estatísticas de Uso" icon="fas fa-chart-simple" />
     <div class="stats-grid">
       <StatCard
@@ -247,7 +247,7 @@ const medals = computed(() => {
     </div>
   </StatSection>
 
-  <StatSection>
+  <StatSection id="se-cuida">
     <SectionTitle class="bb" title="Fique de Olho" icon="fas fa-circle-exclamation" />
     <template v-if="attentionMessages.length">
       <StatMessage v-for="(m, i) in attentionMessages" :key="'att-'+i" category="attention">
@@ -262,7 +262,7 @@ const medals = computed(() => {
     </template>
   </StatSection>
 
-  <StatSection>
+  <StatSection id="sugestoes">
     <SectionTitle class="bb" title="Sugestões" icon="fas fa-lightbulb" />
 
     <template v-if="suggestionMessages.length">
@@ -279,7 +279,7 @@ const medals = computed(() => {
 
   </StatSection>
 
-  <StatSection>
+  <StatSection id="medalhas">
     <SectionTitle class="bb" title="Medalhas" icon="fas fa-medal" :seeAll="true" to="/challenges"/>
     <div class="stats-medal-grid">
       <StatCard

@@ -31,15 +31,17 @@ onMounted(() => {
 
 <template>
   <BlueHeader>
-    <div class="profile-pic-container">
-      <div class="profile-pic"></div>
-    </div>
+    <div id="informacoes" class="text-center">
+      <div class="profile-pic-container">
+        <div class="profile-pic"></div>
+      </div>
 
-    <div class="profile-name">{{ storeAuth.userDetails.nome }}</div>
+      <div class="profile-name">{{ storeAuth.userDetails.nome }}</div>
 
-    <div class="profile-level">
-      <q-icon name="fas fa-star" size="16px" class="q-mr-2" />
-      {{ storeAuth.userDetails.nivel }} - Investidor Junior
+      <div class="profile-level">
+        <q-icon name="fas fa-star" size="16px" class="q-mr-2" />
+        {{ storeAuth.userDetails.nivel }} - Investidor Junior
+      </div>
     </div>
 
     <div class="profile-stats-container">

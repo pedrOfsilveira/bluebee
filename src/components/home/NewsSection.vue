@@ -21,7 +21,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="section">
+  <div class="section" id="news-section">
     <SectionTitle title="Notícias de Mercado" icon="fas fa-newspaper" bb />
 
     <div class="news-container">
@@ -29,11 +29,11 @@ onMounted(() => {
         <q-spinner color="secondary" size="3em" :thickness="5" />
       </div>
 
-      <NewsCard 
-        v-for="(news, index) in storeNews.newsState.noticias" 
-        :key="index" 
+      <NewsCard
+        v-for="(news, index) in storeNews.newsState.noticias"
+        :key="index"
         :news="news"
-        @click="showNewsDetails(news)" 
+        @click="showNewsDetails(news)"
       />
     </div>
 
@@ -61,13 +61,13 @@ onMounted(() => {
 
         <q-card-actions align="right">
           <q-btn v-close-popup flat color="grey" label="Fechar" />
-          <q-btn 
-            class="my-btn" 
-            label="Ler notícia completa" 
+          <q-btn
+            class="my-btn"
+            label="Ler notícia completa"
             icon-right="fas fa-arrow-up-right-from-square"
-             
+
             :href="selectedNews.url"
-            target="_blank" 
+            target="_blank"
           />
         </q-card-actions>
       </q-card>

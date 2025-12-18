@@ -39,14 +39,13 @@ onMounted(() => {
 <template>
   <q-page class="bg-grey-1">
 
-    <BlueHeader>
+    <BlueHeader id="security-search">
       <div class="flex text-h5 text-weight-bolder items-center q-mb-lg">
         <q-icon name="fas fa-shield-alt" class="q-mr-sm" />
         Guia Anti-Golpe
       </div>
 
       <q-input
-        id="security-search"
         v-model="search"
         class="search-input"
         outlined

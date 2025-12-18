@@ -85,8 +85,6 @@ export const useStoreAssets = defineStore("assets", () => {
       let unixOld = Math.floor(searchData[0].unix_id/24)
       let unixNew = Math.floor((Date.now()/1000)/24)
       if (unixOld < unixNew) {
-        console.log(unixOld, unixNew)
-        console.log("Funcionou")
         const { error, data } = await supabase
           .from('ativo_registro')
           .update({

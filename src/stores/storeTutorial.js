@@ -9,7 +9,7 @@ export const useStoreTutorial = defineStore("tutorial", () => {
       {
         element: "#saldo-box",
         popover: {
-          title: "Seu Patrimônio",
+          title: "Seu Saldo",
           description:
             "Aqui você acompanha quanto dinheiro você tem para investir.",
         },
@@ -19,7 +19,15 @@ export const useStoreTutorial = defineStore("tutorial", () => {
         popover: {
           title: "Ações Rápidas",
           description:
-            "Acesse o simulador, notícias, desafios e outras sessões por aqui.",
+            "Acesse os ativos, simulador, desafios e outras sessões por aqui.",
+        },
+      },
+      {
+        element: "#news-section",
+        popover: {
+          title: "Notícias",
+          description:
+            "Fique por dentro das notícias mais recentes do mercado, clique para mais detalhes!",
         },
       },
       {
@@ -27,7 +35,7 @@ export const useStoreTutorial = defineStore("tutorial", () => {
         popover: {
           title: "Desafios",
           description:
-            "Complete missões diárias para ganhar XP e subir de nível!",
+            "Complete desafios para ganhar XP e subir de nível!",
         },
       },
       {
@@ -41,10 +49,11 @@ export const useStoreTutorial = defineStore("tutorial", () => {
     ],
     wallet: [
       {
-        element: "#saldo-box",
+        element: "#diversification-section",
         popover: {
-          title: "Visão da Carteira",
-          description: "Seu saldo e evolução do patrimônio.",
+          title: "Diversificação",
+          description:
+            "Distribuição da sua carteira por classes de ativos.",
         },
       },
       {
@@ -52,15 +61,15 @@ export const useStoreTutorial = defineStore("tutorial", () => {
         popover: {
           title: "Meus Ativos",
           description:
-            "Lista de ativos que você possui. Toque para ver detalhes.",
+          "Lista de ativos que você possui. Toque para ver detalhes.",
         },
       },
       {
-        element: "#diversification-section",
+        element: "#wallet-tabs",
         popover: {
-          title: "Diversificação",
+          title: "Clique aqui",
           description:
-            "Distribuição da sua carteira por classes de ativos.",
+            "Escolha entre ver seus ativos da carteira e ver o histórico de transações.",
         },
       },
       {
@@ -86,7 +95,7 @@ export const useStoreTutorial = defineStore("tutorial", () => {
         popover: {
           title: "Resultados",
           description:
-            "Veja o total investido, valor final estimado e rendimento.",
+            "Veja o total investido, valor final estimado, rendimento e compartilhe com seus amigos.",
         },
       },
     ],
@@ -144,10 +153,49 @@ export const useStoreTutorial = defineStore("tutorial", () => {
     ],
     profile: [
       {
+        element: "#informacoes",
+        popover: {
+          title: "Informações",
+          description: "Veja seu nome, nível e título.",
+        },
+      },
+      {
         element: ".profile-stats-container",
         popover: {
           title: "Visão Geral",
-          description: "Acompanhe conquistas, sequência e experiência.",
+          description: "Acompanhe conquistas, sequência, experiência e seu perfil de investidor.",
+        },
+      },
+      {
+        element: "#estatistica",
+        popover: {
+          title: "Estatísticas de Uso",
+          description:
+            "Veja seu tempo de uso e os desafios concluídos.",
+        },
+      },
+      {
+        element: "#se-cuida",
+        popover: {
+          title: "Fique de Olho",
+          description:
+            "Receba avisos sobre os seus investimentos.",
+        },
+      },
+      {
+        element: "#sugestoes",
+        popover: {
+          title: "Sugestões",
+          description:
+            "Visualize sugestões para melhorar seus conhecimentos.",
+        },
+      },
+      {
+        element: "#medalhas",
+        popover: {
+          title: "Medalhas",
+          description:
+            "Acesse a sua lista de medalhas recebidas pelos desafios concluídos.",
         },
       },
       {
@@ -176,7 +224,7 @@ export const useStoreTutorial = defineStore("tutorial", () => {
         },
       },
       {
-        element: ".quiz-card",
+        element: "#quiz-info",
         popover: {
           title: "Resultado",
           description:

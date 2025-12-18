@@ -7,7 +7,6 @@ import { useStoreAssets } from "src/stores/storeAssets";
 
 const storeAuth = useStoreAuth();
 
-// TESTE ele demora pra carregar e aparece por menos de um segundo o zero toda vez que carrega
 const storeUserAssets = useStoreUserAssets();
 const storeAssets = useStoreAssets();
 const patrimonio = ref(null);
@@ -37,29 +36,19 @@ onUnmounted(() => {
 
 const loadStore = async store => {
   if (store.assets.length >= 1) {
-    console.log("Carregou a tempo")
     return store.assets
   }
   else {
-    console.log("Não carregou a tempo")
     await store.loadUserAssets();
     return store.assets
   }
 }
-// FIM TESTE
 
 const formattedSaldo = computed(() => {
   const saldo = (storeAuth.userDetails && storeAuth.userDetails.saldo != null) ? storeAuth.userDetails.saldo : 0;
   return useCurrencify(saldo);
 });
 
-const user = {
-  name: "Investidor",
-  accountBalance: 2500.00,
-  totalAssets: 5247.89,
-  assetChange: 245.12,
-  assetChangePercent: 4.9
-};
 </script>
 
 <template>

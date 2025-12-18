@@ -70,14 +70,13 @@ onMounted(() => {
 <template>
   <q-page class="bg-grey-1">
 
-    <BlueHeader>
+    <BlueHeader id="glossary-search">
       <div class="flex text-h5 text-weight-bolder items-center q-mb-lg">
         <q-icon name="fas fa-book" class="q-mr-sm" />
         Glossário Financeiro
       </div>
 
       <q-input
-        id="glossary-search"
         v-model="search"
         class="search-input"
         outlined

@@ -26,13 +26,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <BlueHeader>
+  <BlueHeader id="explore-search">
     <div class="flex text-h5 text-weight-bolder items-center q-mb-lg">
       <q-icon name="fas fa-compass" class="q-mr-sm" />
       Explorar Ativos
     </div>
     <q-input
-      id="explore-search"
       @update:model-value="handleSearch"
       v-model="search"
       class="search-input"
