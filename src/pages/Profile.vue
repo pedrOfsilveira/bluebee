@@ -115,7 +115,7 @@ const investorProfileColor = computed(() => {
   background: linear-gradient(135deg, #81d4fa, #4fc3f7);
   border: 5px solid white;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-  background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvGGufBrBQeeKIcHbmY_hUgSjS7BcuYbVdtQ&s');
+  background-image: url('https://voxnews.com.br/wp-content/uploads/2017/04/unnamed.png');
   background-size: cover;
   background-position: center;
   transition: transform 0.4s ease;
