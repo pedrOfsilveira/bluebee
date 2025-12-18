@@ -27,6 +27,7 @@ const precoMedio = computed(() => {
 });
 
 const precoAtual = props.register[0].preco_atual // nao posso fazer assim, isso aqui é teste
+
 </script>
 
 <template>

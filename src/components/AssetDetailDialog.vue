@@ -12,10 +12,12 @@ import { useCurrencify } from "src/use/useCurrencify";
 import { useStoreHistory } from "src/stores/storeHistory";
 import { valueOrDefault } from "chart.js/helpers";
 import { useQuasar } from "quasar";
+import { useStoreAuth } from "src/stores/storeAuth";
 
 const storeUserAssets = useStoreUserAssets()
 const storeHistory = useStoreHistory()
 const $q = useQuasar()
+const auth = useStoreAuth()
 
 const props = defineProps({
   // modelValue é o padrão para o v-model (controla se o dialog está aberto)
@@ -81,6 +83,40 @@ const totalPrice = computed(() => {
   return props.register[0] ? (props.register[0].preco_atual * transactionDetails.quantidade).toFixed(2) : 0;
 });
 
+const compatibilityStatus = computed(() => {
+  const profile = (auth.userDetails?.investor_profile || '').toLowerCase();
+  const risk = (props.asset?.risco || '').toString();
+  const isLow = risk === 'Baixo';
+  const isMid = risk === 'Médio';
+  const isHigh = risk === 'Alto';
+
+  if (!profile) return { text: 'Defina seu perfil', color: 'grey-7' };
+
+  if (profile.includes('conserv')) {
+    if (isLow) return { text: 'Compatível', color: 'positive' };
+    if (isMid) return { text: 'Atenção (médio)', color: 'warning' };
+    if (isHigh) return { text: 'Não compatível', color: 'negative' };
+  }
+  if (profile.includes('moder')) {
+    if (isLow || isMid) return { text: 'Compatível', color: 'positive' };
+    if (isHigh) return { text: 'Atenção (alto)', color: 'warning' };
+  }
+  return { text: 'Compatível', color: 'positive' };
+});
+
+const compatIconClass = computed(() => {
+  switch (compatibilityStatus.value.color) {
+    case 'positive':
+      return 'fas fa-check-circle';
+    case 'warning':
+      return 'fas fa-exclamation-triangle';
+    case 'negative':
+      return 'fas fa-times-circle';
+    default:
+      return 'fas fa-user-shield';
+  }
+});
+
 // Watch for dialog open to ensure data is fresh
 watch(() => props.modelValue, async (newVal) => {
   if (newVal) {
@@ -98,6 +134,12 @@ const handleBuy = async () => {
       <div class="confirm-message">
         <div class="msg-line">Comprar <strong>${transactionDetails.quantidade}</strong> de <strong>${assetName.value}</strong></div>
         <div class="msg-total">Total: <strong>R$ ${totalPrice.value.replace('.', ',')}</strong></div>
+        <div class="compat-row">
+          <span class="compat-badge ${compatibilityStatus.value.color}">
+            <i class="${compatIconClass.value}"></i>
+            ${compatibilityStatus.value.text} com seu perfil
+          </span>
+        </div>
       </div>
     `,
     html: true,
@@ -349,6 +391,7 @@ const increaseQuantity = () => {
 }
 /* Remove browser spinners for clean look */
 .quantity-input :deep(input[type='number']) {
+  appearance: textfield;
   -moz-appearance: textfield;
 }
 .quantity-input :deep(input[type='number']::-webkit-outer-spin-button),
@@ -397,6 +440,39 @@ const increaseQuantity = () => {
     & .q-btn.confirm-btn {
       border-radius: 8px !important;
     }
+  }
+
+  .compat-row {
+    margin-top: 8px;
+  }
+
+  .compat-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+  }
+  .compat-badge.positive {
+    background: linear-gradient(135deg, rgba($positive, 0.9), $positive);
+  }
+  .compat-badge.warning {
+    background: linear-gradient(135deg, #ffe082, $warning);
+    color: #1a1a1a;
+  }
+  .compat-badge.negative {
+    background: linear-gradient(135deg, #ef5350, $negative);
+  }
+  .compat-badge.grey-7 {
+    background: #9e9e9e;
+  }
+  .compat-badge i {
+    font-size: 14px;
   }
 
 

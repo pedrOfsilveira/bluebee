@@ -53,6 +53,15 @@ const attentionMessages = computed(() => {
           route: '/wallet'
         })
       }
+      // Portfolio vs profile mismatch (conservador): pouca exposição a FIIs/ETFs
+      const stableShare = shares.fii + shares.etf
+      if (dist.total > 0 && stableShare < 0.4) {
+        list.push({
+          text: `Seu portfólio não combina com seu perfil conservador: baixa exposição a FIIs/ETFs (${Math.round(stableShare*100)}%). `,
+          action: 'Explorar FIIs/ETFs',
+          route: '/explore'
+        })
+      }
     } else if (profile.includes('moder')) {
       if (shares.crypto >= 0.28) {
         list.push({
@@ -61,6 +70,51 @@ const attentionMessages = computed(() => {
           route: '/explore'
         })
       }
+      // Portfolio vs profile mismatch (moderado): alta concentração em uma classe
+      if (dist.total > 0 && dist.top.share > 0.6) {
+        list.push({
+          text: `Seu portfólio pode não refletir um perfil moderado: concentração em uma classe (${Math.round(dist.top.share*100)}%). `,
+          action: 'Diversificar carteira',
+          route: '/explore'
+        })
+      }
+    }
+    else if (profile.includes('agress')) {
+      // Portfolio vs profile mismatch (agressivo): muito estabilo e pouca RV
+      const riskOnShare = shares.stocks + shares.crypto
+      if (dist.total > 0 && riskOnShare < 0.4) {
+        list.push({
+          text: `Seu portfólio está conservador para um perfil agressivo (${Math.round(riskOnShare*100)}% em Ações/Cripto). Avalie aumentar risco calculado. `,
+          action: 'Explorar oportunidades',
+          route: '/explore'
+        })
+      }
+    }
+
+    // High-risk assets share warning
+    const assets = Array.isArray(userAssets.assets) ? userAssets.assets : []
+    let highRiskQty = 0
+    let totalQty = 0
+    for (const a of assets) {
+      const q = typeof a?.quantidade === 'number' ? a.quantidade : 0
+      totalQty += q
+      const risco = a?.ativos?.risco || a?.risco || ''
+      if (risco.toString() === 'Alto') highRiskQty += q
+    }
+    const highRiskShare = totalQty > 0 ? highRiskQty / totalQty : 0
+
+    // Thresholds by profile
+    let threshold = 0.3 // default
+    if (profile.includes('conserv')) threshold = 0.15
+    else if (profile.includes('moder')) threshold = 0.3
+    else if (profile.includes('agress')) threshold = 0.6
+
+    if (highRiskShare > threshold) {
+      list.push({
+        text: `Muitos ativos de alto risco (${Math.round(highRiskShare*100)}%). Ajuste a carteira para reduzir a volatilidade. `,
+        action: 'Rebalancear',
+        route: '/wallet'
+      })
     }
   }
   return list
