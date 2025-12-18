@@ -85,6 +85,8 @@ export const useStoreUserAssets = defineStore("userAssets", () => {
       assetsLoaded.value = true
       subscribeAssets()
       filterByTime(assets.value) //filtra pelo tempo de cada ativo, dividindo em arrays
+      // After loading assets, verify if any challenge thresholds are met
+      try { await storeUserChallenges.verifyChallenge() } catch {}
     }
   }
 
@@ -100,18 +102,10 @@ export const useStoreUserAssets = defineStore("userAssets", () => {
           table: 'perfil_ativos',
           filter: `perfil_id=eq.${ storeAuth.userDetails.id }`
         },
-        (payload) => {
-          if (payload.eventType === 'INSERT') {
-            assets.value.push(payload.new)
-          }
-          if (payload.eventType === 'DELETE') {
-            const index = getAssetIndexByIds(payload.old.perfil_id, payload.old.ativo_id)
-            assets.value.splice(index, 1)
-          }
-          if (payload.eventType === 'UPDATE') {
-            const index = getAssetIndexByIds(payload.old.perfil_id, payload.old.ativo_id)
-            assets.value[index].quantidade = payload.new.quantidade
-          }
+        async () => {
+          // Reload to keep nested "ativos" hydrated and recalculate challenges
+          await loadUserAssets()
+          try { await storeUserChallenges.verifyChallenge() } catch {}
         }
       )
       .subscribe()

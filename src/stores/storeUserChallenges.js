@@ -77,17 +77,12 @@ export const useStoreUserChallenges = defineStore("userChallenges", () => {
         {
           event: '*',
           schema: 'public',
-          table: 'perfil_ativos',
+          table: 'perfil_desafios',
           filter: `perfil_id=eq.${ storeAuth.userDetails.id }`
         },
-        (payload) => {
-          if (payload.eventType === 'INSERT') {
-            challenges.value.push(payload.new)
-          }
-          if (payload.eventType === 'DELETE') {
-            const index = getChallengeIndexByIds(payload.old.perfil_id, payload.old.desafio_id)
-            challenges.value.splice(index, 1)
-          }
+        async (payload) => {
+          // Reload to ensure we have nested "desafios" populated
+          await loadUserChallenges()
         }
       )
       .subscribe()
@@ -103,7 +98,6 @@ export const useStoreUserChallenges = defineStore("userChallenges", () => {
 
   //teste
   const verifyChallenge = async () => {
-    await storeUserAssets.loadUserAssets()
     // utiliza a contagem por tipo para verificar se algum desafio foi cumprido
     const result = beginnerChallenge(storeUserAssets.assets)
     const completedTypes = Object.keys(result).filter(t => result[t] >= 10)

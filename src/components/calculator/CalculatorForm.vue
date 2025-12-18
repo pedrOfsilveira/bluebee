@@ -158,7 +158,6 @@ const formatCurrency = (fieldName) => {
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 8px 25px rgba(255, 193, 7, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;

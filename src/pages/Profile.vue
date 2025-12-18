@@ -27,6 +27,15 @@ const tutorial = useStoreTutorial()
 onMounted(() => {
   setTimeout(() => tutorial.startTutorialFor('profile'), 600)
 })
+
+const levelTitle = computed(() => {
+  const n = Number(storeAuth.userDetails?.nivel ?? 0);
+  if (!n || isNaN(n)) return null;
+  if (n < 5) return 'Investidor Junior';
+  if (n < 10) return 'Investidor Pleno';
+  if (n < 15) return 'Investidor Sênior';
+  return 'Investidor Mestre';
+})
 </script>
 
 <template>
@@ -40,7 +49,12 @@ onMounted(() => {
 
       <div class="profile-level">
         <q-icon name="fas fa-star" size="16px" class="q-mr-2" />
-        {{ storeAuth.userDetails.nivel }} - Investidor Junior
+        <template v-if="storeAuth.userDetails.nivel != null && levelTitle">
+          {{ storeAuth.userDetails.nivel }} - {{ levelTitle }}
+        </template>
+        <template v-else>
+          <q-skeleton type="text" width="180px" />
+        </template>
       </div>
     </div>
 
@@ -153,7 +167,7 @@ onMounted(() => {
   margin-bottom: 30px;
   position: relative;
   z-index: 2;
-  box-shadow: 0 8px 20px rgba(255, 193, 7, 0.45);
+
 }
 
 .profile-stats-container {

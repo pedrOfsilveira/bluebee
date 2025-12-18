@@ -60,6 +60,31 @@ const formattedSaldo = computed(() => {
   return useCurrencify(saldo);
 });
 
+const formattedRealFloat = computed(() => {
+  if (real_float.value === null || isNaN(real_float.value)) return null;
+  const absVal = Math.abs(Number(real_float.value));
+  return useCurrencify(absVal);
+});
+
+const badgeColor = computed(() => {
+  if (flutuacao.value === null || isNaN(flutuacao.value)) return 'grey-7';
+  if (flutuacao.value > 0) return 'positive';
+  if (flutuacao.value < 0) return 'negative';
+  return 'grey-7';
+});
+
+const badgeTextColor = computed(() => {
+  // Ensure readable text contrast against background
+  return badgeColor.value === 'grey-7' ? 'dark' : 'white';
+});
+
+const badgeLabel = computed(() => {
+  if (formattedRealFloat.value === null || flutuacao.value === null || isNaN(flutuacao.value)) return null;
+  const sign = real_float.value > 0 ? '+' : real_float.value < 0 ? '-' : '';
+  const perc = Number(flutuacao.value).toFixed(2);
+  return `${sign ? sign + ' ' : ''}${formattedRealFloat.value} (${perc}%)`;
+});
+
 </script>
 
 <template>
@@ -75,11 +100,14 @@ const formattedSaldo = computed(() => {
         <div v-if="patrimonio !== null" class="text-h4 text-weight-bolder balance">R$ {{ patrimonio.toFixed(2).replace('.', ',') }}</div>
         <q-skeleton v-else type="text" class="text-h4 balance" width="180px" />
         <q-badge
+          v-if="badgeLabel"
           align="middle"
-          :label="`${real_float} (${flutuacao}%)`"
-          class="q-pa-sm text-weight-bold positive-bg"
-          text-color="positive"
+          :label="badgeLabel"
+          class="q-pa-sm text-weight-bold"
+          :color="badgeColor"
+          :text-color="badgeTextColor"
         />
+        <q-skeleton v-else type="text" width="120px" />
       </div>
     </div>
   </div>

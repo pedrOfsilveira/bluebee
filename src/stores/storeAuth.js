@@ -254,25 +254,30 @@ export const useStoreAuth = defineStore("auth", () => {
 
   const updateReward = async desafioForm => {
     const res = gainXpFormula(userDetails, desafioForm.experiencia);
-    if (res.gainedLevels > 0) {
-      const { error } = await supabase
-        .from('perfil')
-        .update({
-          saldo: userDetails.saldo+desafioForm.dinheiro,
-          nivel: res.nivel,
-          experiencia: res.experiencia
-        })
-        .eq('id', userDetails.id)
+    const { error } = await supabase
+      .from('perfil')
+      .update({
+        saldo: (userDetails.saldo || 0) + (desafioForm.dinheiro || 0),
+        nivel: res.nivel,
+        experiencia: res.experiencia
+      })
+      .eq('id', userDetails.id)
 
-      if (error) useShowErrorMessage(error.message)
-      else {
-        Notify.create({
-          type: 'positive',
-          message: `Você subiu para o nivel ${res.nivel}!`,
-          position: "top"
-        });
-      }
+    if (error) {
+      useShowErrorMessage(error.message)
+      return
     }
+
+    if (res.gainedLevels > 0) {
+      Notify.create({
+        type: 'positive',
+        message: `Você subiu para o nivel ${res.nivel}!`,
+        position: "top"
+      });
+    }
+
+    // Refresh local cache
+    await loadUserDetails()
   }
 
   function xpToNext(nivel, base = 100, exponent = 1.2) {

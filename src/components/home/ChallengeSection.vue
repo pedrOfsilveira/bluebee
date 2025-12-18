@@ -26,6 +26,8 @@ const limitedChallenges = computed(() => viewChallenges.value.slice(0, 5));
 onMounted(() => {
   // Ensure challenges are loaded when the dashboard mounts
   storeChallenges.loadChallenges();
+  // Also load user challenges to mark completed ones
+  storeUserChallenges.loadUserChallenges();
 });
 </script>
 

@@ -62,7 +62,6 @@ defineProps({
   justify-content: center;
   margin-right: 18px;
   font-size: 24px;
-  box-shadow: 0 5px 15px rgba(255, 193, 7, 0.3);
   transition: all 0.3s ease;
 }
 
