@@ -86,11 +86,6 @@ const formSubmitSuccess = () => {
     <div class="login-form" v-if="!register" >
       <AuthInput v-model="credentialsLogin.email" label="Email" type="email" icon="email" class="q-mb-lg" />
       <AuthInput v-model="credentialsLogin.password" label="Senha" type="password" icon="key" class="q-mb-md" />
-      <div class="options">
-        <div class="forgot-password">
-          <a href="#">Esqueceu sua senha?</a>
-        </div>
-      </div>
 
       <BigButton
         @click="submitForm(credentialsLogin)"
@@ -142,12 +137,6 @@ const formSubmitSuccess = () => {
         icon="check_circle"
         class="q-mb-md"
       />
-      <div class="options">
-        <div class="forgot-password">
-          <a href="#">Esqueceu sua senha?</a>
-        </div>
-      </div>
-
       <BigButton
         @click="submitForm(credentialsRegister)"
         title="Cadastrar"
