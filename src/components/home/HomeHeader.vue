@@ -1,15 +1,19 @@
 <script setup>
 import { useCurrencify } from 'src/use/useCurrencify';
 import { useStoreAuth } from 'src/stores/storeAuth';
-import { onMounted, onUnmounted, computed, ref } from 'vue';
+import { onMounted, computed, ref } from 'vue';
 import { useStoreUserAssets } from "src/stores/storeUserAssets";
 import { useStoreAssets } from "src/stores/storeAssets";
+import { usePercentageCalculator } from 'src/use/usePercentageCalculator';
+import { useColorPercentage } from 'src/use/useColor';
 
 const storeAuth = useStoreAuth();
 
 const storeUserAssets = useStoreUserAssets();
 const storeAssets = useStoreAssets();
 const patrimonio = ref(null);
+const flutuacao = ref(null);
+const real_float = ref(null);
 
 onMounted(async () => {
   const loadedStore = await loadStore(storeUserAssets)
@@ -19,19 +23,26 @@ onMounted(async () => {
         const register = await storeAssets.returnPrice(asset.ativos)
         const price = register?.[0]?.preco_atual || 0
         const qty = Number(asset.quantidade) || 0
-        return price * qty
+        const middle_price = (asset.ativos.valor_max+asset.ativos.valor_min)/2
+        const real_float = (price-middle_price)
+        return {preco_total: price * qty, real_float: real_float}
       })
     )
-    const sum = totals.reduce((a,b) => a + b, 0)
+    let sum = 0;
+    let sum_float = 0;
+    totals.forEach(price => {
+      sum += price.preco_total
+      sum_float += price.real_float
+    })
+    let sum_per = usePercentageCalculator(sum-sum_float, sum)
     patrimonio.value = Number(sum.toFixed(2))
+    flutuacao.value = Number(sum_per.toFixed(2))
+    real_float.value = Number(sum_float.toFixed(2))
   } else {
     patrimonio.value = 0
+    flutuacao.value = 0
+    real_float.value = 0
   }
-})
-
-onUnmounted(() => {
-  // Ensure dividend timers do not keep running across route changes
-  storeUserAssets.clearIntervals()
 })
 
 const loadStore = async store => {
@@ -64,9 +75,8 @@ const formattedSaldo = computed(() => {
         <div v-if="patrimonio !== null" class="text-h4 text-weight-bolder balance">R$ {{ patrimonio.toFixed(2).replace('.', ',') }}</div>
         <q-skeleton v-else type="text" class="text-h4 balance" width="180px" />
         <q-badge
-
           align="middle"
-          label="+ R$245,12 (4,9%)"
+          :label="`${real_float} (${flutuacao}%)`"
           class="q-pa-sm text-weight-bold positive-bg"
           text-color="positive"
         />

@@ -59,12 +59,10 @@ export const useStoreUserAssets = defineStore("userAssets", () => {
   }
 
   const dividend = async (assets) => {
-    console.log("assets", assets)
     let dividendTotal = 0;
     assets.forEach(asset => { //foreach que puxa cada ativo que vem do intervalo do loadUserAssets para colocar os dividendos
       let assetDividend = asset.ativos.dividendos ? asset.ativos.dividendos*asset.quantidade : 0
       dividendTotal += assetDividend;
-      console.log("aaa "+dividendTotal, "bbb "+assetDividend)
     })
     await storeAuth.updateBalance(dividendTotal);
   }
@@ -103,9 +101,7 @@ export const useStoreUserAssets = defineStore("userAssets", () => {
           filter: `perfil_id=eq.${ storeAuth.userDetails.id }`
         },
         (payload) => {
-          console.log(payload)
           if (payload.eventType === 'INSERT') {
-            console.log("aa")
             assets.value.push(payload.new)
           }
           if (payload.eventType === 'DELETE') {
@@ -136,7 +132,6 @@ export const useStoreUserAssets = defineStore("userAssets", () => {
   const buyAsset = async (buyAssetForm, transactionForm) => {
     let searchData = await searchAsset(buyAssetForm.id);
     let returnIfCanBuy = await storeAuth.updateBalance(transactionForm.valor_total)
-    console.log("can buy", returnIfCanBuy)
 
     if (searchData.length >= 1 && returnIfCanBuy) {
       const { error } = await supabase
@@ -173,16 +168,10 @@ export const useStoreUserAssets = defineStore("userAssets", () => {
         })
       }
     }
-    console.log("buy form", buyAssetForm)
-    console.log("quantidade", transactionForm.quantidade)
-    console.log("valor_total", transactionForm.valor_total)
-    console.log("teste_desafio", await storeUserChallenges.verifyChallenge())
   }
 
   const sellAsset = async (sellAssetForm, transactionForm) => {
     let searchData = await searchAsset(sellAssetForm.id);
-    console.log(searchData[0])
-    console.log(searchData[0].quantidade)
 
     if (searchData[0].quantidade >= transactionForm.quantidade) {
       if (searchData[0].quantidade == transactionForm.quantidade) {
@@ -219,9 +208,6 @@ export const useStoreUserAssets = defineStore("userAssets", () => {
       await storeAuth.updateBalance(transactionForm.valor_total)
     }
     else useShowErrorMessage("Você não possui essa quantidade de ativos.")
-
-    console.log("sell form", sellAssetForm)
-    console.log("transaction form", transactionForm)
   }
 
   // helpers

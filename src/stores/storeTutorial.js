@@ -81,11 +81,19 @@ export const useStoreTutorial = defineStore("tutorial", () => {
         },
       },
       {
+        element: "#wallet-filter",
+        popover: {
+          title: "Filtre como quiser",
+          description:
+            "Filtre por compras ou vendas registradas.",
+        },
+      },
+      {
         element: "#wallet-history",
         popover: {
           title: "Histórico",
           description:
-            "Acompanhe compras, vendas e dividendos registrados.",
+            "Acompanhe o registro de suas transações com data e hora.",
         },
       },
     ],

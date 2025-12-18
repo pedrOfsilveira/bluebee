@@ -220,9 +220,8 @@ export const useStoreAuth = defineStore("auth", () => {
   }
 
   const updateBalance = async currency => {
-    console.log("currency",currency)
     if (currency >= 0) {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('perfil')
         .update({
           saldo: userDetails.saldo+currency,
@@ -231,13 +230,10 @@ export const useStoreAuth = defineStore("auth", () => {
         .eq('id', userDetails.id)
 
       if (error) useShowErrorMessage(error.message)
-      if (data) {
-        console.log("venda", data)
-      }
     }
     else {
       if (userDetails.saldo+currency >= 0) {
-        const { data, error } = await supabase
+        const { error } = await supabase
           .from('perfil')
           .update({
             saldo: userDetails.saldo+currency,
@@ -246,9 +242,6 @@ export const useStoreAuth = defineStore("auth", () => {
           .eq('id', userDetails.id)
 
         if (error) useShowErrorMessage(error.message)
-        if (data) {
-          console.log("compra", data)
-        }
       }
       else {
         useShowErrorMessage("Saldo insuficiente")
@@ -262,7 +255,7 @@ export const useStoreAuth = defineStore("auth", () => {
   const updateReward = async desafioForm => {
     const res = gainXpFormula(userDetails, desafioForm.experiencia);
     if (res.gainedLevels > 0) {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('perfil')
         .update({
           saldo: userDetails.saldo+desafioForm.dinheiro,
@@ -279,18 +272,15 @@ export const useStoreAuth = defineStore("auth", () => {
           position: "top"
         });
       }
-      if (data) console.log(data)
     }
   }
 
   function xpToNext(nivel, base = 100, exponent = 1.2) {
-    console.log("calculo", Math.floor(base * Math.pow(nivel, exponent)))
     return Math.floor(base * Math.pow(nivel, exponent));
   }
 
   function gainXpFormula(user, xpGain, base = 100, exponent = 1.2) {
     user.experiencia = (user.experiencia || 0) + xpGain;
-    console.log("user xp",user.experiencia)
     let gainedLevels = 0;
 
     while (user.experiencia >= xpToNext(user.nivel, base, exponent)) {

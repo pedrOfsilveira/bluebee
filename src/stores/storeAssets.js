@@ -44,7 +44,6 @@ export const useStoreAssets = defineStore("assets", () => {
   }
 
   const searchAssets = async (search) => {
-    console.log(search)
     let { data, error } = await supabase
       .from('ativos')
       .select('*')
@@ -63,19 +62,19 @@ export const useStoreAssets = defineStore("assets", () => {
   }
 
   // funcao que seta o valor atual após carregar todos os ativos
-  const setPriceAssets = (assets) => {
-    assets.forEach(asset => {
-      asset.valor_atual = randomNumber(asset.valor_min, asset.valor_max)
-    });
-    interval = setInterval(() => {reloadPriceAssets(assets)}, 24000)
-  }
+  // const setPriceAssets = (assets) => {
+  //   assets.forEach(asset => {
+  //     asset.valor_atual = randomNumber(asset.valor_min, asset.valor_max)
+  //   });
+  //   interval = setInterval(() => {reloadPriceAssets(assets)}, 24000)
+  // }
 
   // funcao que sera chamada pelo setInterval com uma array de todos os objetos para mudar o valor atual de cada um de tanto em tanto tempo
-  const reloadPriceAssets = (assets) => {
-    assets.forEach(asset => {
-      asset.valor_atual = randomNumber(asset.valor_min, asset.valor_max)
-    });
-  }
+  // const reloadPriceAssets = (assets) => {
+  //   assets.forEach(asset => {
+  //     asset.valor_atual = randomNumber(asset.valor_min, asset.valor_max)
+  //   });
+  // }
 
   // teste, funcao que procura no registro se existe um preco atual de um certo ativo e retorna o registro
   const returnPrice = async asset => {

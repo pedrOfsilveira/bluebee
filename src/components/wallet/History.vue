@@ -73,6 +73,7 @@ const getAssetName = (transaction) => {
 
 <template>
   <q-tabs
+    id="wallet-filter"
     no-caps
     active-color="primary"
     indicator-color="transparent"

@@ -40,7 +40,7 @@ export const useStoreHistory = defineStore("history", () => {
       try {
         strike.value = computeStrike()
       } catch (err) {
-        console.log('computeStrike failed', err)
+        console.error('computeStrike failed', err)
         strike.value = 1
       }
     }
@@ -51,7 +51,6 @@ export const useStoreHistory = defineStore("history", () => {
   }
 
   const searchHistory = async (search) => {
-    console.log(search)
     let { data, error } = await supabase
       .from('historico')
       .select('*')

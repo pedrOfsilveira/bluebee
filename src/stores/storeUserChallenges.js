@@ -177,7 +177,6 @@ export const useStoreUserChallenges = defineStore("userChallenges", () => {
       storeAuth.updateReward(desafio)
       return data?.[0] ?? null
     }
-    else console.log("ja existe")
   }
 
   const hasUserChallenge = async desafio_id => {
