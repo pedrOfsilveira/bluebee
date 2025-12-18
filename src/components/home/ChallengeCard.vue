@@ -7,28 +7,29 @@ defineProps({
   completed: {
     type: Boolean,
     default: false,
-  }
+  },
 });
 </script>
 
 <template>
   <div class="challenge-card" :class="completed ? 'completed' : 'disabled'">
-
     <div class="challenge-icon" :class="completed ? 'completed' : 'disabled'">
-      <q-icon :name="challenge.icon" :color="completed ? 'secondary' : 'grey-6'" />
+      <q-icon
+        :name="challenge.icon"
+        :color="completed ? 'secondary' : 'grey-6'"
+      />
     </div>
 
     <div class="challenge-info">
-      <div class="challenge-title"> {{ challenge.title }}</div>
-      <div class="challenge-desc"> {{ challenge.desc }}</div>
+      <div class="challenge-title">{{ challenge.title }}</div>
+      <div class="challenge-desc">{{ challenge.desc }}</div>
     </div>
-
   </div>
 </template>
 
 <style lang="scss" scoped>
 .challenge-card {
-   border: 1px solid #e8ecf4;
+  border: 1px solid #e8ecf4;
   background-color: $bg-card;
   border-radius: 18px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);

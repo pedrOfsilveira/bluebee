@@ -1,25 +1,25 @@
 import { defineStore } from "pinia";
 import { reactive } from "vue";
-import { useShowErrorMessage } from 'src/use/useShowErrorMessage';
+import { useShowErrorMessage } from "src/use/useShowErrorMessage";
 
 const parseDescriptionHtml = (htmlString) => {
-  if (!htmlString) return { imageUrl: null, textContent: '' };
+  if (!htmlString) return { imageUrl: null, textContent: "" };
 
-  const tempDiv = document.createElement('div');
+  const tempDiv = document.createElement("div");
   tempDiv.innerHTML = htmlString;
 
-  const imgTag = tempDiv.querySelector('img');
+  const imgTag = tempDiv.querySelector("img");
   const imageUrl = imgTag ? imgTag.src : null;
   const textContent = tempDiv.textContent.trim();
 
   return { imageUrl, textContent };
-}
+};
 
 export const useStoreNews = defineStore("news", () => {
   const newsStateDefault = {
     noticias: [],
     loading: false,
-    error: null
+    error: null,
   };
 
   const newsState = reactive({ ...newsStateDefault });
@@ -28,8 +28,8 @@ export const useStoreNews = defineStore("news", () => {
     newsState.loading = true;
     newsState.error = null;
 
-    const rssUrl = 'https://rss.uol.com.br/feed/economia.xml';
-   const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(rssUrl)}`;
+    const rssUrl = "https://rss.uol.com.br/feed/economia.xml";
+    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(rssUrl)}`;
 
     try {
       const response = await fetch(proxyUrl);
@@ -39,7 +39,7 @@ export const useStoreNews = defineStore("news", () => {
       }
 
       const arrayBuffer = await response.arrayBuffer();
-      const decoder = new TextDecoder('iso-8859-1');
+      const decoder = new TextDecoder("iso-8859-1");
       const textData = decoder.decode(arrayBuffer);
 
       const parser = new DOMParser();
@@ -52,7 +52,7 @@ export const useStoreNews = defineStore("news", () => {
 
       const items = Array.from(xmlDoc.querySelectorAll("item"));
 
-      const noticiasFormatadas = items.map(item => {
+      const noticiasFormatadas = items.map((item) => {
         const title = item.querySelector("title")?.textContent || "Sem título";
         const link = item.querySelector("link")?.textContent || "#";
         const pubDate = item.querySelector("pubDate")?.textContent || "";
@@ -72,7 +72,9 @@ export const useStoreNews = defineStore("news", () => {
           }
         }
 
-        const formattedDate = pubDate ? pubDate.split(' ').slice(0, 4).join(' ') : '';
+        const formattedDate = pubDate
+          ? pubDate.split(" ").slice(0, 4).join(" ")
+          : "";
 
         return {
           title,
@@ -80,12 +82,11 @@ export const useStoreNews = defineStore("news", () => {
           imageUrl: finalImageUrl,
           textContent: parsedContent.textContent,
           pubDateFormatted: formattedDate,
-          rawDate: pubDate
+          rawDate: pubDate,
         };
       });
 
       newsState.noticias = noticiasFormatadas;
-
     } catch (err) {
       useShowErrorMessage(err.message);
       console.error("Falha ao buscar notícias:", err);
@@ -102,6 +103,6 @@ export const useStoreNews = defineStore("news", () => {
   return {
     newsState,
     fetchNoticias,
-    clearNoticias
+    clearNoticias,
   };
 });

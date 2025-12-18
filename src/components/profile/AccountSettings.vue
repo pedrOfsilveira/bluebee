@@ -1,94 +1,104 @@
 <script setup>
-import { ref, computed } from 'vue'
-import { useStoreAuth } from 'src/stores/storeAuth'
-import { useStoreInvestorProfile } from 'src/stores/storeInvestorProfile'
-import { useRouter } from 'vue-router'
-import AuthInput from 'src/components/auth/AuthInput.vue'
-import BigButton from 'src/components/BigButton.vue'
-import { useQuasar } from 'quasar'
+import { ref, computed } from "vue";
+import { useStoreAuth } from "src/stores/storeAuth";
+import { useStoreInvestorProfile } from "src/stores/storeInvestorProfile";
+import { useRouter } from "vue-router";
+import AuthInput from "src/components/auth/AuthInput.vue";
+import BigButton from "src/components/BigButton.vue";
+import { useQuasar } from "quasar";
 
-const storeAuth = useStoreAuth()
-const investor = useStoreInvestorProfile()
-const router = useRouter()
-const $q = useQuasar()
+const storeAuth = useStoreAuth();
+const investor = useStoreInvestorProfile();
+const router = useRouter();
+const $q = useQuasar();
 
-// Personal info
-const nome = ref(storeAuth.userDetails.nome || '')
-const genero = ref(storeAuth.userDetails.genero || '')
-const savingProfile = ref(false)
+const nome = ref(storeAuth.userDetails.nome || "");
+const genero = ref(storeAuth.userDetails.genero || "");
+const savingProfile = ref(false);
 
-const canSaveProfile = computed(() => nome.value?.trim().length > 0)
+const canSaveProfile = computed(() => nome.value?.trim().length > 0);
 
 const onSaveProfile = async () => {
-  savingProfile.value = true
-  const { ok, message } = await storeAuth.updateProfile({ nome: nome.value, genero: genero.value || undefined })
-  savingProfile.value = false
+  savingProfile.value = true;
+  const { ok, message } = await storeAuth.updateProfile({
+    nome: nome.value,
+    genero: genero.value || undefined,
+  });
+  savingProfile.value = false;
   if (ok) {
-    $q.notify({ type: 'positive', message: 'Perfil atualizado com sucesso.' })
+    $q.notify({ type: "positive", message: "Perfil atualizado com sucesso." });
   } else if (message) {
-    // Store already shows Dialog on error; keep Notify for non-empty message only
-    $q.notify({ type: 'negative', message })
+    $q.notify({ type: "negative", message });
   }
-}
+};
 
-// Email
-const newEmail = ref(storeAuth.userDetails.email || '')
-const savingEmail = ref(false)
+const newEmail = ref(storeAuth.userDetails.email || "");
+const savingEmail = ref(false);
 const onSaveEmail = async () => {
-  if (!newEmail.value || !newEmail.value.includes('@')) {
-    $q.notify({ type: 'warning', message: 'Informe um e-mail válido.' })
-    return
+  if (!newEmail.value || !newEmail.value.includes("@")) {
+    $q.notify({ type: "warning", message: "Informe um e-mail válido." });
+    return;
   }
-  savingEmail.value = true
-  const { ok, message } = await storeAuth.updateEmail(newEmail.value)
-  savingEmail.value = false
+  savingEmail.value = true;
+  const { ok, message } = await storeAuth.updateEmail(newEmail.value);
+  savingEmail.value = false;
   if (ok) {
-    $q.notify({ type: 'positive', message: 'E-mail atualizado. Verifique sua caixa de entrada para confirmar.' })
+    $q.notify({
+      type: "positive",
+      message:
+        "E-mail atualizado. Verifique sua caixa de entrada para confirmar.",
+    });
   } else if (message) {
-    $q.notify({ type: 'negative', message })
+    $q.notify({ type: "negative", message });
   }
-}
+};
 
-// Password
-const pwd1 = ref('')
-const pwd2 = ref('')
-const savingPwd = ref(false)
+const pwd1 = ref("");
+const pwd2 = ref("");
+const savingPwd = ref(false);
 
 const onSavePassword = async () => {
   if (!pwd1.value || pwd1.value.length < 6) {
-    $q.notify({ type: 'warning', message: 'A senha deve ter pelo menos 6 caracteres.' })
-    return
+    $q.notify({
+      type: "warning",
+      message: "A senha deve ter pelo menos 6 caracteres.",
+    });
+    return;
   }
   if (pwd1.value !== pwd2.value) {
-    $q.notify({ type: 'warning', message: 'As senhas não coincidem.' })
-    return
+    $q.notify({ type: "warning", message: "As senhas não coincidem." });
+    return;
   }
-  savingPwd.value = true
-  const { ok, message } = await storeAuth.updatePassword(pwd1.value)
-  savingPwd.value = false
+  savingPwd.value = true;
+  const { ok, message } = await storeAuth.updatePassword(pwd1.value);
+  savingPwd.value = false;
   if (ok) {
-    $q.notify({ type: 'positive', message: 'Senha atualizada com sucesso.' })
-    pwd1.value = ''
-    pwd2.value = ''
+    $q.notify({ type: "positive", message: "Senha atualizada com sucesso." });
+    pwd1.value = "";
+    pwd2.value = "";
   } else if (message) {
-    $q.notify({ type: 'negative', message })
+    $q.notify({ type: "negative", message });
   }
-}
+};
 
-// Redo Investor Profile Quiz
 const onRedoInvestorProfile = () => {
-  investor.restartQuiz()
-  router.push('/investprofile')
-}
+  investor.restartQuiz();
+  router.push("/investprofile");
+};
 </script>
 
 <template>
   <div class="q-gutter-md">
-    <!-- Dados Pessoais -->
     <div class="login-form">
       <div class="text-subtitle1 text-weight-bold q-mb-md">Dados Pessoais</div>
 
-      <AuthInput v-model="nome" label="Nome" type="text" icon="person" class="q-mb-lg" />
+      <AuthInput
+        v-model="nome"
+        label="Nome"
+        type="text"
+        icon="person"
+        class="q-mb-lg"
+      />
 
       <div class="auth-toggle">
         <q-btn-toggle
@@ -105,33 +115,64 @@ const onRedoInvestorProfile = () => {
         />
       </div>
 
-      <BigButton :disable="!canSaveProfile || savingProfile" :title="savingProfile ? 'Salvando...' : 'Salvar dados pessoais'" @click="onSaveProfile" />
+      <BigButton
+        :disable="!canSaveProfile || savingProfile"
+        :title="savingProfile ? 'Salvando...' : 'Salvar dados pessoais'"
+        @click="onSaveProfile"
+      />
     </div>
 
-    <!-- E-mail -->
     <div class="login-form">
       <div class="text-subtitle1 text-weight-bold q-mb-md">E-mail</div>
 
-      <AuthInput v-model="newEmail" type="email" label="Novo e-mail" icon="email" class="q-mb-lg" />
-      <BigButton :disable="savingEmail" :title="savingEmail ? 'Atualizando...' : 'Atualizar e-mail'" @click="onSaveEmail" />
+      <AuthInput
+        v-model="newEmail"
+        type="email"
+        label="Novo e-mail"
+        icon="email"
+        class="q-mb-lg"
+      />
+      <BigButton
+        :disable="savingEmail"
+        :title="savingEmail ? 'Atualizando...' : 'Atualizar e-mail'"
+        @click="onSaveEmail"
+      />
     </div>
 
-    <!-- Senha -->
     <div class="login-form">
       <div class="text-subtitle1 text-weight-bold q-mb-md">Senha</div>
 
-      <AuthInput v-model="pwd1" type="password" label="Nova senha" icon="key" class="q-mb-lg" />
-      <AuthInput v-model="pwd2" type="password" label="Confirmar nova senha" icon="check_circle" class="q-mb-lg" />
-      <BigButton :disable="savingPwd" :title="savingPwd ? 'Atualizando...' : 'Atualizar senha'" @click="onSavePassword" />
+      <AuthInput
+        v-model="pwd1"
+        type="password"
+        label="Nova senha"
+        icon="key"
+        class="q-mb-lg"
+      />
+      <AuthInput
+        v-model="pwd2"
+        type="password"
+        label="Confirmar nova senha"
+        icon="check_circle"
+        class="q-mb-lg"
+      />
+      <BigButton
+        :disable="savingPwd"
+        :title="savingPwd ? 'Atualizando...' : 'Atualizar senha'"
+        @click="onSavePassword"
+      />
     </div>
 
-    <!-- Perfil do Investidor -->
     <div class="login-form">
-      <div class="text-subtitle1 text-weight-bold q-mb-md">Perfil do Investidor</div>
-      <BigButton :title="'Refazer Teste de Perfil'" @click="onRedoInvestorProfile" />
+      <div class="text-subtitle1 text-weight-bold q-mb-md">
+        Perfil do Investidor
+      </div>
+      <BigButton
+        :title="'Refazer Teste de Perfil'"
+        @click="onRedoInvestorProfile"
+      />
     </div>
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>

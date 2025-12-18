@@ -111,25 +111,26 @@ const getAssetName = (transaction) => {
               {{ getAssetName(transaction) }}
             </div>
             <div class="transaction-date">
-              {{
-                useReturnObjectDate(new Date(transaction.created_at)).tempo
-              }}
+              {{ useReturnObjectDate(new Date(transaction.created_at)).tempo }}
             </div>
           </div>
           <div
             class="transaction-value"
             :class="{
-              'value-negative': getTransactionType(transaction.compra_venda) === 'buy',
-              'value-positive': getTransactionType(transaction.compra_venda) === 'sell',
-              'value-dividend': getTransactionType(transaction.compra_venda) === 'dividend',
+              'value-negative':
+                getTransactionType(transaction.compra_venda) === 'buy',
+              'value-positive':
+                getTransactionType(transaction.compra_venda) === 'sell',
+              'value-dividend':
+                getTransactionType(transaction.compra_venda) === 'dividend',
             }"
           >
             {{
-              getTransactionType(transaction.compra_venda) === 'buy'
-                ? '- R$ '
-                : '+ R$ '
+              getTransactionType(transaction.compra_venda) === "buy"
+                ? "- R$ "
+                : "+ R$ "
             }}
-            {{ Math.abs(transaction.valor_total).toFixed(2).replace('.', ',') }}
+            {{ Math.abs(transaction.valor_total).toFixed(2).replace(".", ",") }}
           </div>
         </div>
       </template>

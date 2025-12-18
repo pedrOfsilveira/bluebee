@@ -7,49 +7,46 @@ import StatCard from "./profile/StatCard.vue";
 import AssetHeader from "./AssetHeader.vue";
 import AssetDetailsContent from "./AssetDetailsContent.vue";
 import { useStoreUserAssets } from "src/stores/storeUserAssets";
-// Importe o que mais precisar (ex: useCurrencify)
+
 import { useCurrencify } from "src/use/useCurrencify";
 import { useStoreHistory } from "src/stores/storeHistory";
 import { valueOrDefault } from "chart.js/helpers";
 import { useQuasar } from "quasar";
 import { useStoreAuth } from "src/stores/storeAuth";
 
-const storeUserAssets = useStoreUserAssets()
-const storeHistory = useStoreHistory()
-const $q = useQuasar()
-const auth = useStoreAuth()
+const storeUserAssets = useStoreUserAssets();
+const storeHistory = useStoreHistory();
+const $q = useQuasar();
+const auth = useStoreAuth();
 
 const props = defineProps({
-  // modelValue é o padrão para o v-model (controla se o dialog está aberto)
   modelValue: {
     type: Boolean,
     default: false,
   },
-  // O ativo que foi clicado
+
   asset: {
     type: Object,
     default: () => null,
   },
-  //teste
+
   register: {
     type: Object,
     default: () => null,
-  }
+  },
 });
-
-// tem que trocar isso depois
 
 const transactionDetailsDefault = {
   quantidade: 1,
   compra_venda: true,
-  valor_total: 0
-}
+  valor_total: 0,
+};
 
 const transactionDetails = reactive({
-  ...transactionDetailsDefault
-})
+  ...transactionDetailsDefault,
+});
 
-const emit = defineEmits(["update:modelValue"]); // Necessário para o v-model
+const emit = defineEmits(["update:modelValue"]);
 
 const showDialog = computed({
   get() {
@@ -60,7 +57,6 @@ const showDialog = computed({
   },
 });
 
-// Computada para pegar o nome, já que a estrutura do seu prop é complexa
 const assetName = computed(() => {
   if (!props.asset) return "";
   return props.asset.nome || (props.asset.ativos && props.asset.ativos.nome);
@@ -75,65 +71,72 @@ const assetType = computed(() => {
 const userAssetQuantity = computed(() => {
   if (!props.asset) return 0;
   const assetId = props.asset.id || props.asset.ativo_id;
-  const userAsset = storeUserAssets.assets.find(a => a.ativos?.id === assetId);
+  const userAsset = storeUserAssets.assets.find(
+    (a) => a.ativos?.id === assetId,
+  );
   return userAsset ? userAsset.quantidade : 0;
 });
 
 const totalPrice = computed(() => {
-  return props.register[0] ? (props.register[0].preco_atual * transactionDetails.quantidade).toFixed(2) : 0;
+  return props.register[0]
+    ? (props.register[0].preco_atual * transactionDetails.quantidade).toFixed(2)
+    : 0;
 });
 
 const compatibilityStatus = computed(() => {
-  const profile = (auth.userDetails?.investor_profile || '').toLowerCase();
-  const risk = (props.asset?.risco || '').toString();
-  const isLow = risk === 'Baixo';
-  const isMid = risk === 'Médio';
-  const isHigh = risk === 'Alto';
+  const profile = (auth.userDetails?.investor_profile || "").toLowerCase();
+  const risk = (props.asset?.risco || "").toString();
+  const isLow = risk === "Baixo";
+  const isMid = risk === "Médio";
+  const isHigh = risk === "Alto";
 
-  if (!profile) return { text: 'Defina seu perfil', color: 'grey-7' };
+  if (!profile) return { text: "Defina seu perfil", color: "grey-7" };
 
-  if (profile.includes('conserv')) {
-    if (isLow) return { text: 'Compatível', color: 'positive' };
-    if (isMid) return { text: 'Atenção (médio)', color: 'warning' };
-    if (isHigh) return { text: 'Não compatível', color: 'negative' };
+  if (profile.includes("conserv")) {
+    if (isLow) return { text: "Compatível", color: "positive" };
+    if (isMid) return { text: "Atenção (médio)", color: "warning" };
+    if (isHigh) return { text: "Não compatível", color: "negative" };
   }
-  if (profile.includes('moder')) {
-    if (isLow || isMid) return { text: 'Compatível', color: 'positive' };
-    if (isHigh) return { text: 'Atenção (alto)', color: 'warning' };
+  if (profile.includes("moder")) {
+    if (isLow || isMid) return { text: "Compatível", color: "positive" };
+    if (isHigh) return { text: "Atenção (alto)", color: "warning" };
   }
-  return { text: 'Compatível', color: 'positive' };
+  return { text: "Compatível", color: "positive" };
 });
 
 const compatIconClass = computed(() => {
   switch (compatibilityStatus.value.color) {
-    case 'positive':
-      return 'fas fa-check-circle';
-    case 'warning':
-      return 'fas fa-exclamation-triangle';
-    case 'negative':
-      return 'fas fa-times-circle';
+    case "positive":
+      return "fas fa-check-circle";
+    case "warning":
+      return "fas fa-exclamation-triangle";
+    case "negative":
+      return "fas fa-times-circle";
     default:
-      return 'fas fa-user-shield';
+      return "fas fa-user-shield";
   }
 });
 
 // Watch for dialog open to ensure data is fresh
-watch(() => props.modelValue, async (newVal) => {
-  if (newVal) {
-    // Reload user assets when dialog opens to get fresh data
-    await storeUserAssets.loadUserAssets();
-  }
-});
+watch(
+  () => props.modelValue,
+  async (newVal) => {
+    if (newVal) {
+      // Reload user assets when dialog opens to get fresh data
+      await storeUserAssets.loadUserAssets();
+    }
+  },
+);
 
 // Funções placeholder
 const handleBuy = async () => {
   $q.dialog({
-    class: 'confirm-transaction-dialog',
-    title: 'Confirmar Compra',
+    class: "confirm-transaction-dialog",
+    title: "Confirmar Compra",
     message: `
       <div class="confirm-message">
         <div class="msg-line">Comprar <strong>${transactionDetails.quantidade}</strong> de <strong>${assetName.value}</strong></div>
-        <div class="msg-total">Total: <strong>R$ ${totalPrice.value.replace('.', ',')}</strong></div>
+        <div class="msg-total">Total: <strong>R$ ${totalPrice.value.replace(".", ",")}</strong></div>
         <div class="compat-row">
           <span class="compat-badge ${compatibilityStatus.value.color}">
             <i class="${compatIconClass.value}"></i>
@@ -143,41 +146,55 @@ const handleBuy = async () => {
       </div>
     `,
     html: true,
-    cancel: { label: 'Cancelar', color: 'grey-7', flat: true, class: 'cancel-btn' },
-    ok: { label: 'Confirmar', color: 'positive', unelevated: true, class: 'confirm-btn', style: 'border-radius: 8px' },
+    cancel: {
+      label: "Cancelar",
+      color: "grey-7",
+      flat: true,
+      class: "cancel-btn",
+    },
+    ok: {
+      label: "Confirmar",
+      color: "positive",
+      unelevated: true,
+      class: "confirm-btn",
+      style: "border-radius: 8px",
+    },
     persistent: true,
-    style: 'max-width: 380px; width: 80vw;'
+    style: "max-width: 380px; width: 80vw;",
   }).onOk(async () => {
-    transactionDetails.valor_total = -(props.register[0].preco_atual*transactionDetails.quantidade);
+    transactionDetails.valor_total = -(
+      props.register[0].preco_atual * transactionDetails.quantidade
+    );
     await storeUserAssets.buyAsset(props.asset, transactionDetails);
-    await storeHistory.addHistory(props.asset,transactionDetails);
+    await storeHistory.addHistory(props.asset, transactionDetails);
     await storeHistory.loadHistory();
     await storeUserAssets.loadUserAssets();
     Object.assign(transactionDetails, transactionDetailsDefault);
-  })
+  });
 };
 
 const handleSell = async () => {
   if (userAssetQuantity.value === 0) {
     $q.notify({
-      type: 'negative',
+      type: "negative",
       message: `Você não possui ${assetName.value}`,
-      position: 'top'
+      position: "top",
     });
     return;
   }
 
   if (transactionDetails.quantidade > userAssetQuantity.value) {
     $q.notify({
-      type: 'negative',
+      type: "negative",
       message: `Você só possui ${userAssetQuantity.value} ${assetName.value}`,
-      position: 'top'
+      position: "top",
     });
     return;
   }
 
   transactionDetails.compra_venda = false;
-  transactionDetails.valor_total = props.register[0].preco_atual*transactionDetails.quantidade;
+  transactionDetails.valor_total =
+    props.register[0].preco_atual * transactionDetails.quantidade;
   await storeUserAssets.sellAsset(props.asset, transactionDetails);
   await storeHistory.loadHistory();
   await storeUserAssets.loadUserAssets();
@@ -210,52 +227,56 @@ const increaseQuantity = () => {
           >.
         </p>
 
-
-
-        <AssetDetailsContent :asset="props.asset" :register="props.register"/>
+        <AssetDetailsContent :asset="props.asset" :register="props.register" />
       </q-card-section>
 
       <q-separator />
 
-        <!-- mudar esse input e o separator que eu coloquei em baixo -->
-        <q-card-section class="column items-center q-pa-lg q-pt-xl">
-          <div class="flex items-center quantity-control q-mb-md">
-            <q-btn
-              flat
-              dense
-              round
-              icon="fas fa-chevron-left"
-              @click="decreaseQuantity"
-              class="quantity-btn"
-            />
-            <q-input
-              v-model.number="transactionDetails.quantidade"
-              type="number"
-              min="1"
-              step="1"
-              inputmode="numeric"
-              hide-bottom-space
-              borderless
-              dense
-              class="quantity-input"
-              @blur="() => { if (!transactionDetails.quantidade || transactionDetails.quantidade < 1) transactionDetails.quantidade = 1 }"
-            />
-            <q-btn
-              flat
-              dense
-              round
-              icon="fas fa-chevron-right"
-              @click="increaseQuantity"
-              class="quantity-btn"
-            />
-          </div>
-          <div class="text-center">
-            <div class="text-subtitle2 text-grey-7">Você possui:</div>
-            <div class="text-h6 text-primary">{{ userAssetQuantity }}</div>
-          </div>
-        </q-card-section>
+      <q-card-section class="column items-center q-pa-lg q-pt-xl">
+        <div class="flex items-center quantity-control q-mb-md">
+          <q-btn
+            flat
+            dense
+            round
+            icon="fas fa-chevron-left"
+            @click="decreaseQuantity"
+            class="quantity-btn"
+          />
+          <q-input
+            v-model.number="transactionDetails.quantidade"
+            type="number"
+            min="1"
+            step="1"
+            inputmode="numeric"
+            hide-bottom-space
+            borderless
+            dense
+            class="quantity-input"
+            @blur="
+              () => {
+                if (
+                  !transactionDetails.quantidade ||
+                  transactionDetails.quantidade < 1
+                )
+                  transactionDetails.quantidade = 1;
+              }
+            "
+          />
+          <q-btn
+            flat
+            dense
+            round
+            icon="fas fa-chevron-right"
+            @click="increaseQuantity"
+            class="quantity-btn"
+          />
+        </div>
+        <div class="text-center">
+          <div class="text-subtitle2 text-grey-7">Você possui:</div>
+          <div class="text-h6 text-primary">{{ userAssetQuantity }}</div>
+        </div>
+      </q-card-section>
 
-      <!-- BOTÕES DE COMPRA E DE VENDA, BOA SORTE ! -->
       <q-card-actions align="around" class="asset-dialog-actions q-pa-md">
         <q-btn
           class="action-btn sell-btn"
@@ -279,7 +300,6 @@ const increaseQuantity = () => {
 </template>
 
 <style scoped lang="scss">
-/* Estiliza o Card principal */
 .asset-dialog-card {
   border-radius: 12px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
@@ -288,19 +308,16 @@ const increaseQuantity = () => {
   transform: translateY(-25px);
 }
 
-
-/* Estiliza o Cabeçalho */
 .asset-dialog-header {
   padding: 0;
   .text-h6 {
-    color: $primary; // Usando uma variável de cor do Quasar
+    color: $primary;
     font-weight: 600;
   }
 }
 
-/* Estiliza o Corpo */
 .asset-dialog-body {
-  min-height: 200px; // Exemplo de altura mínima
+  min-height: 200px;
 
   p {
     font-size: 1rem;
@@ -308,7 +325,6 @@ const increaseQuantity = () => {
   }
 }
 
-/* Estiliza o Rodapé de Ações */
 .asset-dialog-actions {
   display: flex;
   justify-content: center;
@@ -356,9 +372,10 @@ const increaseQuantity = () => {
   }
 }
 
-.quantity-display { display: none; }
+.quantity-display {
+  display: none;
+}
 
-/* Square, centered, editable input matching the aesthetic */
 .quantity-input {
   width: 64px;
   min-width: 64px;
@@ -366,11 +383,15 @@ const increaseQuantity = () => {
 }
 
 .quantity-input :deep(.q-field__control) {
-  background: linear-gradient(135deg, rgba(66, 165, 245, 0.1), rgba(66, 165, 245, 0.05));
+  background: linear-gradient(
+    135deg,
+    rgba(66, 165, 245, 0.1),
+    rgba(66, 165, 245, 0.05)
+  );
   border-radius: 16px;
   border: 2px solid rgba(66, 165, 245, 0.2);
   padding: 0;
-  min-height: 64px; /* square height */
+  min-height: 64px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -389,18 +410,17 @@ const increaseQuantity = () => {
   display: flex;
   align-items: center;
 }
-/* Remove browser spinners for clean look */
-.quantity-input :deep(input[type='number']) {
+
+.quantity-input :deep(input[type="number"]) {
   appearance: textfield;
   -moz-appearance: textfield;
 }
-.quantity-input :deep(input[type='number']::-webkit-outer-spin-button),
-.quantity-input :deep(input[type='number']::-webkit-inner-spin-button) {
+.quantity-input :deep(input[type="number"]::-webkit-outer-spin-button),
+.quantity-input :deep(input[type="number"]::-webkit-inner-spin-button) {
   -webkit-appearance: none;
   margin: 0;
 }
 
-/* Dialog plugin styles need deep selector since they mount outside */
 :deep(.confirm-transaction-dialog) {
   .q-card {
     border-radius: 14px;
@@ -436,7 +456,7 @@ const increaseQuantity = () => {
     & .q-btn {
       border-radius: 8px !important;
     }
-    /* Explicit class ensures we override theme-specific variants */
+
     & .q-btn.confirm-btn {
       border-radius: 8px !important;
     }
@@ -455,8 +475,8 @@ const increaseQuantity = () => {
     font-size: 12px;
     font-weight: 600;
     color: white;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-    border: 1px solid rgba(255,255,255,0.25);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.25);
   }
   .compat-badge.positive {
     background: linear-gradient(135deg, rgba($positive, 0.9), $positive);
@@ -474,8 +494,5 @@ const increaseQuantity = () => {
   .compat-badge i {
     font-size: 14px;
   }
-
-
 }
-
 </style>

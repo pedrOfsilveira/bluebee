@@ -32,10 +32,7 @@
   </q-layout>
 </template>
 
-<script setup>
-// Usei QRouteTab para que a navegação funcione automaticamente com as rotas.
-// Não se esqueça de definir suas rotas no arquivo /router/routes.js
-</script>
+<script setup></script>
 
 <style scoped>
 .floating-footer {
@@ -56,8 +53,8 @@
   padding: 8px;
 }
 
-.q-tab--active, .q-hoverable {
+.q-tab--active,
+.q-hoverable {
   border-radius: 17px;
 }
-
 </style>

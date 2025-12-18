@@ -1,7 +1,7 @@
 <script setup>
 import { defineProps, ref, computed, onMounted } from "vue";
 import BlueHeader from "src/components/BlueHeader.vue";
-import AssetCard from './wallet/AssetCard.vue';
+import AssetCard from "./wallet/AssetCard.vue";
 import { useCurrencify } from "src/use/useCurrencify";
 import { usePercentageCalculator } from "src/use/usePercentageCalculator";
 import { useStoreAssets } from "src/stores/storeAssets";
@@ -13,21 +13,20 @@ const props = defineProps({
     type: Object,
     default: () => null,
   },
-  //teste
+
   register: {
     type: Object,
     default: () => null,
   },
 });
 
-// preco medio como computed (seguro contra props nulas)
 const precoMedio = computed(() => {
   const min = Number(props.asset?.valor_min ?? 0);
   const max = Number(props.asset?.valor_max ?? 0);
   return (min + max) / 2;
 });
 
-const precoAtual = props.register[0].preco_atual //nao posso fazer assim, isso Ã© teste
+const precoAtual = props.register[0].preco_atual;
 </script>
 
 <template>
@@ -41,27 +40,25 @@ const precoAtual = props.register[0].preco_atual //nao posso fazer assim, isso Ã
         size="sm"
         v-close-popup
       />
-
-
-
     </div>
 
-      <AssetCard :asset="asset" class="my-asset" />
+    <AssetCard :asset="asset" class="my-asset" />
 
     <div class="asset-price-info">
-
-      <!-- TROCAR PARA O PREÃ‡O DE VDD -->
-
       <div class="current-price">{{ useCurrencify(precoAtual) }}</div>
 
-      <div class="price-change change-positive positive-bg" v-if="usePercentageCalculator(precoMedio,precoAtual) >= 0">
-        <q-icon name="fas fa-caret-up"/> {{ usePercentageCalculator(precoMedio,precoAtual).toFixed(2) }}%
+      <div
+        class="price-change change-positive positive-bg"
+        v-if="usePercentageCalculator(precoMedio, precoAtual) >= 0"
+      >
+        <q-icon name="fas fa-caret-up" />
+        {{ usePercentageCalculator(precoMedio, precoAtual).toFixed(2) }}%
       </div>
 
       <div class="price-change change-negative negative-bg" v-else>
-        <q-icon name="fas fa-caret-down"/> {{ usePercentageCalculator(precoMedio,precoAtual).toFixed(2) }}%
+        <q-icon name="fas fa-caret-down" />
+        {{ usePercentageCalculator(precoMedio, precoAtual).toFixed(2) }}%
       </div>
-
     </div>
   </BlueHeader>
 </template>
@@ -71,8 +68,6 @@ const precoAtual = props.register[0].preco_atual //nao posso fazer assim, isso Ã
   width: 100%;
   max-width: 500px;
 }
-
-
 
 .header-top-row {
   margin-top: -15px;
@@ -112,14 +107,13 @@ const precoAtual = props.register[0].preco_atual //nao posso fazer assim, isso Ã
   border-color: #ffc107;
 }
 
-
 .asset-price-info {
   text-align: center;
 }
 
 .current-price {
   font-size: 32px;
-  /* Aumentado */
+
   font-weight: 700;
   margin-bottom: 5px;
 }
@@ -138,7 +132,6 @@ const precoAtual = props.register[0].preco_atual //nao posso fazer assim, isso Ã
   color: $positive;
 }
 
-/* Verde mais claro */
 .change-negative {
   color: $negative;
 }

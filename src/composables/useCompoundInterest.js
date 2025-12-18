@@ -1,8 +1,6 @@
 import { reactive, ref, watch, computed } from "vue";
 
 export function useCompoundInterest() {
-  // STATE
-
   const options = ref([
     {
       label: "Nenhum (usar rentabilidade acima)",
@@ -31,7 +29,6 @@ export function useCompoundInterest() {
     },
   ]);
 
-  // O 'model' continua pegando o primeiro item, só que agora é um objeto
   const model = ref(options.value[0]);
 
   const calculatorForm = reactive({
@@ -46,15 +43,11 @@ export function useCompoundInterest() {
   const totalInvested = ref(0);
   const totalInterest = ref(0);
   const ipcaWarning = ref(false);
-  const percentGain = ref('0');
-
-  // COMPUTED
+  const percentGain = ref("0");
 
   const isAnnualReturnDisabled = computed(() => {
     return model.value !== options.value[0];
   });
-
-  // WATCHERS
 
   watch(model, (selectedOption) => {
     if (selectedOption) {
@@ -66,8 +59,6 @@ export function useCompoundInterest() {
       ipcaWarning.value = false;
     }
   });
-
-  // METHODS
 
   const calculateCompoundInterest = () => {
     const initial = parseFloat(calculatorForm.initialValue) || 0;
@@ -81,7 +72,7 @@ export function useCompoundInterest() {
       totalInterest.value = 0;
       finalAmount.value = invested;
       showResults.value = true;
-      percentGain.value = '0';
+      percentGain.value = "0";
       return;
     }
     const monthlyRate = Math.pow(1 + annualRate / 100, 1 / 12) - 1;
@@ -124,9 +115,7 @@ export function useCompoundInterest() {
     percentGain.value = 0;
   };
 
-  // RETURN
   return {
-    // STATE
     calculatorForm,
     options,
     model,
@@ -137,10 +126,8 @@ export function useCompoundInterest() {
     ipcaWarning,
     percentGain,
 
-    // COMPUTED
     isAnnualReturnDisabled,
 
-    // METHODS
     calculateCompoundInterest,
     resetCalculator,
   };

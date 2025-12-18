@@ -9,7 +9,7 @@ const downloadImage = (dataUrl, filename) => {
   a.click();
   document.body.removeChild(a);
   alert(
-    "A imagem foi baixada, pois o compartilhamento nativo não está disponível."
+    "A imagem foi baixada, pois o compartilhamento nativo não está disponível.",
   );
 };
 
@@ -96,7 +96,7 @@ export function useShareAsImage() {
         } catch (error) {
           console.warn(
             "Compartilhamento nativo falhou ou foi cancelado:",
-            error
+            error,
           );
         }
       } else {

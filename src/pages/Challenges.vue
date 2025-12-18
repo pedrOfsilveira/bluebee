@@ -1,9 +1,9 @@
 <script setup>
-import { computed, onMounted } from 'vue';
-import BlueHeader from 'src/components/BlueHeader.vue';
-import ChallengeCard from 'src/components/home/ChallengeCard.vue';
-import { useStoreChallenges } from 'src/stores/storeChallenges';
-import { useStoreUserChallenges } from 'src/stores/storeUserChallenges';
+import { computed, onMounted } from "vue";
+import BlueHeader from "src/components/BlueHeader.vue";
+import ChallengeCard from "src/components/home/ChallengeCard.vue";
+import { useStoreChallenges } from "src/stores/storeChallenges";
+import { useStoreUserChallenges } from "src/stores/storeUserChallenges";
 
 const storeChallenges = useStoreChallenges();
 const storeUserChallenges = useStoreUserChallenges();
@@ -16,13 +16,13 @@ onMounted(() => {
 
 const completedIds = computed(() => {
   const list = storeUserChallenges.challenges || [];
-  return new Set(list.map(c => c?.desafios?.id).filter(Boolean));
+  return new Set(list.map((c) => c?.desafios?.id).filter(Boolean));
 });
 
 const viewChallenges = computed(() => {
-  return (challenges || []).map(ch => ({
+  return (challenges || []).map((ch) => ({
     ...ch,
-    completed: completedIds.value.has(ch.id)
+    completed: completedIds.value.has(ch.id),
   }));
 });
 </script>
@@ -30,11 +30,12 @@ const viewChallenges = computed(() => {
 <template>
   <q-page class="bg-grey-1">
     <BlueHeader>
-      <div class="flex justify-center text-center text-h5 text-weight-bolder items-center">
+      <div
+        class="flex justify-center text-center text-h5 text-weight-bolder items-center"
+      >
         <q-icon name="fas fa-rocket" class="q-mr-sm" />
         Desafios
       </div>
-      <!-- No search bar here -->
     </BlueHeader>
 
     <div class="section q-mt-lg">
@@ -55,10 +56,8 @@ const viewChallenges = computed(() => {
       </div>
     </div>
 
-    <div class="mb" style="height: 80px;"></div>
+    <div class="mb" style="height: 80px"></div>
   </q-page>
 </template>
 
-<style lang="scss">
-/* No extra styles: reuses ChallengeCard component styling */
-</style>
+<style lang="scss"></style>

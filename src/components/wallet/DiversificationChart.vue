@@ -1,6 +1,6 @@
 <script setup>
-import { defineProps } from 'vue';
-import SectionTitle from 'src/components/SectionTitle.vue';
+import { defineProps } from "vue";
+import SectionTitle from "src/components/SectionTitle.vue";
 defineProps({
   percentages: {
     type: Object,
@@ -13,12 +13,15 @@ defineProps({
     }),
   },
 });
-
 </script>
 
 <template>
   <div class="section q-mt-md" id="diversification-section">
-    <SectionTitle title="Diversificação" icon="fas fa-chart-pie" class="q-mt-lg" />
+    <SectionTitle
+      title="Diversificação"
+      icon="fas fa-chart-pie"
+      class="q-mt-lg"
+    />
     <div class="diversification">
       <div class="diversification-chart">
         <div
@@ -74,7 +77,7 @@ defineProps({
 
 <style lang="scss" scoped>
 .diversification {
-   border: 1px solid #e8ecf4;
+  border: 1px solid #e8ecf4;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   padding: 25px;
@@ -154,6 +157,5 @@ defineProps({
   height: 12px;
   border-radius: 50%;
   margin-right: 10px;
-
 }
 </style>

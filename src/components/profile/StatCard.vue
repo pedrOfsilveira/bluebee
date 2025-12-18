@@ -6,7 +6,7 @@ defineProps({
   },
   value: {
     type: String,
-    default: '',
+    default: "",
   },
   label: {
     type: String,
@@ -25,15 +25,15 @@ defineProps({
 
 <style lang="scss" scoped>
 .stat-card {
-  overflow-wrap: break-word; /* Quebra palavras longas */
+  overflow-wrap: break-word;
   word-break: break-word;
   text-wrap: wrap;
   min-width: 120px;
   background: linear-gradient(145deg, #eef2f9, #f8f9fd);
   padding: 20px 15px;
-  /* Padding ajustado */
+
   border-radius: 16px;
-  /* Mais arredondado */
+
   text-align: center;
   border: 1px solid #e8ecf4;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
@@ -47,7 +47,7 @@ defineProps({
 
 .stat-icon {
   font-size: 28px;
-  /* Maior */
+
   color: $primary;
 
   opacity: 0.8;
@@ -57,7 +57,7 @@ defineProps({
   overflow-wrap: break-word;
   word-break: break-word;
   font-size: 20px;
-  /* Maior */
+
   font-weight: 700;
   color: $text-dark;
   margin-bottom: 5px;

@@ -1,9 +1,8 @@
 import { defineStore } from "pinia";
 import { driver } from "driver.js";
-import "driver.js/dist/driver.css"; // CSS do Driver.js
+import "driver.js/dist/driver.css";
 
 export const useStoreTutorial = defineStore("tutorial", () => {
-  // Mapa de passos por rota/página
   const stepsByRoute = {
     home: [
       {
@@ -42,16 +41,14 @@ export const useStoreTutorial = defineStore("tutorial", () => {
         element: "#challenge-section",
         popover: {
           title: "Desafios",
-          description:
-            "Complete desafios para ganhar XP e subir de nível!",
+          description: "Complete desafios para ganhar XP e subir de nível!",
         },
       },
       {
         element: "#bottom-nav-tabs",
         popover: {
           title: "Navegação",
-          description:
-            "Use estas abas para acessar Início, Carteira e Perfil.",
+          description: "Use estas abas para acessar Início, Carteira e Perfil.",
         },
       },
     ],
@@ -60,8 +57,7 @@ export const useStoreTutorial = defineStore("tutorial", () => {
         element: "#diversification-section",
         popover: {
           title: "Diversificação",
-          description:
-            "Distribuição da sua carteira por classes de ativos.",
+          description: "Distribuição da sua carteira por classes de ativos.",
         },
       },
       {
@@ -69,7 +65,7 @@ export const useStoreTutorial = defineStore("tutorial", () => {
         popover: {
           title: "Meus Ativos",
           description:
-          "Lista de ativos que você possui. Toque para ver detalhes.",
+            "Lista de ativos que você possui. Toque para ver detalhes.",
         },
       },
       {
@@ -84,8 +80,7 @@ export const useStoreTutorial = defineStore("tutorial", () => {
         element: "#wallet-filter",
         popover: {
           title: "Filtre como quiser",
-          description:
-            "Filtre por compras ou vendas registradas.",
+          description: "Filtre por compras ou vendas registradas.",
         },
       },
       {
@@ -120,8 +115,7 @@ export const useStoreTutorial = defineStore("tutorial", () => {
         element: "#explore-search",
         popover: {
           title: "Explorar Ativos",
-          description:
-            "Pesquise por nome ou ticker e filtre por categoria.",
+          description: "Pesquise por nome ou ticker e filtre por categoria.",
         },
       },
       {
@@ -145,8 +139,7 @@ export const useStoreTutorial = defineStore("tutorial", () => {
         element: ".terms-container",
         popover: {
           title: "Termos",
-          description:
-            "Abra um termo para ler a explicação e exemplos.",
+          description: "Abra um termo para ler a explicação e exemplos.",
         },
       },
     ],
@@ -162,8 +155,7 @@ export const useStoreTutorial = defineStore("tutorial", () => {
         element: ".scams-container",
         popover: {
           title: "Casos e Dicas",
-          description:
-            "Leia os detalhes e a dica de prevenção de cada caso.",
+          description: "Leia os detalhes e a dica de prevenção de cada caso.",
         },
       },
     ],
@@ -179,31 +171,29 @@ export const useStoreTutorial = defineStore("tutorial", () => {
         element: ".profile-stats-container",
         popover: {
           title: "Visão Geral",
-          description: "Acompanhe conquistas, sequência, experiência e seu perfil de investidor.",
+          description:
+            "Acompanhe conquistas, sequência, experiência e seu perfil de investidor.",
         },
       },
       {
         element: "#estatistica",
         popover: {
           title: "Estatísticas de Uso",
-          description:
-            "Veja seu tempo de uso e os desafios concluídos.",
+          description: "Veja seu tempo de uso e os desafios concluídos.",
         },
       },
       {
         element: "#se-cuida",
         popover: {
           title: "Fique de Olho",
-          description:
-            "Receba avisos sobre os seus investimentos.",
+          description: "Receba avisos sobre os seus investimentos.",
         },
       },
       {
         element: "#sugestoes",
         popover: {
           title: "Sugestões",
-          description:
-            "Visualize sugestões para melhorar seus conhecimentos.",
+          description: "Visualize sugestões para melhorar seus conhecimentos.",
         },
       },
       {
@@ -243,8 +233,7 @@ export const useStoreTutorial = defineStore("tutorial", () => {
         element: "#quiz-info",
         popover: {
           title: "Resultado",
-          description:
-            "Ao finalizar, veja sua pontuação e recomendações.",
+          description: "Ao finalizar, veja sua pontuação e recomendações.",
         },
       },
     ],

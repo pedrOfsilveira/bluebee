@@ -5,7 +5,7 @@ import AssetCard from "./AssetCard.vue";
 import AssetDetailDialog from "src/components/AssetDetailDialog.vue";
 import { useStoreUserAssets } from "src/stores/storeUserAssets";
 
-const storeUserAssets = useStoreUserAssets()
+const storeUserAssets = useStoreUserAssets();
 
 const props = defineProps({
   assets: {
@@ -23,14 +23,17 @@ const showAssetDetails = (asset, register) => {
   selectedRegister.value = register;
   isDialogVisible.value = true;
 };
-
 </script>
 
 <template>
   <div class="section text-body2 text-weight-regular">
-    <SectionTitle title="Meus Ativos"/>
+    <SectionTitle title="Meus Ativos" />
     <div class="assets-list" id="wallet-assets-list">
-     <AssetCard v-for="asset in props.assets" :asset="asset" @open-details="showAssetDetails"/>
+      <AssetCard
+        v-for="asset in props.assets"
+        :asset="asset"
+        @open-details="showAssetDetails"
+      />
     </div>
   </div>
 
@@ -43,6 +46,4 @@ const showAssetDetails = (asset, register) => {
   />
 </template>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

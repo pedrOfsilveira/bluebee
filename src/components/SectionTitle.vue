@@ -1,7 +1,6 @@
 <script setup>
-import { color } from 'chart.js/helpers';
-import { RouterLink } from 'vue-router';
-
+import { color } from "chart.js/helpers";
+import { RouterLink } from "vue-router";
 
 defineProps({
   icon: {
@@ -14,7 +13,7 @@ defineProps({
   },
   textColor: {
     type: String,
-    default: 'secondary',
+    default: "secondary",
   },
   seeAll: {
     type: Boolean,
@@ -22,33 +21,33 @@ defineProps({
   },
   to: {
     type: String,
-    default: ''
+    default: "",
   },
   bb: {
     type: Boolean,
     default: false,
-  }
+  },
 });
-
 </script>
 
 <template>
-  <div class="section-title" :class="`text-${textColor} ${bb ? 'bb' : ''}` ">
+  <div class="section-title" :class="`text-${textColor} ${bb ? 'bb' : ''}`">
     <span class="text-weight-bolder text-h6 flex items-center">
       <q-icon v-if="icon" :name="icon" size="sm" class="q-mr-sm" />
       {{ title }}
     </span>
-    <RouterLink v-if="seeAll && to" :to="to" class="text-weight-bold">Ver tudo</RouterLink>
+    <RouterLink v-if="seeAll && to" :to="to" class="text-weight-bold"
+      >Ver tudo</RouterLink
+    >
     <a v-else-if="seeAll" class="text-weight-bold">Ver tudo</a>
   </div>
 </template>
-
 
 <style scoped lang="scss">
 .section-title {
   display: flex;
   justify-content: space-between;
-  align-items: center;;
+  align-items: center;
 }
 
 .section-title a {

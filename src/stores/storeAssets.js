@@ -1,131 +1,95 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { useShowErrorMessage } from 'src/use/useShowErrorMessage';
+import { useShowErrorMessage } from "src/use/useShowErrorMessage";
 import supabase from "src/config/supabase";
-//import { useStoreAuth } from "./storeAuth";
-
-//let assetsChannel
 
 export const useStoreAssets = defineStore("assets", () => {
-  /* state */
+  const assets = ref([]);
 
-  const assets = ref([])
-
-  //const storeAuth = useStoreAuth()
-
-  const assetsLoaded = ref(false)
+  const assetsLoaded = ref(false);
 
   let interval = 0;
 
-  /* getters */
-
-
-
-  /* actions */
-
   const loadAssets = async () => {
-    assetsLoaded.value = false
+    assetsLoaded.value = false;
 
     let { data, error } = await supabase
-      .from('ativos')
-      .select('*')
-      .order('nome', {ascending: true})
+      .from("ativos")
+      .select("*")
+      .order("nome", { ascending: true });
 
-    if (error) useShowErrorMessage(error.message)
+    if (error) useShowErrorMessage(error.message);
     if (data) {
-      assets.value = data
-      assetsLoaded.value = true
-      //setPriceAssets(assets.value)
+      assets.value = data;
+      assetsLoaded.value = true;
     }
-  }
+  };
 
   const clearAssets = () => {
-    assets.value = []
-  }
+    assets.value = [];
+  };
 
   const searchAssets = async (search) => {
     let { data, error } = await supabase
-      .from('ativos')
-      .select('*')
-      .ilike('nome', `%${search}%`)
-      .order('nome', {ascending: true})
+      .from("ativos")
+      .select("*")
+      .ilike("nome", `%${search}%`)
+      .order("nome", { ascending: true });
 
-      if (error) useShowErrorMessage(error.message)
-      if (data) {
-        assets.value = data
-        //setPriceAssets(assets.value)
-      }
-  }
+    if (error) useShowErrorMessage(error.message);
+    if (data) {
+      assets.value = data;
+    }
+  };
 
   const randomNumber = (min, max) => {
-    return parseFloat((Math.random() * (max - min + 1) + min).toFixed(2))
-  }
+    return parseFloat((Math.random() * (max - min + 1) + min).toFixed(2));
+  };
 
-  // funcao que seta o valor atual após carregar todos os ativos
-  // const setPriceAssets = (assets) => {
-  //   assets.forEach(asset => {
-  //     asset.valor_atual = randomNumber(asset.valor_min, asset.valor_max)
-  //   });
-  //   interval = setInterval(() => {reloadPriceAssets(assets)}, 24000)
-  // }
-
-  // funcao que sera chamada pelo setInterval com uma array de todos os objetos para mudar o valor atual de cada um de tanto em tanto tempo
-  // const reloadPriceAssets = (assets) => {
-  //   assets.forEach(asset => {
-  //     asset.valor_atual = randomNumber(asset.valor_min, asset.valor_max)
-  //   });
-  // }
-
-  // teste, funcao que procura no registro se existe um preco atual de um certo ativo e retorna o registro
-  const returnPrice = async asset => {
-    let searchData = await searchRegister(asset.id)
+  const returnPrice = async (asset) => {
+    let searchData = await searchRegister(asset.id);
 
     if (searchData.length >= 1) {
-      let unixOld = Math.floor(searchData[0].unix_id/24)
-      let unixNew = Math.floor((Date.now()/1000)/24)
+      let unixOld = Math.floor(searchData[0].unix_id / 24);
+      let unixNew = Math.floor(Date.now() / 1000 / 24);
       if (unixOld < unixNew) {
         const { error, data } = await supabase
-          .from('ativo_registro')
+          .from("ativo_registro")
           .update({
-            unix_id: Math.floor(Date.now()/1000),
-            preco_atual: randomNumber(asset.valor_min, asset.valor_max)
+            unix_id: Math.floor(Date.now() / 1000),
+            preco_atual: randomNumber(asset.valor_min, asset.valor_max),
           })
-          .eq('ativo_id', asset.id)
-          .select()
+          .eq("ativo_id", asset.id)
+          .select();
 
-        if (error) useShowErrorMessage(error.message)
-        if (data) return data
+        if (error) useShowErrorMessage(error.message);
+        if (data) return data;
+      } else {
+        return searchData;
       }
-      else {
-        return searchData
-      }
-    }
-    else {
+    } else {
       const { error, data } = await supabase
-        .from('ativo_registro')
+        .from("ativo_registro")
         .insert({
           ativo_id: asset.id,
-          unix_id: Math.floor(Date.now()/1000),
-          preco_atual: randomNumber(asset.valor_min, asset.valor_max)
+          unix_id: Math.floor(Date.now() / 1000),
+          preco_atual: randomNumber(asset.valor_min, asset.valor_max),
         })
-        .select()
-      if (error) useShowErrorMessage(error.message)
-      if (data) return data
+        .select();
+      if (error) useShowErrorMessage(error.message);
+      if (data) return data;
     }
-  }
+  };
 
-  // helpers
-
-  // procura se ja existe algum registro de um certo ativo no banco
-  const searchRegister = async asset_id => {
+  const searchRegister = async (asset_id) => {
     let { data, error } = await supabase
-      .from('ativo_registro')
+      .from("ativo_registro")
       .select("*")
-      .eq('ativo_id', asset_id)
+      .eq("ativo_id", asset_id);
 
-    if (error) useShowErrorMessage(error.message)
-    if (data) return data
-  }
+    if (error) useShowErrorMessage(error.message);
+    if (data) return data;
+  };
 
   return {
     assets,
@@ -133,6 +97,6 @@ export const useStoreAssets = defineStore("assets", () => {
     loadAssets,
     clearAssets,
     searchAssets,
-    returnPrice
+    returnPrice,
   };
 });

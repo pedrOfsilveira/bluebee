@@ -3,12 +3,12 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
-import { useStoreAuth } from './stores/storeAuth';
+import { onMounted } from "vue";
+import { useStoreAuth } from "./stores/storeAuth";
 
-const storeAuth = useStoreAuth()
+const storeAuth = useStoreAuth();
 
 onMounted(() => {
-  storeAuth.init()
-})
+  storeAuth.init();
+});
 </script>

@@ -1,54 +1,75 @@
 <script setup>
-import { ref, computed } from 'vue';
-import BlueHeader from 'src/components/BlueHeader.vue';
-import { useGlossaryStore } from 'src/stores/storeGlossary';
+import { ref, computed } from "vue";
+import BlueHeader from "src/components/BlueHeader.vue";
+import { useGlossaryStore } from "src/stores/storeGlossary";
 
 const store = useGlossaryStore();
-const search = ref('');
-const tab = ref('todos'); // Controla a categoria selecionada
+const search = ref("");
+const tab = ref("todos");
 
-// --- 1. Estilização dos Ícones (Mantido para visual dos cards) ---
 const getTermStyle = (type) => {
   const styles = {
-    stock:   { icon: 'fas fa-chart-line',         bg: 'linear-gradient(135deg, #5C6BC0 0%, #3949AB 100%)' },
-    fixed:   { icon: 'fas fa-seedling',           bg: 'linear-gradient(135deg, #66BB6A 0%, #2E7D32 100%)' },
-    fund:    { icon: 'fas fa-building',           bg: 'linear-gradient(135deg, #FFA726 0%, #EF6C00 100%)' },
-    economy: { icon: 'fas fa-globe-americas',     bg: 'linear-gradient(135deg, #78909C 0%, #455A64 100%)' },
-    trade:   { icon: 'fas fa-bolt',               bg: 'linear-gradient(135deg, #EF5350 0%, #C62828 100%)' },
-    tax:     { icon: 'fas fa-file-invoice-dollar',bg: 'linear-gradient(135deg, #AB47BC 0%, #7B1FA2 100%)' },
-    concept: { icon: 'fas fa-book-open',          bg: 'linear-gradient(135deg, #26C6DA 0%, #0097A7 100%)' }
+    stock: {
+      icon: "fas fa-chart-line",
+      bg: "linear-gradient(135deg, #5C6BC0 0%, #3949AB 100%)",
+    },
+    fixed: {
+      icon: "fas fa-seedling",
+      bg: "linear-gradient(135deg, #66BB6A 0%, #2E7D32 100%)",
+    },
+    fund: {
+      icon: "fas fa-building",
+      bg: "linear-gradient(135deg, #FFA726 0%, #EF6C00 100%)",
+    },
+    economy: {
+      icon: "fas fa-globe-americas",
+      bg: "linear-gradient(135deg, #78909C 0%, #455A64 100%)",
+    },
+    trade: {
+      icon: "fas fa-bolt",
+      bg: "linear-gradient(135deg, #EF5350 0%, #C62828 100%)",
+    },
+    tax: {
+      icon: "fas fa-file-invoice-dollar",
+      bg: "linear-gradient(135deg, #AB47BC 0%, #7B1FA2 100%)",
+    },
+    concept: {
+      icon: "fas fa-book-open",
+      bg: "linear-gradient(135deg, #26C6DA 0%, #0097A7 100%)",
+    },
   };
   return styles[type] || styles.concept;
 };
 
-// --- 2. Normalização de Texto ---
 const normalizeText = (text) => {
-  return text ? text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
+  return text
+    ? text
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+    : "";
 };
 
-// --- 3. Filtragem Inteligente (Categoria + Busca) ---
 const groupedTerms = computed(() => {
   const query = normalizeText(search.value);
 
-  // Passo A: Filtrar por Categoria (Tab)
   let filtered = store.terms;
 
-  if (tab.value !== 'todos') {
-    filtered = filtered.filter(term => term.type === tab.value);
+  if (tab.value !== "todos") {
+    filtered = filtered.filter((term) => term.type === tab.value);
   }
 
-  // Passo B: Filtrar por Texto da Busca (se houver)
   if (query) {
-    filtered = filtered.filter(term => {
-      return normalizeText(term.title).includes(query) ||
-             normalizeText(term.description).includes(query);
+    filtered = filtered.filter((term) => {
+      return (
+        normalizeText(term.title).includes(query) ||
+        normalizeText(term.description).includes(query)
+      );
     });
   }
 
-  // Passo C: Ordenar A-Z
   filtered.sort((a, b) => a.title.localeCompare(b.title));
 
-  // Passo D: Agrupar por Letra
   return filtered.reduce((groups, term) => {
     const letter = term.title.charAt(0).toUpperCase();
     if (!groups[letter]) groups[letter] = [];
@@ -58,18 +79,17 @@ const groupedTerms = computed(() => {
 });
 
 const hasResults = computed(() => Object.keys(groupedTerms.value).length > 0);
-import { useStoreTutorial } from 'src/stores/storeTutorial';
-import { onMounted } from 'vue';
+import { useStoreTutorial } from "src/stores/storeTutorial";
+import { onMounted } from "vue";
 
 const tutorial = useStoreTutorial();
 onMounted(() => {
-  setTimeout(() => tutorial.startTutorialFor('glossary'), 600);
+  setTimeout(() => tutorial.startTutorialFor("glossary"), 600);
 });
 </script>
 
 <template>
   <q-page class="bg-grey-1">
-
     <BlueHeader id="glossary-search">
       <div class="flex text-h5 text-weight-bolder items-center q-mb-lg">
         <q-icon name="fas fa-book" class="q-mr-sm" />
@@ -83,7 +103,7 @@ onMounted(() => {
         placeholder="Buscar termo ou definição..."
       >
         <template v-slot:prepend>
-          <q-icon name="fas fa-search"/>
+          <q-icon name="fas fa-search" />
         </template>
         <template v-slot:append v-if="search">
           <q-icon name="close" @click="search = ''" class="cursor-pointer" />
@@ -111,11 +131,13 @@ onMounted(() => {
 
     <div class="q-mb-lg"></div>
 
-    <div class="q-px-md" style="margin-top: -10px;">
-
+    <div class="q-px-md" style="margin-top: -10px">
       <div v-if="hasResults">
-        <div v-for="(groupTerms, letter) in groupedTerms" :key="letter" class="q-mb-lg">
-
+        <div
+          v-for="(groupTerms, letter) in groupedTerms"
+          :key="letter"
+          class="q-mb-lg"
+        >
           <div class="letter-header q-mb-sm text-primary">
             {{ letter }}
           </div>
@@ -131,7 +153,6 @@ onMounted(() => {
             >
               <template v-slot:header>
                 <div class="row full-width items-center">
-
                   <div
                     class="term-icon q-mr-md"
                     :style="{ background: getTermStyle(term.type).bg }"
@@ -150,13 +171,25 @@ onMounted(() => {
               </template>
 
               <q-card>
-                <q-card-section class="text-grey-7 q-pt-none q-pb-md q-px-md text-body2">
+                <q-card-section
+                  class="text-grey-7 q-pt-none q-pb-md q-px-md text-body2"
+                >
                   <q-separator class="q-mb-md" />
                   {{ term.description }}
 
-                  <div class="q-mt-sm text-caption text-grey-5 flex items-center">
-                    <q-icon :name="getTermStyle(term.type).icon" class="q-mr-xs" />
-                    Categoria: {{ tab === 'todos' ? term.type.toUpperCase() : tab.toUpperCase() }}
+                  <div
+                    class="q-mt-sm text-caption text-grey-5 flex items-center"
+                  >
+                    <q-icon
+                      :name="getTermStyle(term.type).icon"
+                      class="q-mr-xs"
+                    />
+                    Categoria:
+                    {{
+                      tab === "todos"
+                        ? term.type.toUpperCase()
+                        : tab.toUpperCase()
+                    }}
                   </div>
                 </q-card-section>
               </q-card>
@@ -169,20 +202,17 @@ onMounted(() => {
         <q-icon name="fas fa-search-minus" size="3rem" class="q-mb-md" />
         <div class="text-center">
           Nenhum termo encontrado em
-          <strong>{{ tab === 'todos' ? 'todas as categorias' : tab }}</strong>
+          <strong>{{ tab === "todos" ? "todas as categorias" : tab }}</strong>
           para "{{ search }}"
         </div>
       </div>
-
     </div>
 
-    <div class="mb" style="height: 80px;"></div>
+    <div class="mb" style="height: 80px"></div>
   </q-page>
 </template>
 
 <style lang="scss">
-/* --- Estilos copiados EXATAMENTE de ExploreAssets.vue --- */
-
 .search-input {
   width: 100%;
 }
@@ -196,13 +226,13 @@ onMounted(() => {
 .search-input {
   &.q-field--focused {
     .q-field__control {
-      box-shadow: 0 0 0 3px rgba(91, 158, 240, 0.2),
+      box-shadow:
+        0 0 0 3px rgba(91, 158, 240, 0.2),
         0 4px 15px rgba(0, 0, 0, 0.2);
       transform: translateY(-1px);
     }
   }
 
-  /* Opcional: Adiciona uma transição suave para o efeito */
   .q-field__control {
     transition: all 0.3s ease-in-out;
   }
@@ -219,7 +249,7 @@ onMounted(() => {
 
 .subtab {
   background: rgba(255, 255, 255, 0.15);
-  /* Mais sutil */
+
   backdrop-filter: blur(8px);
   color: rgba(255, 255, 255, 0.9);
   border: 1px solid rgba(255, 255, 255, 0.25);
@@ -233,8 +263,6 @@ onMounted(() => {
 .subtabs .q-tabs__content {
   gap: 8px;
 }
-
-/* --- Estilos Específicos dos Cards do Glossário --- */
 
 .glossary-card {
   border: 1px solid #e8ecf4;

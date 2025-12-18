@@ -2,12 +2,12 @@
 defineProps({
   title: {
     type: String,
-    default: 'Clique aqui'
+    default: "Clique aqui",
   },
   disable: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 });
 </script>
 

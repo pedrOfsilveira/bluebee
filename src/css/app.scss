@@ -1,4 +1,3 @@
-// app global css in SCSS form
 $footer-bg: rgba(255, 255, 255, 0.97);
 
 .positive-bg {
@@ -33,7 +32,6 @@ $footer-bg: rgba(255, 255, 255, 0.97);
   margin-bottom: 10px;
 }
 
-/* Auth-like toggle styles (shared) */
 .auth-toggle {
   .q-btn-group {
     width: 100%;
@@ -51,7 +49,9 @@ $footer-bg: rgba(255, 255, 255, 0.97);
   }
 
   .q-btn[aria-pressed="true"] {
-    box-shadow: 0 0 0 3px rgba(91, 158, 240, 0.2), 0 4px 15px rgba(0, 0, 0, 0.2);
+    box-shadow:
+      0 0 0 3px rgba(91, 158, 240, 0.2),
+      0 4px 15px rgba(0, 0, 0, 0.2);
     transform: translateY(-1px);
     border: $primary 2px solid !important;
   }

@@ -1,6 +1,6 @@
 <script setup lang="js">
 import AuthInput from "src/components/auth/AuthInput.vue";
-import CalculatorResults from 'src/components/calculator/CalculatorResults.vue';
+import CalculatorResults from "src/components/calculator/CalculatorResults.vue";
 
 import vSelectAll from "src/directives/directiveSelectAll.js";
 
@@ -20,7 +20,6 @@ const {
   resetCalculator,
 } = useCompoundInterest();
 
-
 const formatCurrency = (fieldName) => {
   let value = calculatorForm[fieldName];
   if (value === null || value === "") {
@@ -36,7 +35,6 @@ const formatCurrency = (fieldName) => {
     calculatorForm[fieldName] = null;
   }
 };
-
 </script>
 <template>
   <q-form
@@ -120,8 +118,6 @@ const formatCurrency = (fieldName) => {
 </template>
 
 <style lang="scss" scoped>
-
-
 .bb {
   border-bottom: 2px solid #e8ecf4;
   margin-bottom: 18px;
@@ -168,5 +164,4 @@ const formatCurrency = (fieldName) => {
   transform: translateY(-3px);
   box-shadow: 0 12px 30px rgba(255, 193, 7, 0.5);
 }
-
 </style>

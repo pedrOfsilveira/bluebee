@@ -1,68 +1,74 @@
 <script setup>
-import HomeHeader from 'src/components/home/HomeHeader.vue';
+import HomeHeader from "src/components/home/HomeHeader.vue";
 import SectionTitle from "src/components/SectionTitle.vue";
 import DiversificationChart from "src/components/wallet/DiversificationChart.vue";
-import History from 'src/components/wallet/History.vue';
-import MyAssetsSection from 'src/components/wallet/MyAssetsSection.vue';
+import History from "src/components/wallet/History.vue";
+import MyAssetsSection from "src/components/wallet/MyAssetsSection.vue";
 import { useStoreUserAssets } from "src/stores/storeUserAssets";
 import { ref, computed, onMounted } from "vue";
 import { useStoreTutorial } from "src/stores/storeTutorial";
 const tab = ref("ativos");
 
-const storeUserAssets = useStoreUserAssets()
+const storeUserAssets = useStoreUserAssets();
 
 const normalizeType = (t) => {
-  const s = (t || '').toString().toLowerCase()
-  if (s.includes('fundo') || s === 'fii') return 'fii'
-  if (s.includes('cripto') || s === 'crypto') return 'crypto'
-  // Map any renda fixa/fixed income into ETF bucket since fixed is removed
-  if (s.includes('renda fixa') || s.includes('fixa') || s.includes('tesouro')) return 'etf'
-  if (s.includes('etf')) return 'etf'
-  if (s.includes('ação') || s.includes('acoes') || s.includes('ações') || s.includes('acao') || s.includes('stock')) return 'stocks'
-  return 'stocks'
-}
+  const s = (t || "").toString().toLowerCase();
+  if (s.includes("fundo") || s === "fii") return "fii";
+  if (s.includes("cripto") || s === "crypto") return "crypto";
+
+  if (s.includes("renda fixa") || s.includes("fixa") || s.includes("tesouro"))
+    return "etf";
+  if (s.includes("etf")) return "etf";
+  if (
+    s.includes("ação") ||
+    s.includes("acoes") ||
+    s.includes("ações") ||
+    s.includes("acao") ||
+    s.includes("stock")
+  )
+    return "stocks";
+  return "stocks";
+};
 
 const percentages = computed(() => {
-  const acc = { stocks: 0, fii: 0, etf: 0, crypto: 0 }
-  const list = storeUserAssets.assets || []
-  let total = 0
-  list.forEach(a => {
-    const tipo = a?.tipo || a?.ativos?.tipo
-    const key = normalizeType(tipo)
-    const qty = typeof a?.quantidade === 'number' && a.quantidade > 0 ? a.quantidade : 1
-    if (acc[key] === undefined) acc[key] = 0
-    acc[key] += qty
-    total += qty
-  })
-  if (total === 0) return acc
+  const acc = { stocks: 0, fii: 0, etf: 0, crypto: 0 };
+  const list = storeUserAssets.assets || [];
+  let total = 0;
+  list.forEach((a) => {
+    const tipo = a?.tipo || a?.ativos?.tipo;
+    const key = normalizeType(tipo);
+    const qty =
+      typeof a?.quantidade === "number" && a.quantidade > 0 ? a.quantidade : 1;
+    if (acc[key] === undefined) acc[key] = 0;
+    acc[key] += qty;
+    total += qty;
+  });
+  if (total === 0) return acc;
   const pct = {
     stocks: Math.round((acc.stocks / total) * 100),
     fii: Math.round((acc.fii / total) * 100),
     etf: Math.round((acc.etf / total) * 100),
     crypto: Math.round((acc.crypto / total) * 100),
-  }
-  // Adjust to ensure sum = 100
-  const sum = pct.stocks + pct.fii + pct.etf + pct.crypto
-  if (sum !== 100) {
-    // add/subtract the difference to the largest bucket
-    const entries = Object.entries(pct)
-    entries.sort((a,b) => b[1]-a[1])
-    const [largestKey] = entries[0]
-    pct[largestKey] += (100 - sum)
-  }
-  return pct
-})
+  };
 
-// inicia tutorial da carteira ao montar (apenas primeira visita)
+  const sum = pct.stocks + pct.fii + pct.etf + pct.crypto;
+  if (sum !== 100) {
+    const entries = Object.entries(pct);
+    entries.sort((a, b) => b[1] - a[1]);
+    const [largestKey] = entries[0];
+    pct[largestKey] += 100 - sum;
+  }
+  return pct;
+});
+
 const tutorial = useStoreTutorial();
 onMounted(() => {
   setTimeout(() => tutorial.startTutorialFor("wallet"), 600);
 });
-
 </script>
 
 <template>
-  <HomeHeader/>
+  <HomeHeader />
 
   <DiversificationChart :percentages="percentages" />
 
@@ -86,14 +92,14 @@ onMounted(() => {
 
   <q-tab-panels v-model="tab" animated>
     <q-tab-panel name="ativos">
-      <MyAssetsSection :assets="storeUserAssets.assets"/>
+      <MyAssetsSection :assets="storeUserAssets.assets" />
     </q-tab-panel>
 
     <q-tab-panel name="history">
       <div class="q-pa-md">
         <SectionTitle title="Histórico" />
         <div class="text-body2 text-weight-regular q-mt-sm">
-          <History/>
+          <History />
         </div>
         <div class="mb"></div>
       </div>
@@ -102,7 +108,6 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
-
 .tabs {
   border: 1px solid #e8ecf4;
   display: flex;
@@ -127,13 +132,8 @@ onMounted(() => {
   overflow: hidden;
 }
 
-
 .q-tab-panel,
 .q-tab-panels {
   background-color: transparent;
 }
-
-
 </style>
-
-

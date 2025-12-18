@@ -1,9 +1,7 @@
 <script setup>
-// LEMBRAR DE TIRAR TUDO ISSO E O @CLICK DO BOTAO
 import { useStoreAuth } from "src/stores/storeAuth";
 
-const storeAuth = useStoreAuth()
-// ATE AQUI
+const storeAuth = useStoreAuth();
 </script>
 
 <template>
@@ -43,7 +41,7 @@ const storeAuth = useStoreAuth()
     </button>
     <button class="action-btn">
       <q-btn
-      to="/challenges"
+        to="/challenges"
         flat
         padding="md"
         icon="fas fa-rocket"
@@ -54,7 +52,7 @@ const storeAuth = useStoreAuth()
     </button>
     <button class="action-btn">
       <q-btn
-      to="/security"
+        to="/security"
         flat
         padding="md"
         icon="fas fa-shield-alt"
@@ -65,7 +63,7 @@ const storeAuth = useStoreAuth()
     </button>
     <button class="action-btn">
       <q-btn
-      to="/quiz"
+        to="/quiz"
         flat
         padding="md"
         icon="fas fa-puzzle-piece"
@@ -79,11 +77,11 @@ const storeAuth = useStoreAuth()
 
 <style scoped lang="scss">
 .quick-actions {
-   border: 1px solid #e8ecf4;
-  // background-color: $card-opacity;
+  border: 1px solid #e8ecf4;
+
   background-color: white;
   backdrop-filter: blur(8px);
-  // border: 1px solid rgba(255, 255, 255, 0.15);
+
   border-radius: 18px;
   margin: -30px 20px 25px;
   padding: 20px;
@@ -105,11 +103,13 @@ const storeAuth = useStoreAuth()
   font-size: 12px;
   font-weight: 500;
   color: $text-light;
-  transition: transform 0.3s ease, color 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    color 0.3s ease;
 }
 
 .action-btn .q-btn {
- border: 1px solid #e8ecf4;
+  border: 1px solid #e8ecf4;
   background: linear-gradient(145deg, #eef2f9, #f8f9fd);
   border-radius: 16px;
 }

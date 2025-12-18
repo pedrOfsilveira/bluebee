@@ -1,8 +1,8 @@
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useStoreNews } from 'src/stores/storeNews';
-import NewsCard from './NewsCard.vue';
-import SectionTitle from '../SectionTitle.vue';
+import { ref, onMounted } from "vue";
+import { useStoreNews } from "src/stores/storeNews";
+import NewsCard from "./NewsCard.vue";
+import SectionTitle from "../SectionTitle.vue";
 
 const storeNews = useStoreNews();
 const dialogVisible = ref(false);
@@ -25,7 +25,10 @@ onMounted(() => {
     <SectionTitle title="Notícias de Mercado" icon="fas fa-newspaper" bb />
 
     <div class="news-container">
-      <div v-if="storeNews.newsState.loading" class="flex justify-center full-width">
+      <div
+        v-if="storeNews.newsState.loading"
+        class="flex justify-center full-width"
+      >
         <q-spinner color="secondary" size="3em" :thickness="5" />
       </div>
 
@@ -38,7 +41,11 @@ onMounted(() => {
     </div>
 
     <q-dialog v-model="dialogVisible">
-      <q-card v-if="selectedNews" class="my-card no-scrollbar" style="width: 100%; max-width: 500px;">
+      <q-card
+        v-if="selectedNews"
+        class="my-card no-scrollbar"
+        style="width: 100%; max-width: 500px"
+      >
         <q-img :src="selectedNews.imageUrl" />
 
         <q-card-section>
@@ -65,7 +72,6 @@ onMounted(() => {
             class="my-btn"
             label="Ler notícia completa"
             icon-right="fas fa-arrow-up-right-from-square"
-
             :href="selectedNews.url"
             target="_blank"
           />
@@ -151,7 +157,7 @@ onMounted(() => {
   cursor: pointer;
 }
 
-.q-dialog__inner>div {
+.q-dialog__inner > div {
   border-radius: 16px !important;
 }
 </style>

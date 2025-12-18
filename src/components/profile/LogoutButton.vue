@@ -1,5 +1,5 @@
 <script setup>
-import { useStoreAuth } from 'src/stores/storeAuth';
+import { useStoreAuth } from "src/stores/storeAuth";
 
 const storeAuth = useStoreAuth();
 </script>

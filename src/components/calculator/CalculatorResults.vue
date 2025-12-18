@@ -5,7 +5,7 @@ import StatCard from "src/components/profile/StatCard.vue";
 
 import { useShareAsImage } from "src/composables/useShareAsImage.js";
 
-import { formatBRL } from 'src/utils/formatters.js';
+import { formatBRL } from "src/utils/formatters.js";
 
 defineProps({
   totalInvested: {

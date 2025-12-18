@@ -1,23 +1,23 @@
 <script setup>
-import { defineProps } from 'vue';
+import { defineProps } from "vue";
 
 defineProps({
   label: {
     type: String,
-    default: 'Insira uma label'
+    default: "Insira uma label",
   },
   type: {
     type: String,
-    default: 'text'
+    default: "text",
   },
   icon: {
     type: String,
-    default: 'info'
+    default: "info",
   },
   appendIcon: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 });
 </script>
 
@@ -41,7 +41,8 @@ defineProps({
 .login-input {
   &.q-field--focused {
     .q-field__control {
-      box-shadow: 0 0 0 3px rgba(91, 158, 240, 0.2),
+      box-shadow:
+        0 0 0 3px rgba(91, 158, 240, 0.2),
         0 4px 15px rgba(0, 0, 0, 0.2);
       transform: translateY(-1px);
     }

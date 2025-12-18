@@ -6,9 +6,9 @@ import { ref, reactive } from "vue";
 import { useStoreAuth } from "src/stores/storeAuth";
 import { useQuasar } from "quasar";
 
-const $q = useQuasar()
+const $q = useQuasar();
 
-const storeAuth = useStoreAuth()
+const storeAuth = useStoreAuth();
 
 const register = ref(false);
 
@@ -17,64 +17,61 @@ const switchRegister = () => {
 };
 
 const credentialsLogin = reactive({
-  email: '',
-  password: ''
-})
+  email: "",
+  password: "",
+});
 
 const credentialsRegister = reactive({
-  email: '',
-  password: '',
-  passwordConfirm: '',
-  name: '',
-  birth: '',
-  gender: ''
-})
+  email: "",
+  password: "",
+  passwordConfirm: "",
+  name: "",
+  birth: "",
+  gender: "",
+});
 
-const credentialsVerify = credentials => {
-  let verify = true
+const credentialsVerify = (credentials) => {
+  let verify = true;
   for (var i in credentials) {
-    if (credentials[i] === '') verify = false
+    if (credentials[i] === "") verify = false;
   }
-  return verify
-}
+  return verify;
+};
 
-const credentialsPasswordVerify = credentials => {
-  let verify = true
+const credentialsPasswordVerify = (credentials) => {
+  let verify = true;
   if (credentials.passwordConfirm) {
     if (credentials.passwordConfirm !== credentials.password) {
-      verify = false
+      verify = false;
     }
   }
-  return verify
-}
+  return verify;
+};
 
-const submitForm = credencials => {
-  if (!credentialsVerify(credencials)){
+const submitForm = (credencials) => {
+  if (!credentialsVerify(credencials)) {
     $q.dialog({
       title: "Erro",
-      message: "Por favor preencha todas as lacunas"
-    })
-  }
-  else if (!credentialsPasswordVerify(credencials)){
+      message: "Por favor preencha todas as lacunas",
+    });
+  } else if (!credentialsPasswordVerify(credencials)) {
     $q.dialog({
       title: "Erro",
-      message: "Certifique-se de que os campos senha e confirmar senha estão iguais"
-    })
+      message:
+        "Certifique-se de que os campos senha e confirmar senha estão iguais",
+    });
+  } else {
+    formSubmitSuccess();
   }
-  else {
-    formSubmitSuccess()
-  }
-}
+};
 
 const formSubmitSuccess = () => {
   if (register.value) {
-    storeAuth.registerUser(credentialsRegister)
+    storeAuth.registerUser(credentialsRegister);
+  } else {
+    storeAuth.loginUser(credentialsLogin);
   }
-  else {
-    storeAuth.loginUser(credentialsLogin)
-  }
-}
-
+};
 </script>
 
 <template>
@@ -83,9 +80,21 @@ const formSubmitSuccess = () => {
     subtitle="Aprenda a investir de forma simples e gamificada"
   />
   <div class="login-container">
-    <div class="login-form" v-if="!register" >
-      <AuthInput v-model="credentialsLogin.email" label="Email" type="email" icon="email" class="q-mb-lg" />
-      <AuthInput v-model="credentialsLogin.password" label="Senha" type="password" icon="key" class="q-mb-md" />
+    <div class="login-form" v-if="!register">
+      <AuthInput
+        v-model="credentialsLogin.email"
+        label="Email"
+        type="email"
+        icon="email"
+        class="q-mb-lg"
+      />
+      <AuthInput
+        v-model="credentialsLogin.password"
+        label="Senha"
+        type="password"
+        icon="key"
+        class="q-mb-md"
+      />
 
       <BigButton
         @click="submitForm(credentialsLogin)"
@@ -128,8 +137,20 @@ const formSubmitSuccess = () => {
           { value: 'outro', label: 'Outro' },
         ]"
       />
-      <AuthInput v-model="credentialsRegister.email" label="Email" type="email" icon="email" class="q-mb-lg" />
-      <AuthInput v-model="credentialsRegister.password" label="Senha" type="password" icon="key" class="q-mb-lg" />
+      <AuthInput
+        v-model="credentialsRegister.email"
+        label="Email"
+        type="email"
+        icon="email"
+        class="q-mb-lg"
+      />
+      <AuthInput
+        v-model="credentialsRegister.password"
+        label="Senha"
+        type="password"
+        icon="key"
+        class="q-mb-lg"
+      />
       <AuthInput
         v-model="credentialsRegister.passwordConfirm"
         label="Confirmar Senha"
@@ -155,7 +176,9 @@ const formSubmitSuccess = () => {
 
 <style lang="scss">
 .q-btn[aria-pressed="true"] {
-  box-shadow: 0 0 0 3px rgba(91, 158, 240, 0.2), 0 4px 15px rgba(0, 0, 0, 0.2);
+  box-shadow:
+    0 0 0 3px rgba(91, 158, 240, 0.2),
+    0 4px 15px rgba(0, 0, 0, 0.2);
   transform: translateY(-1px);
   border: $primary 2px solid !important;
 }
@@ -172,7 +195,7 @@ const formSubmitSuccess = () => {
   border: 1px solid rgba(0, 0, 0, 0.24);
   height: 56px !important;
   transition: all 0.3s ease-in-out;
-  color:rgba(0, 0, 0, 0.54);
+  color: rgba(0, 0, 0, 0.54);
 }
 
 .login-container {
@@ -182,7 +205,6 @@ const formSubmitSuccess = () => {
 .login-form {
   padding: 40px 30px 35px;
 }
-
 
 .options {
   display: flex;

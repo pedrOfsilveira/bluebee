@@ -10,7 +10,8 @@
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev",
     "build": "quasar build",
-    "postinstall": "quasar prepare"
+    "postinstall": "quasar prepare",
+    "clean:nonframework": "node scripts/clean-nonframework.js"
   },
   "dependencies": {
     "@quasar/extras": "^1.16.4",
@@ -29,6 +30,8 @@
     "@quasar/app-vite": "^2.1.0",
     "autoprefixer": "^10.4.2",
     "postcss": "^8.4.14",
+    "prettier": "^3.2.5",
+    "strip-comments": "^2.0.1",
     "workbox-build": "^7.3.0",
     "workbox-cacheable-response": "^7.3.0",
     "workbox-core": "^7.3.0",

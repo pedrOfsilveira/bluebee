@@ -1,27 +1,24 @@
 <script setup>
-import { defineProps } from 'vue';
+import { defineProps } from "vue";
 
 defineProps({
   title: {
     type: String,
-    default: 'Insira um título'
+    default: "Insira um título",
   },
   subtitle: {
     type: String,
-    default: 'Insira um subtítulo'
-  }
+    default: "Insira um subtítulo",
+  },
 });
 </script>
 
-
 <template>
-   <div class="login-header">
-      <q-icon name="hive" size="xl" class="q-mb-md" color="accent" />
-      <span class="text-h5 text-weight-bolder">{{ title }}</span>
-      <span class="text-subtitle1 text-weight-light"
-      >{{ subtitle }}</span
-      >
-    </div>
+  <div class="login-header">
+    <q-icon name="hive" size="xl" class="q-mb-md" color="accent" />
+    <span class="text-h5 text-weight-bolder">{{ title }}</span>
+    <span class="text-subtitle1 text-weight-light">{{ subtitle }}</span>
+  </div>
 </template>
 
 <style scoped lang="scss">
@@ -65,5 +62,4 @@ defineProps({
   position: relative;
   z-index: 2;
 }
-
 </style>

@@ -1,41 +1,41 @@
 <script setup>
-import { computed } from 'vue';
-import BlueHeader from 'src/components/BlueHeader.vue';
-import LogoutButton from 'src/components/profile/LogoutButton.vue';
-import StatList from 'src/components/profile/StatList.vue';
-import AccountSettings from 'src/components/profile/AccountSettings.vue';
-import SectionTitle from 'src/components/SectionTitle.vue';
-import { useStoreAuth } from 'src/stores/storeAuth';
-import { useStoreUserChallenges } from 'src/stores/storeUserChallenges';
-import { useStoreHistory } from 'src/stores/storeHistory'
-import { useStoreTutorial } from 'src/stores/storeTutorial'
-import { onMounted } from 'vue'
+import { computed } from "vue";
+import BlueHeader from "src/components/BlueHeader.vue";
+import LogoutButton from "src/components/profile/LogoutButton.vue";
+import StatList from "src/components/profile/StatList.vue";
+import AccountSettings from "src/components/profile/AccountSettings.vue";
+import SectionTitle from "src/components/SectionTitle.vue";
+import { useStoreAuth } from "src/stores/storeAuth";
+import { useStoreUserChallenges } from "src/stores/storeUserChallenges";
+import { useStoreHistory } from "src/stores/storeHistory";
+import { useStoreTutorial } from "src/stores/storeTutorial";
+import { onMounted } from "vue";
 
-const storeAuth = useStoreAuth()
-const storeUserChallenges = useStoreUserChallenges()
-const storeHistory = useStoreHistory()
+const storeAuth = useStoreAuth();
+const storeUserChallenges = useStoreUserChallenges();
+const storeHistory = useStoreHistory();
 
 const investorProfileColor = computed(() => {
-  const p = (storeAuth.userDetails.investor_profile || '').toLowerCase()
-  if (p.includes('conserv')) return 'secondary'
-  if (p.includes('moder')) return 'warning'
-  if (p.includes('arroj')) return 'negative'
-  return 'primary'
-})
+  const p = (storeAuth.userDetails.investor_profile || "").toLowerCase();
+  if (p.includes("conserv")) return "secondary";
+  if (p.includes("moder")) return "warning";
+  if (p.includes("arroj")) return "negative";
+  return "primary";
+});
 
-const tutorial = useStoreTutorial()
+const tutorial = useStoreTutorial();
 onMounted(() => {
-  setTimeout(() => tutorial.startTutorialFor('profile'), 600)
-})
+  setTimeout(() => tutorial.startTutorialFor("profile"), 600);
+});
 
 const levelTitle = computed(() => {
   const n = Number(storeAuth.userDetails?.nivel ?? 0);
   if (!n || isNaN(n)) return null;
-  if (n < 5) return 'Investidor Junior';
-  if (n < 10) return 'Investidor Pleno';
-  if (n < 15) return 'Investidor Sênior';
-  return 'Investidor Mestre';
-})
+  if (n < 5) return "Investidor Junior";
+  if (n < 10) return "Investidor Pleno";
+  if (n < 15) return "Investidor Sênior";
+  return "Investidor Mestre";
+});
 </script>
 
 <template>
@@ -61,31 +61,42 @@ const levelTitle = computed(() => {
     <div class="profile-stats-container">
       <div class="profile-stats-header">
         <div class="text-subtitle1 text-weight-bold">Visão Geral</div>
-        <q-badge v-if="storeAuth.userDetails.investor_profile" class="profile-badge">
-          <q-icon name="fas fa-circle" :color="investorProfileColor" size="8px" class="q-mr-sm" />
+        <q-badge
+          v-if="storeAuth.userDetails.investor_profile"
+          class="profile-badge"
+        >
+          <q-icon
+            name="fas fa-circle"
+            :color="investorProfileColor"
+            size="8px"
+            class="q-mr-sm"
+          />
           {{ storeAuth.userDetails.investor_profile }}
         </q-badge>
       </div>
       <div class="profile-stats">
-
-        <div class="stat-item" style="flex:2">
+        <div class="stat-item" style="flex: 2">
           <div class="flex items-center justify-center">
             <q-icon name="fas fa-medal" size="20px" class="q-mr-sm" />
-            <div class="stat-value">{{ storeUserChallenges.challenges.length }}</div>
+            <div class="stat-value">
+              {{ storeUserChallenges.challenges.length }}
+            </div>
           </div>
           <div class="stat-label">Conquistas</div>
         </div>
-        <div class="stat-item" style="flex:2">
+        <div class="stat-item" style="flex: 2">
           <div class="flex items-center justify-center">
             <q-icon name="fas fa-fire" size="20px" class="q-mr-sm" />
             <div class="stat-value">{{ storeHistory.strike }}</div>
           </div>
           <div class="stat-label">Sequência</div>
         </div>
-        <div class="stat-item" style="flex:2">
+        <div class="stat-item" style="flex: 2">
           <div class="flex items-center justify-center">
             <q-icon name="fas fa-star" size="20px" class="q-mr-sm" />
-            <div class="stat-value">{{ storeAuth.userDetails.experiencia }}</div>
+            <div class="stat-value">
+              {{ storeAuth.userDetails.experiencia }}
+            </div>
           </div>
           <div class="stat-label">Experiência</div>
         </div>
@@ -93,11 +104,20 @@ const levelTitle = computed(() => {
     </div>
   </BlueHeader>
   <div class="section q-mt-lg">
-    <SectionTitle title="Relatório de Progresso" icon="fas fa-square-poll-vertical" />
+    <SectionTitle
+      title="Relatório de Progresso"
+      icon="fas fa-square-poll-vertical"
+    />
     <StatList />
   </div>
   <div class="section q-mt-lg pad">
-    <q-expansion-item id="account-settings" expand-separator dense header-class="settings-header" expand-icon-class="text-grey-6">
+    <q-expansion-item
+      id="account-settings"
+      expand-separator
+      dense
+      header-class="settings-header"
+      expand-icon-class="text-grey-6"
+    >
       <template v-slot:header>
         <div class="row full-width items-center no-wrap">
           <div class="settings-icon q-mr-md">
@@ -116,10 +136,9 @@ const levelTitle = computed(() => {
     </q-expansion-item>
   </div>
   <div class="section">
-    <LogoutButton/>
+    <LogoutButton />
   </div>
   <div class="mb"></div>
-
 </template>
 
 <style lang="scss">
@@ -138,7 +157,7 @@ const levelTitle = computed(() => {
   background: linear-gradient(135deg, #81d4fa, #4fc3f7);
   border: 5px solid white;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-  background-image: url('https://voxnews.com.br/wp-content/uploads/2017/04/unnamed.png');
+  background-image: url("https://voxnews.com.br/wp-content/uploads/2017/04/unnamed.png");
   background-size: cover;
   background-position: center;
   transition: transform 0.4s ease;
@@ -167,7 +186,6 @@ const levelTitle = computed(() => {
   margin-bottom: 30px;
   position: relative;
   z-index: 2;
-
 }
 
 .profile-stats-container {
@@ -188,7 +206,6 @@ const levelTitle = computed(() => {
 .profile-stats {
   display: flex;
 }
-
 
 .stat-item {
   padding: 0 10px;
@@ -225,7 +242,6 @@ const levelTitle = computed(() => {
   font-weight: 500;
 }
 
-
 .profile-stats-header {
   display: flex;
   align-items: center;
@@ -238,7 +254,7 @@ const levelTitle = computed(() => {
   align-items: center;
   border-radius: 16px;
   padding: 6px 12px;
-  background: rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.15);
   color: rgba(255, 255, 255, 0.85);
   font-size: 13px;

@@ -1,3 +1,3 @@
 export function usePercentageCalculator(oldValue, newValue) {
-  return ((newValue - oldValue) / oldValue) * 100
+  return ((newValue - oldValue) / oldValue) * 100;
 }

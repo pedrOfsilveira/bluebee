@@ -22,7 +22,9 @@ const routes = [
   {
     path: "/explore",
     component: () => import("layouts/MainLayout.vue"),
-    children: [{ path: "", component: () => import("pages/ExploreAssets.vue") }],
+    children: [
+      { path: "", component: () => import("pages/ExploreAssets.vue") },
+    ],
   },
   {
     path: "/calculator",
@@ -52,11 +54,11 @@ const routes = [
   {
     path: "/investprofile",
     component: () => import("layouts/AuthLayout.vue"),
-    children: [{ path: "", component: () => import("pages/InvestorProfile.vue") }],
+    children: [
+      { path: "", component: () => import("pages/InvestorProfile.vue") },
+    ],
   },
 
-  // Always leave this as last one,
-  // but you can also remove it
   {
     path: "/:catchAll(.*)*",
     component: () => import("pages/ErrorNotFound.vue"),

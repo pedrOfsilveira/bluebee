@@ -1,44 +1,56 @@
 <script setup>
-import { ref, computed } from 'vue';
-import BlueHeader from 'src/components/BlueHeader.vue';
-import { useSecurityStore } from 'src/stores/storeSecurity';
+import { ref, computed } from "vue";
+import BlueHeader from "src/components/BlueHeader.vue";
+import { useSecurityStore } from "src/stores/storeSecurity";
 
 const store = useSecurityStore();
-const search = ref('');
+const search = ref("");
 
 // Normalização para busca
-const normalizeText = (text) => text ? text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase() : "";
+const normalizeText = (text) =>
+  text
+    ? text
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+    : "";
 
 // Filtro
 const filteredScams = computed(() => {
   const query = normalizeText(search.value);
   if (!query) return store.scams;
 
-  return store.scams.filter(item =>
-    normalizeText(item.title).includes(query) ||
-    normalizeText(item.description).includes(query)
+  return store.scams.filter(
+    (item) =>
+      normalizeText(item.title).includes(query) ||
+      normalizeText(item.description).includes(query),
   );
 });
 
 // Cores baseadas na gravidade
 const getScamStyle = (severity) => {
-  if (severity === 'high') {
-    return { bg: 'linear-gradient(135deg, #FF5252 0%, #D32F2F 100%)', icon: 'fas fa-exclamation-triangle' };
+  if (severity === "high") {
+    return {
+      bg: "linear-gradient(135deg, #FF5252 0%, #D32F2F 100%)",
+      icon: "fas fa-exclamation-triangle",
+    };
   }
-  return { bg: 'linear-gradient(135deg, #FFB74D 0%, #F57C00 100%)', icon: 'fas fa-shield-alt' };
+  return {
+    bg: "linear-gradient(135deg, #FFB74D 0%, #F57C00 100%)",
+    icon: "fas fa-shield-alt",
+  };
 };
-import { useStoreTutorial } from 'src/stores/storeTutorial';
-import { onMounted } from 'vue';
+import { useStoreTutorial } from "src/stores/storeTutorial";
+import { onMounted } from "vue";
 
 const tutorial = useStoreTutorial();
 onMounted(() => {
-  setTimeout(() => tutorial.startTutorialFor('security'), 600);
+  setTimeout(() => tutorial.startTutorialFor("security"), 600);
 });
 </script>
 
 <template>
   <q-page class="bg-grey-1">
-
     <BlueHeader id="security-search">
       <div class="flex text-h5 text-weight-bolder items-center q-mb-lg">
         <q-icon name="fas fa-shield-alt" class="q-mr-sm" />
@@ -52,7 +64,7 @@ onMounted(() => {
         placeholder="Pesquisar golpe..."
       >
         <template v-slot:prepend>
-          <q-icon name="fas fa-search"/>
+          <q-icon name="fas fa-search" />
         </template>
         <template v-slot:append v-if="search">
           <q-icon name="close" @click="search = ''" class="cursor-pointer" />
@@ -60,10 +72,8 @@ onMounted(() => {
       </q-input>
     </BlueHeader>
     <div class="section q-mt-lg">
-
       <div v-if="filteredScams.length > 0">
         <div class="scams-container">
-
           <q-expansion-item
             v-for="scam in filteredScams"
             :key="scam.id"
@@ -74,7 +84,6 @@ onMounted(() => {
           >
             <template v-slot:header>
               <div class="row full-width items-center no-wrap">
-
                 <div
                   class="term-icon q-mr-md"
                   :style="{ background: getScamStyle(scam.severity).bg }"
@@ -82,31 +91,40 @@ onMounted(() => {
                   <q-icon :name="scam.icon" size="xs" color="white" />
                 </div>
 
-                <div class="col text-weight-bold text-grey-9 text-body1 text-left">
+                <div
+                  class="col text-weight-bold text-grey-9 text-body1 text-left"
+                >
                   {{ scam.title }}
                 </div>
               </div>
             </template>
 
             <q-card>
-              <q-card-section class="text-grey-7 q-pt-none q-pb-md q-px-md text-body2">
+              <q-card-section
+                class="text-grey-7 q-pt-none q-pb-md q-px-md text-body2"
+              >
                 <q-separator class="q-mb-md" />
 
-                <div class="text-weight-bold q-mb-xs">{{ scam.description }}</div>
+                <div class="text-weight-bold q-mb-xs">
+                  {{ scam.description }}
+                </div>
 
                 <p class="q-mb-md">{{ scam.content }}</p>
 
                 <div class="bg-red-1 q-pa-sm rounded-borders flex items-start">
-                  <q-icon name="fas fa-exclamation-circle" color="negative" class="q-mt-xs q-mr-sm" size="xs" />
+                  <q-icon
+                    name="fas fa-exclamation-circle"
+                    color="negative"
+                    class="q-mt-xs q-mr-sm"
+                    size="xs"
+                  />
                   <span class="text-caption text-grey-9 text-weight-medium col">
                     Prevenção: {{ scam.tip }}
                   </span>
                 </div>
-
               </q-card-section>
             </q-card>
           </q-expansion-item>
-
         </div>
       </div>
 
@@ -114,15 +132,13 @@ onMounted(() => {
         <q-icon name="fas fa-shield-virus" size="3rem" class="q-mb-md" />
         <div class="text-center">Nenhum golpe encontrado.</div>
       </div>
-
     </div>
 
-    <div class="mb" style="height: 80px;"></div>
+    <div class="mb" style="height: 80px"></div>
   </q-page>
 </template>
 
 <style lang="scss">
-/* --- Estilos Globais (Input) --- */
 .search-input {
   width: 100%;
 }
@@ -136,7 +152,8 @@ onMounted(() => {
 .search-input {
   &.q-field--focused {
     .q-field__control {
-      box-shadow: 0 0 0 3px rgba(91, 158, 240, 0.2),
+      box-shadow:
+        0 0 0 3px rgba(91, 158, 240, 0.2),
         0 4px 15px rgba(0, 0, 0, 0.2);
       transform: translateY(-1px);
     }
@@ -148,8 +165,6 @@ onMounted(() => {
 .q-field--focused .q-field__prepend .q-icon {
   color: $primary;
 }
-
-/* --- Estilos do Card --- */
 
 .security-card {
   border: 1px solid #e8ecf4;

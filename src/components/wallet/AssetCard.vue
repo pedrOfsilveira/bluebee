@@ -3,57 +3,67 @@ import { defineEmits, computed } from "vue";
 import { useStoreUserAssets } from "src/stores/storeUserAssets";
 import { useStoreAssets } from "src/stores/storeAssets";
 
-const storeUserAssets = useStoreUserAssets()
-const storeAssets = useStoreAssets()
+const storeUserAssets = useStoreUserAssets();
+const storeAssets = useStoreAssets();
 
-const emit = defineEmits(['open-details']);
+const emit = defineEmits(["open-details"]);
 
 const props = defineProps({
   asset: {
     type: Object,
-    required: true
-  },});
+    required: true,
+  },
+});
 
 const categoryMap = {
-  stocks: { label: 'Ações', iconClass: 'icon-stocks', iconName: 'fas fa-chart-line' },
-  fii: { label: 'FIIs', iconClass: 'icon-fii', iconName: 'fas fa-building' },
-  crypto: { label: 'Cripto', iconClass: 'icon-crypto', iconName: 'fab fa-bitcoin' },
-  etf: { label: 'ETF', iconClass: 'icon-fixed', iconName: 'fas fa-chart-pie' },
+  stocks: {
+    label: "Ações",
+    iconClass: "icon-stocks",
+    iconName: "fas fa-chart-line",
+  },
+  fii: { label: "FIIs", iconClass: "icon-fii", iconName: "fas fa-building" },
+  crypto: {
+    label: "Cripto",
+    iconClass: "icon-crypto",
+    iconName: "fab fa-bitcoin",
+  },
+  etf: { label: "ETF", iconClass: "icon-fixed", iconName: "fas fa-chart-pie" },
 };
 
 const normalizedType = computed(() => {
-  const t = (props.asset?.tipo || props.asset?.ativos?.tipo || '').toString().toLowerCase();
-  if (!t) return 'stocks'
-  if (t.includes('fundo') || t === 'fii') return 'fii'
-  if (t.includes('cripto') || t === 'crypto') return 'crypto'
-  if (t.includes('etf')) return 'etf'
-  if (t.includes('ação') || t.includes('acoes') || t.includes('ações') || t.includes('acao') || t.includes('stock')) return 'stocks'
-  return 'stocks'
+  const t = (props.asset?.tipo || props.asset?.ativos?.tipo || "")
+    .toString()
+    .toLowerCase();
+  if (!t) return "stocks";
+  if (t.includes("fundo") || t === "fii") return "fii";
+  if (t.includes("cripto") || t === "crypto") return "crypto";
+  if (t.includes("etf")) return "etf";
+  if (
+    t.includes("ação") ||
+    t.includes("acoes") ||
+    t.includes("ações") ||
+    t.includes("acao") ||
+    t.includes("stock")
+  )
+    return "stocks";
+  return "stocks";
 });
 
-const categoryInfo = computed(() => categoryMap[normalizedType.value] || categoryMap.stocks);
+const categoryInfo = computed(
+  () => categoryMap[normalizedType.value] || categoryMap.stocks,
+);
 
 const displayQuantity = computed(() => {
-  return typeof props.asset?.quantidade === 'number' ? props.asset.quantidade : null;
+  return typeof props.asset?.quantidade === "number"
+    ? props.asset.quantidade
+    : null;
 });
 
-// const changeClass = computed(() => {
-//   console.log(props.asset)
-//   return props.asset.change.trim().startsWith('+') ? 'change-positive' : 'change-negative';
-// });
-
-// ORIGINAL
-// const openDetails = () => {
-//   emit('open-details', props.asset)
-// }
-
-// Open dialog with normalized asset shape (ensure id exists)
 const openDetails = async () => {
-  const normalizedAsset = props.asset?.id ? props.asset : props.asset?.ativos
-  const register = await storeAssets.returnPrice(normalizedAsset)
-  emit('open-details', normalizedAsset, register)
-}
-
+  const normalizedAsset = props.asset?.id ? props.asset : props.asset?.ativos;
+  const register = await storeAssets.returnPrice(normalizedAsset);
+  emit("open-details", normalizedAsset, register);
+};
 </script>
 
 <template>
@@ -66,12 +76,13 @@ const openDetails = async () => {
       <div class="asset-type">{{ asset.tipo }}</div>
     </div>
     <div v-else class="asset-info">
-      <div class="asset-name" >{{ asset.ativos.nome }}</div>
-      <div class="asset-type" >{{ asset.ativos.tipo }}</div>
+      <div class="asset-name">{{ asset.ativos.nome }}</div>
+      <div class="asset-type">{{ asset.ativos.tipo }}</div>
     </div>
     <div class="asset-value">
-      <div v-if="displayQuantity !== null" class="asset-amount">Qtd: {{ displayQuantity }}</div>
-      <!-- <div class="asset-change" :class="changeClass">{{ asset.ativos.valor_max - asset.ativos.valor_min }}</div> -->
+      <div v-if="displayQuantity !== null" class="asset-amount">
+        Qtd: {{ displayQuantity }}
+      </div>
     </div>
   </div>
 </template>
@@ -99,10 +110,12 @@ const openDetails = async () => {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg,
-      transparent,
-      rgba(255, 255, 255, 0.2),
-      transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
   transition: left 0.5s ease;
 }
 
@@ -116,7 +129,7 @@ const openDetails = async () => {
 }
 
 .asset-icon {
-   border-radius: 18px;
+  border-radius: 18px;
   width: 50px;
   height: 50px;
   display: flex;
