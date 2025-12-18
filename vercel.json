@@ -1,0 +1,7 @@
+{
+  "buildCommand": "npm run build:pwa",
+  "outputDirectory": "dist/pwa",
+  "framework": null,
+  "ignoreCommand": "",
+  "rewrites": []
+}

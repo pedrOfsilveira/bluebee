@@ -11,6 +11,7 @@
     "dev": "quasar dev",
     "build": "quasar build",
     "postinstall": "quasar prepare",
+    "build:pwa": "quasar build -m pwa",
     "clean:nonframework": "node scripts/clean-nonframework.js"
   },
   "dependencies": {
