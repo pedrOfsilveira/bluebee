@@ -28,15 +28,34 @@ export const useStoreUserAssets = defineStore("userAssets", () => {
 
   /* actions */
 
+  // Interval management
+  const clearIntervals = () => {
+    if (intervalOf4) {
+      clearInterval(intervalOf4)
+      intervalOf4 = 0
+    }
+    if (intervalOf12) {
+      clearInterval(intervalOf12)
+      intervalOf12 = 0
+    }
+  }
+
   // teste
   const filterByTime = (assets) => {
+    // Prevent stacking multiple intervals on repeated loads/updates
+    clearIntervals()
+
     let assetsOf4 = []
     let assetsOf12 = []
     assets.forEach(asset => {
       asset.ativos.tempo == 4 ? assetsOf4.push(asset) : assetsOf12.push(asset)
     })
-    intervalOf4 = setInterval(() => {dividend(assetsOf4)}, 4000)
-    intervalOf12 = setInterval(() => {dividend(assetsOf12)}, 12000)
+    if (assetsOf4.length > 0) {
+      intervalOf4 = setInterval(() => {dividend(assetsOf4)}, 4000)
+    }
+    if (assetsOf12.length > 0) {
+      intervalOf12 = setInterval(() => {dividend(assetsOf12)}, 12000)
+    }
   }
 
   const dividend = async (assets) => {
@@ -104,10 +123,14 @@ export const useStoreUserAssets = defineStore("userAssets", () => {
 
   const unsubscribeAssets = () => {
     supabase.removeChannel(userAssetsChannel)
+    // Ensure timers are cleared when unsubscribing from updates
+    clearIntervals()
   }
 
   const clearUserAssets = () => {
     assets.value = []
+    // Stop any running dividend timers
+    clearIntervals()
   }
 
   const buyAsset = async (buyAssetForm, transactionForm) => {
@@ -228,6 +251,8 @@ export const useStoreUserAssets = defineStore("userAssets", () => {
     unsubscribeAssets,
     clearUserAssets,
     buyAsset,
-    sellAsset
+    sellAsset,
+    // Expose for components to clear on unmount if needed
+    clearIntervals
   };
 });

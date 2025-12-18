@@ -1,7 +1,7 @@
 <script setup>
 import { useCurrencify } from 'src/use/useCurrencify';
 import { useStoreAuth } from 'src/stores/storeAuth';
-import { onMounted, computed, ref } from 'vue';
+import { onMounted, onUnmounted, computed, ref } from 'vue';
 import { useStoreUserAssets } from "src/stores/storeUserAssets";
 import { useStoreAssets } from "src/stores/storeAssets";
 
@@ -28,6 +28,11 @@ onMounted(async () => {
   } else {
     patrimonio.value = 0
   }
+})
+
+onUnmounted(() => {
+  // Ensure dividend timers do not keep running across route changes
+  storeUserAssets.clearIntervals()
 })
 
 const loadStore = async store => {
