@@ -73,7 +73,6 @@ onMounted(() => {
     class="text-grey-8 tabs"
     active-bg-color="blue-1"
     v-model="tab"
-    id="wallet-tabs"
   >
     <q-tab name="ativos" icon="fas fa-landmark" label="Ativos" class="tab" />
     <q-tab
@@ -81,6 +80,7 @@ onMounted(() => {
       icon="fas fa-clock-rotate-left"
       label="Histórico"
       class="tab"
+      id="wallet-tabs"
     />
   </q-tabs>
 

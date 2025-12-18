@@ -58,7 +58,7 @@ const formattedSaldo = computed(() => {
       <div class="label text-subtitle2 text-weight-regular">Saldo Conta</div>
       <div class="balance text-h5 text-weight-bolder">{{ formattedSaldo }}</div>
     </div>
-    <div class="chart-placeholder flex">
+    <div class="chart-placeholder flex" id="patrimonio-box">
       <div>
         <div class="text-subtitle2">Seu Patrimônio Atual</div>
         <div v-if="patrimonio !== null" class="text-h4 text-weight-bolder balance">R$ {{ patrimonio.toFixed(2).replace('.', ',') }}</div>

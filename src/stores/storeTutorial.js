@@ -15,6 +15,14 @@ export const useStoreTutorial = defineStore("tutorial", () => {
         },
       },
       {
+        element: "#patrimonio-box",
+        popover: {
+          title: "Seu Patrimônio",
+          description:
+            "Aqui você acompanha quanto dinheiro tem investido e suas flutuações.",
+        },
+      },
+      {
         element: "#acoes-rapidas",
         popover: {
           title: "Ações Rápidas",
