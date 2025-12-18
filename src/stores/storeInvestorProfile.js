@@ -112,7 +112,7 @@ export const useStoreInvestorProfile = defineStore("investorProfile", () => {
     }
     else {
       return {
-        title: "Arrojado",
+        title: "Agressivo",
         msg: "Você entende o mercado e aceita oscilações em busca de alta rentabilidade no longo prazo. Carteira ideal: Ações, FIIs, Cripto e ETFs.",
         icon: "fas fa-rocket",
         color: "negative", // Vermelho/Roxo

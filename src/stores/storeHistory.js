@@ -14,6 +14,9 @@ export const useStoreHistory = defineStore("history", () => {
 
   const historyLoaded = ref(false)
 
+  // strike atual (dias consecutivos)
+  const strike = ref(1)
+
   /* getters */
 
 
@@ -33,6 +36,13 @@ export const useStoreHistory = defineStore("history", () => {
     if (data) {
       history.value = data
       historyLoaded.value = true
+      // atualiza strike sempre que carregar histórico
+      try {
+        strike.value = computeStrike()
+      } catch (err) {
+        console.log('computeStrike failed', err)
+        strike.value = 1
+      }
     }
   }
 
@@ -71,6 +81,50 @@ export const useStoreHistory = defineStore("history", () => {
       .select()
 
     if (error) useShowErrorMessage(error.message)
+    else {
+      strike.value = computeStrike()
+    }
+  }
+
+  const computeStrike = () => {
+    // retorna número de dias consecutivos iniciando em hoje
+    // regra: se não houver registro hoje, o strike é 1
+
+    if (!Array.isArray(history.value) || history.value.length === 0) return 1
+
+    const toDateKey = (input) => {
+      const date = (input instanceof Date) ? input : new Date(input)
+      if (isNaN(date)) return null
+      const y = date.getFullYear()
+      const m = String(date.getMonth() + 1).padStart(2, '0')
+      const d = String(date.getDate()).padStart(2, '0')
+      return `${y}-${m}-${d}`
+    }
+
+    const set = new Set()
+    for (const rec of history.value) {
+      const created = rec?.created_at ?? rec?.createdAt ?? rec?.date ?? rec
+      const key = toDateKey(created)
+      if (key) set.add(key)
+    }
+
+    const todayKey = toDateKey(new Date())
+    // se não houver registro hoje, por regra, retorna 1
+    if (!set.has(todayKey)) return 1
+
+    let count = 0
+    const cursor = new Date()
+    // conta enquanto houver registro em dias consecutivos
+    while (true) {
+      const k = toDateKey(cursor)
+      if (!k) break
+      if (set.has(k)) {
+        count += 1
+        cursor.setDate(cursor.getDate() - 1)
+      } else break
+    }
+
+    return count
   }
 
   return {
@@ -79,6 +133,10 @@ export const useStoreHistory = defineStore("history", () => {
     loadHistory,
     clearHistory,
     searchHistory,
-    addHistory
+    addHistory,
+
+    // strike helper
+    computeStrike,
+    strike
   };
 });

@@ -6,8 +6,12 @@ import StatList from 'src/components/profile/StatList.vue';
 import AccountSettings from 'src/components/profile/AccountSettings.vue';
 import SectionTitle from 'src/components/SectionTitle.vue';
 import { useStoreAuth } from 'src/stores/storeAuth';
+import { useStoreUserChallenges } from 'src/stores/storeUserChallenges';
+import { useStoreHistory } from 'src/stores/storeHistory'
 
 const storeAuth = useStoreAuth()
+const storeUserChallenges = useStoreUserChallenges()
+const storeHistory = useStoreHistory()
 
 const investorProfileColor = computed(() => {
   const p = (storeAuth.userDetails.investor_profile || '').toLowerCase()
@@ -44,14 +48,14 @@ const investorProfileColor = computed(() => {
         <div class="stat-item" style="flex:2">
           <div class="flex items-center justify-center">
             <q-icon name="fas fa-medal" size="20px" class="q-mr-sm" />
-            <div class="stat-value">15</div>
+            <div class="stat-value">{{ storeUserChallenges.challenges.length }}</div>
           </div>
           <div class="stat-label">Conquistas</div>
         </div>
         <div class="stat-item" style="flex:2">
           <div class="flex items-center justify-center">
             <q-icon name="fas fa-fire" size="20px" class="q-mr-sm" />
-            <div class="stat-value">15</div>
+            <div class="stat-value">{{ storeHistory.strike }}</div>
           </div>
           <div class="stat-label">Sequência</div>
         </div>

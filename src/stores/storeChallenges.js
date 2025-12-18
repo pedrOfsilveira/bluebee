@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { uid } from "quasar";
+import supabase from "src/config/supabase";
 
 export const useStoreChallenges = defineStore("challenges", () => {
   /* state */

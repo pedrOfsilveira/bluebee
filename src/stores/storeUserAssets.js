@@ -5,6 +5,7 @@ import supabase from "src/config/supabase";
 import { useStoreAuth } from "./storeAuth";
 import { Notify } from 'quasar'
 import { useStoreHistory } from "./storeHistory";
+import { useStoreUserChallenges } from "./storeUserChallenges";
 
 let userAssetsChannel
 
@@ -15,6 +16,7 @@ export const useStoreUserAssets = defineStore("userAssets", () => {
 
   const storeAuth = useStoreAuth()
   const storeHistory = useStoreHistory()
+  const storeUserChallenges = useStoreUserChallenges()
 
   const assetsLoaded = ref(false)
 
@@ -37,11 +39,15 @@ export const useStoreUserAssets = defineStore("userAssets", () => {
     intervalOf12 = setInterval(() => {dividend(assetsOf12)}, 12000)
   }
 
-  const dividend = (assets) => {
+  const dividend = async (assets) => {
+    console.log("assets", assets)
+    let dividendTotal = 0;
     assets.forEach(asset => { //foreach que puxa cada ativo que vem do intervalo do loadUserAssets para colocar os dividendos
       let assetDividend = asset.ativos.dividendos ? asset.ativos.dividendos*asset.quantidade : 0
-      storeAuth.userDetails.saldo += assetDividend
+      dividendTotal += assetDividend;
+      console.log("aaa "+dividendTotal, "bbb "+assetDividend)
     })
+    await storeAuth.updateBalance(dividendTotal);
   }
   //
 
@@ -106,8 +112,10 @@ export const useStoreUserAssets = defineStore("userAssets", () => {
 
   const buyAsset = async (buyAssetForm, transactionForm) => {
     let searchData = await searchAsset(buyAssetForm.id);
+    let returnIfCanBuy = await storeAuth.updateBalance(transactionForm.valor_total)
+    console.log("can buy", returnIfCanBuy)
 
-    if (searchData.length >= 1) {
+    if (searchData.length >= 1 && returnIfCanBuy) {
       const { error } = await supabase
         .from('perfil_ativos')
         .update({
@@ -119,7 +127,7 @@ export const useStoreUserAssets = defineStore("userAssets", () => {
 
       if (error) useShowErrorMessage(error.message)
     }
-    else {
+    else if (returnIfCanBuy) {
       const newAsset = Object.assign({}, {
         perfil_id: storeAuth.userDetails.id,
         ativo_id: buyAssetForm.id,
@@ -136,6 +144,7 @@ export const useStoreUserAssets = defineStore("userAssets", () => {
       if (error) useShowErrorMessage(error.message)
       else {
         Notify.create({
+          type: "positive",
           message: 'Ativo Adicionado!',
           position: 'top'
         })
@@ -144,7 +153,7 @@ export const useStoreUserAssets = defineStore("userAssets", () => {
     console.log("buy form", buyAssetForm)
     console.log("quantidade", transactionForm.quantidade)
     console.log("valor_total", transactionForm.valor_total)
-
+    console.log("teste_desafio", await storeUserChallenges.verifyChallenge())
   }
 
   const sellAsset = async (sellAssetForm, transactionForm) => {
@@ -152,37 +161,42 @@ export const useStoreUserAssets = defineStore("userAssets", () => {
     console.log(searchData[0])
     console.log(searchData[0].quantidade)
 
-    if (searchData[0].quantidade < transactionForm.quantidade) useShowErrorMessage("Você não possui essa quantidade de ativos.")
-    else if (searchData[0].quantidade == transactionForm.quantidade) {
-      const { error } = await supabase
-        .from('perfil_ativos')
-        .delete()
-        .eq('perfil_id', storeAuth.userDetails.id)
-        .eq('ativo_id', sellAssetForm.id)
+    if (searchData[0].quantidade >= transactionForm.quantidade) {
+      if (searchData[0].quantidade == transactionForm.quantidade) {
+        const { error } = await supabase
+          .from('perfil_ativos')
+          .delete()
+          .eq('perfil_id', storeAuth.userDetails.id)
+          .eq('ativo_id', sellAssetForm.id)
 
-      if (error) useShowErrorMessage(error.message)
-      else {
-        Notify.create({
-          message: 'Ativo Removido!',
-          position: 'top'
-        })
+        if (error) useShowErrorMessage(error.message)
+        else {
+          Notify.create({
+            type: "negative",
+            message: 'Ativo Removido!',
+            position: 'top'
+          })
 
-        await storeHistory.addHistory(sellAssetForm, transactionForm)
+          await storeHistory.addHistory(sellAssetForm, transactionForm)
+        }
       }
-    }
-    else {
-      const { error } = await supabase
-        .from('perfil_ativos')
-        .update({
-          quantidade: searchData[0].quantidade-transactionForm.quantidade, //podemos mudar isso caso a gente coloque como definir uma quantidade
-        })
-        .eq('perfil_id', storeAuth.userDetails.id)
-        .eq('ativo_id', sellAssetForm.id)
-        .select()
+      else {
+        const { error } = await supabase
+          .from('perfil_ativos')
+          .update({
+            quantidade: searchData[0].quantidade-transactionForm.quantidade, //podemos mudar isso caso a gente coloque como definir uma quantidade
+          })
+          .eq('perfil_id', storeAuth.userDetails.id)
+          .eq('ativo_id', sellAssetForm.id)
+          .select()
 
-      if (error) useShowErrorMessage(error.message)
-      else await storeHistory.addHistory(sellAssetForm, transactionForm)
+        if (error) useShowErrorMessage(error.message)
+        else await storeHistory.addHistory(sellAssetForm, transactionForm)
+      }
+      await storeAuth.updateBalance(transactionForm.valor_total)
     }
+    else useShowErrorMessage("Você não possui essa quantidade de ativos.")
+
     console.log("sell form", sellAssetForm)
     console.log("transaction form", transactionForm)
   }

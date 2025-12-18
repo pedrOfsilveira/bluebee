@@ -9,11 +9,13 @@ import SectionTitle from "src/components/SectionTitle.vue";
 import StatSection from "./StatSection.vue";
 import StatCard from "./StatCard.vue";
 import StatMessage from "./StatMessage.vue";
+import { useStoreUserChallenges } from 'src/stores/storeUserChallenges'
 
 const quiz = useQuizStore()
 const investor = useStoreInvestorProfile()
 const auth = useStoreAuth()
 const userAssets = useStoreUserAssets()
+const storeUserChallenges = useStoreUserChallenges()
 
 const { feedback: quizFeedback } = storeToRefs(quiz)
 
@@ -107,7 +109,7 @@ const suggestionMessages = computed(() => {
       })
     } else if (profile.includes('arroj')) {
       list.push({
-        text: 'Perfil arrojado: diversifique entre Ações, FIIs, Cripto e ETFs para potencial de retorno no longo prazo. ',
+        text: 'Perfil agressivo: diversifique entre Ações, FIIs, Cripto e ETFs para potencial de retorno no longo prazo. ',
         action: 'Explorar oportunidades',
         route: '/explore'
       })
@@ -173,12 +175,12 @@ const portfolioDistribution = computed(() => {
     <div class="stats-grid">
       <StatCard
         icon="fas fa-stopwatch"
-        value="18h"
+        :value="Math.floor(auth.userDetails.tempo_uso/3600)+'h'"
         label="Tempo de Uso"
       />
       <StatCard
         icon="fas fa-medal"
-        value="15"
+        :value="storeUserChallenges.challenges.length"
         label="Desafios Concluídos"
       />
     </div>
@@ -221,7 +223,7 @@ const portfolioDistribution = computed(() => {
     <div class="stats-medal-grid">
       <StatCard
         icon="fas fa-trophy"
-        label="Rei do Mercado"
+        :label="(storeUserChallenges.challenges.length > 0) ? storeUserChallenges.challenges[0].desafios.nome : 0"
       />
       <StatCard
         icon="fas fa-trophy"

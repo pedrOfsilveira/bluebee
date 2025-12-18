@@ -6,6 +6,9 @@ import supabase from "src/config/supabase";
 import { useStoreAssets } from "./storeAssets";
 import { useStoreUserAssets } from "./storeUserAssets";
 import { useStoreHistory } from "./storeHistory";
+import { useStoreChallenges } from "./storeChallenges";
+import { useStoreUserChallenges } from "./storeUserChallenges";
+import { Notify } from "quasar";
 
 export const useStoreAuth = defineStore("auth", () => {
   /* state */
@@ -13,6 +16,8 @@ export const useStoreAuth = defineStore("auth", () => {
   const storeAssets = useStoreAssets()
   const storeUserAssets = useStoreUserAssets()
   const storeHistory = useStoreHistory()
+  const storeChallenges = useStoreChallenges()
+  const storeUserChallenges = useStoreUserChallenges()
 
   const userDetailsDefault = {
     id: null,
@@ -22,7 +27,8 @@ export const useStoreAuth = defineStore("auth", () => {
     experiencia: null,
     genero: null,
     saldo: null,
-    investor_profile: null
+    investor_profile: null,
+    tempo_uso: null
   }
 
   const userDetails = reactive({
@@ -59,6 +65,8 @@ export const useStoreAuth = defineStore("auth", () => {
           storeAssets.loadAssets()
           storeUserAssets.loadUserAssets()
           storeHistory.loadHistory()
+          storeChallenges.loadChallenges()
+          storeUserChallenges.loadUserChallenges()
 
           hydrated.value = true
         }
@@ -139,6 +147,7 @@ export const useStoreAuth = defineStore("auth", () => {
       userDetails.genero = data[0].genero
       userDetails.saldo = data[0].saldo
       userDetails.investor_profile = data[0].investor_profile || data[0].perfil_investidor || null
+      userDetails.tempo_uso = data[0].tempo_uso
     }
   }
 
@@ -210,6 +219,89 @@ export const useStoreAuth = defineStore("auth", () => {
     }
   }
 
+  const updateBalance = async currency => {
+    console.log("currency",currency)
+    if (currency >= 0) {
+      const { data, error } = await supabase
+        .from('perfil')
+        .update({
+          saldo: userDetails.saldo+currency,
+          tempo_uso: userDetails.tempo_uso+4
+        })
+        .eq('id', userDetails.id)
+
+      if (error) useShowErrorMessage(error.message)
+      if (data) {
+        console.log("venda", data)
+      }
+    }
+    else {
+      if (userDetails.saldo+currency >= 0) {
+        const { data, error } = await supabase
+          .from('perfil')
+          .update({
+            saldo: userDetails.saldo+currency,
+            tempo_uso: userDetails.tempo_uso+4
+          })
+          .eq('id', userDetails.id)
+
+        if (error) useShowErrorMessage(error.message)
+        if (data) {
+          console.log("compra", data)
+        }
+      }
+      else {
+        useShowErrorMessage("Saldo insuficiente")
+        return false
+      }
+    }
+    loadUserDetails();
+    return true
+  }
+
+  const updateReward = async desafioForm => {
+    const res = gainXpFormula(userDetails, desafioForm.experiencia);
+    if (res.gainedLevels > 0) {
+      const { data, error } = await supabase
+        .from('perfil')
+        .update({
+          saldo: userDetails.saldo+desafioForm.dinheiro,
+          nivel: res.nivel,
+          experiencia: res.experiencia
+        })
+        .eq('id', userDetails.id)
+
+      if (error) useShowErrorMessage(error.message)
+      else {
+        Notify.create({
+          type: 'positive',
+          message: `Você subiu para o nivel ${res.nivel}!`,
+          position: "top"
+        });
+      }
+      if (data) console.log(data)
+    }
+  }
+
+  function xpToNext(nivel, base = 100, exponent = 1.2) {
+    console.log("calculo", Math.floor(base * Math.pow(nivel, exponent)))
+    return Math.floor(base * Math.pow(nivel, exponent));
+  }
+
+  function gainXpFormula(user, xpGain, base = 100, exponent = 1.2) {
+    user.experiencia = (user.experiencia || 0) + xpGain;
+    console.log("user xp",user.experiencia)
+    let gainedLevels = 0;
+
+    while (user.experiencia >= xpToNext(user.nivel, base, exponent)) {
+      user.experiencia -= xpToNext(user.nivel, base, exponent);
+      user.nivel += 1;
+      gainedLevels += 1;
+    }
+
+    return { gainedLevels, nivel: user.nivel, experiencia: user.experiencia };
+  }
+
   return {
     userDetails,
     hydrated,
@@ -221,6 +313,8 @@ export const useStoreAuth = defineStore("auth", () => {
     logoutUser,
     updateEmail,
     updatePassword,
-    updateProfile
+    updateProfile,
+    updateBalance,
+    updateReward
   };
 });
