@@ -28,7 +28,22 @@ register(process.env.SERVICE_WORKER_FILE, {
   },
 
   updated (/* registration */) {
-    // console.log('New content is available; please refresh.')
+    // Force activate the new SW and reload to avoid stale bundles
+    try {
+      const reg = arguments[0]
+      if (reg && reg.waiting) {
+        reg.waiting.postMessage({ type: 'SKIP_WAITING' })
+        reg.waiting.addEventListener('statechange', (e) => {
+          if (e.target.state === 'activated') {
+            window.location.reload()
+          }
+        })
+      } else {
+        window.location.reload()
+      }
+    } catch (e) {
+      window.location.reload()
+    }
   },
 
   offline () {
