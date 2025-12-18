@@ -4,14 +4,16 @@ import QuickActions from "src/components/home/QuickActions.vue"
 import NewsSection from 'src/components/home/NewsSection.vue';
 import ChallengeSection from 'src/components/home/ChallengeSection.vue';
 import { useStoreTutorial } from "src/stores/storeTutorial";
+import { onMounted } from "vue";
 
-// const storeTutorial = useStoreTutorial();
+const storeTutorial = useStoreTutorial();
 
-// onMounted(() => {
-//   setTimeout(() => {
-//     storeTutorial.startTutorial();
-//   }, 1000);
-// });
+onMounted(() => {
+  // inicia tutorial da Home somente na primeira visita
+  setTimeout(() => {
+    storeTutorial.startTutorialFor("home");
+  }, 600);
+});
 
 </script>
 

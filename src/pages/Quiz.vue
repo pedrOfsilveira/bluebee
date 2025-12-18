@@ -3,6 +3,8 @@ import { computed, ref } from 'vue'; // Importar REF é importante
 import BlueHeader from 'src/components/BlueHeader.vue';
 import { useQuizStore } from 'src/stores/storeQuiz';
 import { useRouter } from 'vue-router';
+import { useStoreTutorial } from 'src/stores/storeTutorial';
+import { onMounted } from 'vue';
 
 const store = useQuizStore();
 const router = useRouter();
@@ -27,6 +29,11 @@ const handleSwipe = ({ direction }) => {
     }
   }
 };
+
+const tutorial = useStoreTutorial();
+onMounted(() => {
+  setTimeout(() => tutorial.startTutorialFor('quiz'), 600);
+});
 </script>
 
 <template>
@@ -71,7 +78,7 @@ const handleSwipe = ({ direction }) => {
               </q-card-section>
             </q-card>
 
-            <div class="options-container">
+            <div class="options-container" id="quiz-options">
               <button
                 v-for="(option, index) in currentQuestion.options"
                 :key="index"

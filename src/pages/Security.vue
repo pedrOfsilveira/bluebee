@@ -27,6 +27,13 @@ const getScamStyle = (severity) => {
   }
   return { bg: 'linear-gradient(135deg, #FFB74D 0%, #F57C00 100%)', icon: 'fas fa-shield-alt' };
 };
+import { useStoreTutorial } from 'src/stores/storeTutorial';
+import { onMounted } from 'vue';
+
+const tutorial = useStoreTutorial();
+onMounted(() => {
+  setTimeout(() => tutorial.startTutorialFor('security'), 600);
+});
 </script>
 
 <template>
@@ -39,6 +46,7 @@ const getScamStyle = (severity) => {
       </div>
 
       <q-input
+        id="security-search"
         v-model="search"
         class="search-input"
         outlined

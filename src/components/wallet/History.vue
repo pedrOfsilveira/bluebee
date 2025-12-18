@@ -85,7 +85,7 @@ const getAssetName = (transaction) => {
     <q-tab name="sell" label="Vendas" class="subtab" />
   </q-tabs>
 
-  <div class="history-list">
+  <div class="history-list" id="wallet-history">
     <template v-if="filteredHistory.length === 0">
       <div class="empty-message">Nenhuma transação encontrada</div>
     </template>

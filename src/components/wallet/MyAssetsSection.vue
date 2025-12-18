@@ -29,7 +29,7 @@ const showAssetDetails = (asset, register) => {
 <template>
   <div class="section text-body2 text-weight-regular">
     <SectionTitle title="Meus Ativos"/>
-    <div class="assets-list">
+    <div class="assets-list" id="wallet-assets-list">
      <AssetCard v-for="asset in props.assets" :asset="asset" @open-details="showAssetDetails"/>
     </div>
   </div>

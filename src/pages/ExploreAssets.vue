@@ -16,6 +16,13 @@ onUnmounted( () => {
 })
 
 const storeAssets = useStoreAssets();
+import { useStoreTutorial } from 'src/stores/storeTutorial';
+import { onMounted } from 'vue';
+
+const tutorial = useStoreTutorial();
+onMounted(() => {
+  setTimeout(() => tutorial.startTutorialFor('explore'), 600);
+});
 </script>
 
 <template>
@@ -25,6 +32,7 @@ const storeAssets = useStoreAssets();
       Explorar Ativos
     </div>
     <q-input
+      id="explore-search"
       @update:model-value="handleSearch"
       v-model="search"
       class="search-input"

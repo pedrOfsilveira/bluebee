@@ -58,6 +58,13 @@ const groupedTerms = computed(() => {
 });
 
 const hasResults = computed(() => Object.keys(groupedTerms.value).length > 0);
+import { useStoreTutorial } from 'src/stores/storeTutorial';
+import { onMounted } from 'vue';
+
+const tutorial = useStoreTutorial();
+onMounted(() => {
+  setTimeout(() => tutorial.startTutorialFor('glossary'), 600);
+});
 </script>
 
 <template>
@@ -70,6 +77,7 @@ const hasResults = computed(() => Object.keys(groupedTerms.value).length > 0);
       </div>
 
       <q-input
+        id="glossary-search"
         v-model="search"
         class="search-input"
         outlined

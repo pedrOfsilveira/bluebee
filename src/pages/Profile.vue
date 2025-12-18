@@ -8,6 +8,8 @@ import SectionTitle from 'src/components/SectionTitle.vue';
 import { useStoreAuth } from 'src/stores/storeAuth';
 import { useStoreUserChallenges } from 'src/stores/storeUserChallenges';
 import { useStoreHistory } from 'src/stores/storeHistory'
+import { useStoreTutorial } from 'src/stores/storeTutorial'
+import { onMounted } from 'vue'
 
 const storeAuth = useStoreAuth()
 const storeUserChallenges = useStoreUserChallenges()
@@ -19,6 +21,11 @@ const investorProfileColor = computed(() => {
   if (p.includes('moder')) return 'warning'
   if (p.includes('arroj')) return 'negative'
   return 'primary'
+})
+
+const tutorial = useStoreTutorial()
+onMounted(() => {
+  setTimeout(() => tutorial.startTutorialFor('profile'), 600)
 })
 </script>
 
@@ -74,7 +81,7 @@ const investorProfileColor = computed(() => {
     <StatList />
   </div>
   <div class="section q-mt-lg pad">
-    <q-expansion-item expand-separator dense header-class="settings-header" expand-icon-class="text-grey-6">
+    <q-expansion-item id="account-settings" expand-separator dense header-class="settings-header" expand-icon-class="text-grey-6">
       <template v-slot:header>
         <div class="row full-width items-center no-wrap">
           <div class="settings-icon q-mr-md">

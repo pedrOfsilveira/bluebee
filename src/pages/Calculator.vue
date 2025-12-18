@@ -16,5 +16,12 @@
 import BlueHeader from 'src/components/BlueHeader.vue';
 import CalculatorForm from 'src/components/calculator/CalculatorForm.vue';
 import SectionTitle from 'src/components/SectionTitle.vue';
+import { useStoreTutorial } from 'src/stores/storeTutorial';
+import { onMounted } from 'vue';
+
+const tutorial = useStoreTutorial();
+onMounted(() => {
+  setTimeout(() => tutorial.startTutorialFor('calculator'), 600);
+});
 
 </script>

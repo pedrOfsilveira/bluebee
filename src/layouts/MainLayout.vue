@@ -6,6 +6,7 @@
 
     <div class="floating-footer">
       <q-tabs
+        id="bottom-nav-tabs"
         no-caps
         active-color="primary"
         indicator-color="transparent"

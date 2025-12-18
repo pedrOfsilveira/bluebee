@@ -7,7 +7,7 @@ const storeAuth = useStoreAuth()
 </script>
 
 <template>
-  <div class="quick-actions">
+  <div class="quick-actions" id="acoes-rapidas">
     <button class="action-btn">
       <q-btn
         to="/explore"

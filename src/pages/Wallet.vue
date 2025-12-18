@@ -5,7 +5,8 @@ import DiversificationChart from "src/components/wallet/DiversificationChart.vue
 import History from 'src/components/wallet/History.vue';
 import MyAssetsSection from 'src/components/wallet/MyAssetsSection.vue';
 import { useStoreUserAssets } from "src/stores/storeUserAssets";
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
+import { useStoreTutorial } from "src/stores/storeTutorial";
 const tab = ref("ativos");
 
 const storeUserAssets = useStoreUserAssets()
@@ -90,6 +91,11 @@ const percentages = computed(() => {
 //   },
 // ]);
 
+// inicia tutorial da carteira ao montar (apenas primeira visita)
+const tutorial = useStoreTutorial();
+onMounted(() => {
+  setTimeout(() => tutorial.startTutorialFor("wallet"), 600);
+});
 
 </script>
 
@@ -166,3 +172,5 @@ const percentages = computed(() => {
 
 
 </style>
+
+

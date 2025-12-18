@@ -5,7 +5,7 @@ const storeAuth = useStoreAuth();
 </script>
 
 <template>
-  <div class="logout-btn" @click="storeAuth.logoutUser">
+  <div class="logout-btn" id="logout-btn" @click="storeAuth.logoutUser">
     <q-icon name="fas fa-door-open" class="text-weight-bold" />
     Sair da Conta
   </div>

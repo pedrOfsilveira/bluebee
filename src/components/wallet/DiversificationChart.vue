@@ -17,7 +17,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="section q-mt-md">
+  <div class="section q-mt-md" id="diversification-section">
     <SectionTitle title="Diversificação" icon="fas fa-chart-pie" class="q-mt-lg" />
     <div class="diversification">
       <div class="diversification-chart">

@@ -41,6 +41,7 @@ const formatCurrency = (fieldName) => {
 <template>
   <q-form
     class="stat-section"
+    id="calculator-form"
     @submit="calculateCompoundInterest"
     @reset="resetCalculator"
   >
