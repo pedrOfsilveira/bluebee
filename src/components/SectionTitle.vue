@@ -1,5 +1,6 @@
 <script setup>
 import { color } from 'chart.js/helpers';
+import { RouterLink } from 'vue-router';
 
 
 defineProps({
@@ -19,6 +20,10 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  to: {
+    type: String,
+    default: ''
+  },
   bb: {
     type: Boolean,
     default: false,
@@ -33,7 +38,8 @@ defineProps({
       <q-icon v-if="icon" :name="icon" size="sm" class="q-mr-sm" />
       {{ title }}
     </span>
-    <a v-if="seeAll" class="text-weight-bold">Ver tudo</a>
+    <RouterLink v-if="seeAll && to" :to="to" class="text-weight-bold">Ver tudo</RouterLink>
+    <a v-else-if="seeAll" class="text-weight-bold">Ver tudo</a>
   </div>
 </template>
 
@@ -43,5 +49,14 @@ defineProps({
   display: flex;
   justify-content: space-between;
   align-items: center;;
+}
+
+.section-title a {
+  text-decoration: none;
+  color: $primary;
+}
+
+.section-title a:visited {
+  color: $primary;
 }
 </style>

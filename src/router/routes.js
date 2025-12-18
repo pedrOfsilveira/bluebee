@@ -35,6 +35,11 @@ const routes = [
     children: [{ path: "", component: () => import("pages/Glossary.vue") }],
   },
   {
+    path: "/challenges",
+    component: () => import("layouts/MainLayout.vue"),
+    children: [{ path: "", component: () => import("pages/Challenges.vue") }],
+  },
+  {
     path: "/security",
     component: () => import("layouts/MainLayout.vue"),
     children: [{ path: "", component: () => import("pages/Security.vue") }],

@@ -3,15 +3,19 @@ defineProps({
   challenge: {
     type: Object,
     required: true,
+  },
+  completed: {
+    type: Boolean,
+    default: false,
   }
 });
 </script>
 
 <template>
-  <div class="challenge-card">
+  <div class="challenge-card" :class="completed ? 'completed' : 'disabled'">
 
-    <div class="challenge-icon">
-      <q-icon :name="challenge.icon" color="secondary" />
+    <div class="challenge-icon" :class="completed ? 'completed' : 'disabled'">
+      <q-icon :name="challenge.icon" :color="completed ? 'secondary' : 'grey-6'" />
     </div>
 
     <div class="challenge-info">
@@ -36,10 +40,22 @@ defineProps({
   cursor: pointer;
 }
 
+.challenge-card.disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.challenge-card.disabled .challenge-title {
+  color: #9e9e9e;
+}
+
+.challenge-card.disabled .challenge-desc {
+  color: #9e9e9e;
+}
+
 .challenge-icon {
   width: 50px;
   height: 50px;
-  background: linear-gradient(135deg, #ffecb3, $accent);
   border-radius: 16px;
   display: flex;
   align-items: center;
@@ -48,6 +64,15 @@ defineProps({
   font-size: 24px;
   box-shadow: 0 5px 15px rgba(255, 193, 7, 0.3);
   transition: all 0.3s ease;
+}
+
+.challenge-icon.completed {
+  background: linear-gradient(135deg, #ffecb3, $accent);
+}
+
+.challenge-icon.disabled {
+  background: linear-gradient(135deg, #eceff1, #cfd8dc);
+  box-shadow: 0 5px 15px rgba(207, 216, 220, 0.3);
 }
 
 .challenge-info {

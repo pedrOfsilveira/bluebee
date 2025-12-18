@@ -167,6 +167,13 @@ const portfolioDistribution = computed(() => {
   const missing = Object.entries(counts).filter(([, v]) => v === 0).map(([k]) => k)
   return { counts, total, shares, top, missing }
 })
+
+const medals = computed(() => {
+  const list = Array.isArray(storeUserChallenges.challenges) ? storeUserChallenges.challenges : []
+  return list
+    .map(c => c?.desafios?.nome)
+    .filter(n => typeof n === 'string' && n.length > 0)
+})
 </script>
 
 <template>
@@ -219,20 +226,18 @@ const portfolioDistribution = computed(() => {
   </StatSection>
 
   <StatSection>
-    <SectionTitle class="bb" title="Medalhas" icon="fas fa-medal" seeAll/>
+    <SectionTitle class="bb" title="Medalhas" icon="fas fa-medal" :seeAll="true" to="/challenges"/>
     <div class="stats-medal-grid">
       <StatCard
+        v-for="(name, i) in medals"
+        :key="'medal-'+i"
         icon="fas fa-trophy"
-        :label="(storeUserChallenges.challenges.length > 0) ? storeUserChallenges.challenges[0].desafios.nome : 0"
+        :value="''"
+        :label="name"
       />
-      <StatCard
-        icon="fas fa-trophy"
-        label="Guru dos Investimentos"
-      />
-      <StatCard
-        icon="fas fa-trophy"
-        label="Imobilista"
-      />
+      <StatMessage v-if="medals.length === 0" category="suggestion">
+        Complete desafios para desbloquear medalhas.
+      </StatMessage>
     </div>
   </StatSection>
 </template>
