@@ -119,18 +119,6 @@ Fluxo sugerido:
 2. Configurar as variáveis `SUPABASE_URL` e `SUPABASE_KEY` no painel.
 3. Publicar com build de produção.
 
-## 📈 Próximas Evoluções
-
-- cobertura de testes automatizados;
-- melhorias de acessibilidade (a11y);
-- métricas de engajamento por módulo;
-- internacionalização (i18n).
-
-## 👤 Autor
-
-**Pedro Silveira**  
-[LinkedIn](https://www.linkedin.com) • [Portfólio](https://github.com)
-
 ---
 
 Se você gostou do projeto, considere deixar uma ⭐ no repositório.
